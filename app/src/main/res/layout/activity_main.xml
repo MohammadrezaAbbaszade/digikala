@@ -18,7 +18,9 @@
         android:layout_gravity="end"
         android:fitsSystemWindows="true"
         android:layoutDirection="rtl"
-        android:textDirection="rtl">
+        android:textDirection="rtl"
+        app:headerLayout="@layout/header"
+        app:menu="@menu/navigation_menu">
 
     </com.google.android.material.navigation.NavigationView>
 

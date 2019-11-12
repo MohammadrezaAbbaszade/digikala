@@ -46,7 +46,7 @@ public class MainFragment extends Fragment {
     private ProductAdaptor mProductAdaptor;
     private RecyclerView mRecyclerView2;
     private List<String> mStrings2=new ArrayList<>();
-    private NewestProductAdaptor mNewestProductAdaptor;
+    private ProductRecyclerView mNewestProductAdaptor;
     public static MainFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -89,7 +89,7 @@ public class MainFragment extends Fragment {
         mStrings2.add("کتونی");
         mStrings2.add("چیپس");
         mStrings2.add("کارت هدیه");
-        mNewestProductAdaptor=new NewestProductAdaptor(mStrings2);
+        mNewestProductAdaptor=new ProductRecyclerView(mStrings2,getContext());
         mRecyclerView2.setAdapter(mNewestProductAdaptor);
         mProductAdaptor=new ProductAdaptor(mStrings);
         mRecyclerView.setAdapter(mProductAdaptor);
@@ -148,43 +148,43 @@ public class MainFragment extends Fragment {
 
     }
 
-    private class NewestProductHolder extends RecyclerView.ViewHolder {
-        private TextView mTextView;
-
-        public NewestProductHolder(@NonNull View itemView) {
-            super(itemView);
-            mTextView = itemView.findViewById(R.id.list_newest_products_text_view);
-
-        }
-
-
-    }
-
-    private class NewestProductAdaptor extends RecyclerView.Adapter<NewestProductHolder> {
-        private List<String> mToDoList;
-
-        public NewestProductAdaptor(List<String> toDoList) {
-            mToDoList = toDoList;
-        }
-
-        @NonNull
-        @Override
-        public NewestProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.list_newest_products, parent, false);
-            NewestProductHolder newestProductHolder = new NewestProductHolder(view);
-            return newestProductHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull NewestProductHolder holder, int position) {
-            holder.mTextView.setText(mToDoList.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mToDoList.size();
-        }
-    }
+//    private class NewestProductHolder extends RecyclerView.ViewHolder {
+//        private TextView mTextView;
+//
+//        public NewestProductHolder(@NonNull View itemView) {
+//            super(itemView);
+//            mTextView = itemView.findViewById(R.id.list_newest_products_text_view);
+//
+//        }
+//
+//
+//    }
+//
+//    private class NewestProductAdaptor extends RecyclerView.Adapter<NewestProductHolder> {
+//        private List<String> mToDoList;
+//
+//        public NewestProductAdaptor(List<String> toDoList) {
+//            mToDoList = toDoList;
+//        }
+//
+//        @NonNull
+//        @Override
+//        public NewestProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//            View view = LayoutInflater.from(getActivity()).inflate(R.layout.list_newest_products, parent, false);
+//            NewestProductHolder newestProductHolder = new NewestProductHolder(view);
+//            return newestProductHolder;
+//        }
+//
+//        @Override
+//        public void onBindViewHolder(@NonNull NewestProductHolder holder, int position) {
+//            holder.mTextView.setText(mToDoList.get(position));
+//        }
+//
+//        @Override
+//        public int getItemCount() {
+//            return mToDoList.size();
+//        }
+//    }
     private class ProductHolder extends RecyclerView.ViewHolder {
         private Button mButton;
 
