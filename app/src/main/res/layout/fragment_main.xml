@@ -31,4 +31,29 @@
         app:progressMode="true"
         app:selectedDotColor="@color/blue" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_main_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/dots_indicator" />
+
+    <TextView
+        android:id="@+id/new_product_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="جدیدترین محصولات"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_main_recycler" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_main_newest_product_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/new_product_textview" />
 </androidx.constraintlayout.widget.ConstraintLayout>
