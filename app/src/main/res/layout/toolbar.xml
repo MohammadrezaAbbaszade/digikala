@@ -20,19 +20,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:layout_marginLeft="14dp"
         android:background="@drawable/ic_shop" />
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp" />
+        android:layout_marginRight="10dp"/>
     <ImageButton
         android:id="@+id/toolbar_burger"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginLeft="80dp"
+        android:layout_marginRight="10dp"
         android:layout_margin="10dp"
         android:background="@drawable/ic_burger" />
 

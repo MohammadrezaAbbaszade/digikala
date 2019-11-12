@@ -43,6 +43,7 @@
         android:icon="@drawable/ic_question"/>
     <item
         android:id="@+id/about_us__menu"
-        android:title="درباره ما" />
+        android:title="درباره ما"
+        android:icon="@drawable/ic_digikala_w"/>
 
 </menu>
