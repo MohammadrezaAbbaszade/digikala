@@ -1,10 +1,15 @@
 package com.example.digikala;
 
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
@@ -15,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -27,6 +33,7 @@ public class MainFragment extends Fragment {
     private ViewPager mViewPager;
     private CircleIndicator mDotsIndicator;
     private ImageView mImageView;
+
 
     public static MainFragment newInstance() {
 
@@ -42,15 +49,13 @@ public class MainFragment extends Fragment {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
         init(view);
-
-
-
         mViewPager.setAdapter(new PagerAdapter() {
             @Override
             public int getCount() {
@@ -67,6 +72,7 @@ public class MainFragment extends Fragment {
                 return view;
 
             }
+
             @Override
             public void destroyItem(ViewGroup container, int position, Object view) {
                 container.removeView((View) view);
@@ -76,6 +82,7 @@ public class MainFragment extends Fragment {
             public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
                 return object == view;
             }
+
             private int getImageAt(int position) {
                 switch (position) {
                     case 0:
@@ -96,8 +103,9 @@ public class MainFragment extends Fragment {
     }
 
 
-        private void init (View view){
-            mViewPager = view.findViewById(R.id.view_pager);
-            mDotsIndicator = view.findViewById(R.id.dots_indicator);
-        }
+    private void init(View view) {
+        mViewPager = view.findViewById(R.id.view_pager);
+        mDotsIndicator = view.findViewById(R.id.dots_indicator);
+
+    }
 }
