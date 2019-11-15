@@ -1,44 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="200dp"
-    android:layout_height="290dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="215dp"
+    android:layout_height="300dp"
     android:layout_gravity="center"
     android:layout_margin="8dp"
     android:orientation="vertical">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/list_newest_product_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
             android:layout_gravity="center|top"
-            android:src="@drawable/digikala" />
-        <TextView
-            android:id="@+id/list_newest_products_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="جدید ترین محصولات"
-            android:textSize="20sp" />
+            android:src="@drawable/digikala"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
-            android:layout_marginTop="20dp"
-            android:layout_width="200dp"
+            android:id="@+id/imageView"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
-            android:src="@drawable/shape2" />
+            android:layout_marginTop="10dp"
+            android:src="@drawable/shape2"
+            app:layout_constraintBottom_toTopOf="@+id/regular_price"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/list_newest_products_text_view"
+            app:layout_constraintVertical_bias="0.0" />
+
         <TextView
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="40dp"
+            android:id="@+id/list_newest_products_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="جدید ترین محصولات"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@+id/list_newest_product_image_view" />
+
+        <TextView
+            android:id="@+id/budget_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="45000 تومان"
-            android:textSize="20sp" />
+            android:textColor="#EE0C0C"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/regular_price"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.187"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintVertical_bias="1.0" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/regular_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="45000 تومان"
+            android:textSize="15sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

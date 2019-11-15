@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +20,9 @@ import android.widget.ImageView;
 
 import com.example.digikala.ProductRecyclerView;
 import com.example.digikala.R;
+import com.example.digikala.model.ImagesItem;
+import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.network.WooCommerce;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,16 +33,18 @@ import me.relex.circleindicator.CircleIndicator;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements WooCommerce.WooCommerceCallback {
     private ViewPager mViewPager;
     private CircleIndicator mDotsIndicator;
     private ImageView mImageView;
     private RecyclerView mRecyclerView;
-    private List<String> mStrings=new ArrayList<>();
+    private List<String> mStrings = new ArrayList<>();
     private ProductAdaptor mProductAdaptor;
     private RecyclerView mRecyclerView2;
-    private List<String> mStrings2=new ArrayList<>();
+    private List<String> mStrings2 = new ArrayList<>();
     private ProductRecyclerView mNewestProductAdaptor;
+    private WooCommerce mWooCommerce=new WooCommerce();
+
     public static MainFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -52,6 +58,13 @@ public class MainFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mWooCommerce.setCallback(this);
+        updateUi();
+
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -60,31 +73,7 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         init(view);
-        mStrings.add("کالای دیجیتال");
-        mStrings.add("آرایشی، بهداشتی و سلامت");
-        mStrings.add("خودرو، ابزار و اداری");
-        mStrings.add("مد و پوشاک");
-        mStrings.add("خانه و آشپزخانه");
-        mStrings.add("کتاب، لوازم التحریر و هنر");
-        mStrings.add("اسباب بازی، کودک و نوزاد");
-        mStrings.add("ورزش و سفر");
-        mStrings.add("خوردنی و آشامیدنی");
-        mStrings.add("کارت هدیه");
 
-        mStrings2.add("دوربین");
-        mStrings2.add("گوشی");
-        mStrings2.add("خودرو");
-        mStrings2.add(" پوشاک");
-        mStrings2.add("توپ");
-        mStrings2.add("کتاب");
-        mStrings2.add("اسباب بازی");
-        mStrings2.add("کتونی");
-        mStrings2.add("چیپس");
-        mStrings2.add("کارت هدیه");
-        mNewestProductAdaptor=new ProductRecyclerView(mStrings2,getContext());
-        mRecyclerView2.setAdapter(mNewestProductAdaptor);
-        mProductAdaptor=new ProductAdaptor(mStrings);
-        mRecyclerView.setAdapter(mProductAdaptor);
         mViewPager.setAdapter(new PagerAdapter() {
             @Override
             public int getCount() {
@@ -136,11 +125,26 @@ public class MainFragment extends Fragment {
         mViewPager = view.findViewById(R.id.view_pager);
         mDotsIndicator = view.findViewById(R.id.dots_indicator);
         mRecyclerView = view.findViewById(R.id.fragment_main_recycler);
-        mRecyclerView2=view.findViewById(R.id.fragment_main_newest_product_recycler);
+        mRecyclerView2 = view.findViewById(R.id.fragment_main_newest_product_recycler);
+
+    }
+public void updateUi()
+{
+    mWooCommerce.productRecentPhotosAsync();
+}
+    public void updateAdaptor(List<WoocommerceBody> items) {
+       mNewestProductAdaptor=new ProductRecyclerView(items,getActivity());
+       mRecyclerView2.setAdapter(mNewestProductAdaptor);
 
     }
 
-//    private class NewestProductHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onRetrofitResponse(List<WoocommerceBody> items) {
+        updateAdaptor(items);
+    }
+
+
+    //    private class NewestProductHolder extends RecyclerView.ViewHolder {
 //        private TextView mTextView;
 //
 //        public NewestProductHolder(@NonNull View itemView) {

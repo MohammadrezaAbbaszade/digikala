@@ -26,7 +26,7 @@ public class RetrofitInstance  {
     private RetrofitInstance(String baseUrl) {
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .addConverterFactory(createGsonConverter(new TypeToken<List<PhotoItem>>() {}.getType(), new GetItemListDeserializer()))
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
