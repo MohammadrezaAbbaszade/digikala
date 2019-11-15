@@ -18,11 +18,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.digikala.ProductRecyclerView;
+import com.example.digikala.RecyclersViews.NewestProductRecyclerView;
 import com.example.digikala.R;
-import com.example.digikala.model.ImagesItem;
+import com.example.digikala.RecyclersViews.PopularProductRecyclerViews;
+import com.example.digikala.RecyclersViews.RatedRecyclerViews;
+import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.WooCommerce;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +41,15 @@ public class MainFragment extends Fragment implements WooCommerce.WooCommerceCal
     private CircleIndicator mDotsIndicator;
     private ImageView mImageView;
     private RecyclerView mCategoryRecyclerView;
+    private RecyclerView mRatedRecyclerView;
     private RecyclerView mPopularRecyclerView;
     private List<String> mStrings = new ArrayList<>();
     private ProductAdaptor mProductAdaptor;
-    private RecyclerView mRecentRecyclerView2;
+    private RecyclerView mRecentRecyclerView;
     private List<String> mStrings2 = new ArrayList<>();
-    private ProductRecyclerView mNewestProductAdaptor;
-    private ProductRecyclerView mPopularProductAdaptor;
+    private NewestProductRecyclerView mNewestProductAdaptor;
+    private PopularProductRecyclerViews mPopularProductAdaptor;
+    private RatedRecyclerViews mRatedRecyclerAdaptor;
     private WooCommerce mWooCommerce = new WooCommerce();
 
     public static MainFragment newInstance() {
@@ -127,8 +132,9 @@ public class MainFragment extends Fragment implements WooCommerce.WooCommerceCal
         mViewPager = view.findViewById(R.id.view_pager);
         mDotsIndicator = view.findViewById(R.id.dots_indicator);
         mCategoryRecyclerView = view.findViewById(R.id.fragment_main_recycler);
-        mRecentRecyclerView2 = view.findViewById(R.id.fragment_main_newest_product_recycler);
-        mPopularRecyclerView=view.findViewById(R.id.fragment_main_popular_product_recycler);
+        mRecentRecyclerView = view.findViewById(R.id.fragment_main_newest_product_recycler);
+        mPopularRecyclerView = view.findViewById(R.id.fragment_main_popular_product_recycler);
+        mRatedRecyclerView = view.findViewById(R.id.fragment_main_rated_product_recycler);
 
     }
 
@@ -138,10 +144,14 @@ public class MainFragment extends Fragment implements WooCommerce.WooCommerceCal
     }
 
     public void updateAdaptor(List<WoocommerceBody> items) {
-        mNewestProductAdaptor = new ProductRecyclerView(items, getActivity());
-        mPopularProductAdaptor=new ProductRecyclerView(items,getActivity());
-        mRecentRecyclerView2.setAdapter(mNewestProductAdaptor);
+        mNewestProductAdaptor = new NewestProductRecyclerView(items, getActivity());
+        mPopularProductAdaptor = new PopularProductRecyclerViews(items, getActivity());
+        mRatedRecyclerAdaptor = new RatedRecyclerViews(items, getActivity());
+        mProductAdaptor = new ProductAdaptor(items.get(0).getCategories());
+        mCategoryRecyclerView.setAdapter(mProductAdaptor);
+        mRecentRecyclerView.setAdapter(mNewestProductAdaptor);
         mPopularRecyclerView.setAdapter(mPopularProductAdaptor);
+        mRatedRecyclerView.setAdapter(mRatedRecyclerAdaptor);
 
 
     }
@@ -160,14 +170,17 @@ public class MainFragment extends Fragment implements WooCommerce.WooCommerceCal
 
         }
 
+        void bind(CategoriesItem categoriesItem) {
+            mButton.setText(categoriesItem.getName());
+        }
 
     }
 
     private class ProductAdaptor extends RecyclerView.Adapter<ProductHolder> {
-        private List<String> mToDoList;
+        private List<CategoriesItem> mCategoriesItems;
 
-        public ProductAdaptor(List<String> toDoList) {
-            mToDoList = toDoList;
+        public ProductAdaptor(List<CategoriesItem> categoriesItems) {
+            mCategoriesItems = categoriesItems;
         }
 
         @NonNull
@@ -180,12 +193,12 @@ public class MainFragment extends Fragment implements WooCommerce.WooCommerceCal
 
         @Override
         public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
-            holder.mButton.setText(mToDoList.get(position));
+            holder.bind(mCategoriesItems.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return mToDoList.size();
+            return mCategoriesItems.size();
         }
     }
 }

@@ -79,5 +79,23 @@
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/popular_product_textview" />
+    <TextView
+        android:id="@+id/rated_product_textview"
+        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="33dp"
+        android:text="پر امتیاز ترین محصولات"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_main_popular_product_recycler" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_main_rated_product_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/rated_product_textview" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

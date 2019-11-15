@@ -2,6 +2,7 @@ package com.example.digikala.network;
 
 import android.util.Log;
 
+import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.ImagesItem;
 import com.example.digikala.model.WoocommerceBody;
 
@@ -36,19 +37,6 @@ public class WooCommerce {
             .getRetrofit()
             .create(WoocommerceService.class);
 
-//    public List<WoocommerceBody> productsRecentPhotos(String page) throws IOException {
-//        mQueries.put("orderby", "date");
-//        mQueries.put("page", page);
-//        return getPhotoItems();
-//    }
-//
-//    public List<WoocommerceBody> searchPhotos(String query) throws IOException {
-//        mQueries.put("method", SEARCH_METHOD);
-//        mQueries.put("text", query);
-//
-//        return getPhotoItems();
-//    }
-
     public void productRecentPhotosAsync() {
         mQueries.put("orderby", "date");
 //        mQueries.put("page", "2");
@@ -57,6 +45,12 @@ public class WooCommerce {
     }
     public void productPopularityAsync() {
         mQueries.put("orderby", "popularity");
+//        mQueries.put("page", "2");
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
+        call.enqueue(getRetrofitCallback());
+    }
+    public void productRatedAsync() {
+        mQueries.put("orderby", "rating");
 //        mQueries.put("page", "2");
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
         call.enqueue(getRetrofitCallback());
@@ -91,4 +85,5 @@ public class WooCommerce {
     public interface WooCommerceCallback {
         void onRetrofitResponse(List<WoocommerceBody> items);
     }
+
 }

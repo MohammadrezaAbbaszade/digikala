@@ -1,7 +1,6 @@
-package com.example.digikala;
+package com.example.digikala.RecyclersViews;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +10,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.digikala.model.ImagesItem;
+import com.example.digikala.R;
 import com.example.digikala.model.WoocommerceBody;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class ProductRecyclerView extends RecyclerView.Adapter {
+public class RatedRecyclerViews extends RecyclerView.Adapter {
     private List<WoocommerceBody> productList;
     private Context mContext;
     private View view;
 
-    public ProductRecyclerView(List<WoocommerceBody> toDoList, Context context) {
+    public RatedRecyclerViews(List<WoocommerceBody> toDoList, Context context) {
         productList = toDoList;
         mContext = context;
     }
@@ -37,7 +36,7 @@ public class ProductRecyclerView extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ProductHolder productHolder = (ProductHolder) holder;
+       ProductHolder productHolder = (ProductHolder) holder;
         productHolder.bind(productList.get(position));
     }
 
@@ -61,16 +60,10 @@ public class ProductRecyclerView extends RecyclerView.Adapter {
 
         void bind(WoocommerceBody woocommerceBody) {
             if(!woocommerceBody.getName().equalsIgnoreCase("تیشرت جذاب تابستانه با تخفیف ویژه دیجیکالا!!!!!"))
-            mTextView.setText(woocommerceBody.getName());
+                mTextView.setText(woocommerceBody.getName());
             mRegularPriceTextView.setText(woocommerceBody.getPrice()+""+"تومان");
             Picasso.with(mContext).load(woocommerceBody.getImages().get(0).getSrc()).placeholder(R.drawable.digikala)
                     .into(mImageView);
         }
     }
 }
-
-
-
-
-
-

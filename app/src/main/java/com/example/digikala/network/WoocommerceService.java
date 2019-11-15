@@ -1,5 +1,6 @@
 package com.example.digikala.network;
 
+import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.ImagesItem;
 import com.example.digikala.model.WoocommerceBody;
 
@@ -14,5 +15,8 @@ public interface WoocommerceService {
 
     @GET("products")
     Call<List<WoocommerceBody>> getWooCommerceBody(@QueryMap Map<String, String> queries);
+
+    @GET("products/categories")
+    Call<List<CategoriesItem>> getCategories();
 
 }
