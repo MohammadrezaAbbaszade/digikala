@@ -55,6 +55,12 @@ public class WooCommerce {
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
         call.enqueue(getRetrofitCallback());
     }
+    public void productPopularityAsync() {
+        mQueries.put("orderby", "popularity");
+//        mQueries.put("page", "2");
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
+        call.enqueue(getRetrofitCallback());
+    }
 
 //    public void searchPhotosAsync(String query) {
 //        mQueries.put("method", SEARCH_METHOD);
@@ -69,10 +75,6 @@ public class WooCommerce {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
                 if (response.isSuccessful()) {
-                    for (WoocommerceBody woocommerceBody : response.body()){
-                        Log.e("TAG4" , woocommerceBody.getImages().get(0).getName() + " " +
-                                "SRC " + woocommerceBody.getImages().get(0).getSrc());
-                    }
                     List<ImagesItem> items = response.body().get(0).getImages();
                     mCallback.onRetrofitResponse(response.body());
                     Log.d("tag","onResponse"+items);

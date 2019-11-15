@@ -37,13 +37,15 @@ public class MainFragment extends Fragment implements WooCommerce.WooCommerceCal
     private ViewPager mViewPager;
     private CircleIndicator mDotsIndicator;
     private ImageView mImageView;
-    private RecyclerView mRecyclerView;
+    private RecyclerView mCategoryRecyclerView;
+    private RecyclerView mPopularRecyclerView;
     private List<String> mStrings = new ArrayList<>();
     private ProductAdaptor mProductAdaptor;
-    private RecyclerView mRecyclerView2;
+    private RecyclerView mRecentRecyclerView2;
     private List<String> mStrings2 = new ArrayList<>();
     private ProductRecyclerView mNewestProductAdaptor;
-    private WooCommerce mWooCommerce=new WooCommerce();
+    private ProductRecyclerView mPopularProductAdaptor;
+    private WooCommerce mWooCommerce = new WooCommerce();
 
     public static MainFragment newInstance() {
 
@@ -124,17 +126,23 @@ public class MainFragment extends Fragment implements WooCommerce.WooCommerceCal
     private void init(View view) {
         mViewPager = view.findViewById(R.id.view_pager);
         mDotsIndicator = view.findViewById(R.id.dots_indicator);
-        mRecyclerView = view.findViewById(R.id.fragment_main_recycler);
-        mRecyclerView2 = view.findViewById(R.id.fragment_main_newest_product_recycler);
+        mCategoryRecyclerView = view.findViewById(R.id.fragment_main_recycler);
+        mRecentRecyclerView2 = view.findViewById(R.id.fragment_main_newest_product_recycler);
+        mPopularRecyclerView=view.findViewById(R.id.fragment_main_popular_product_recycler);
 
     }
-public void updateUi()
-{
-    mWooCommerce.productRecentPhotosAsync();
-}
+
+    public void updateUi() {
+        mWooCommerce.productRecentPhotosAsync();
+        mWooCommerce.productPopularityAsync();
+    }
+
     public void updateAdaptor(List<WoocommerceBody> items) {
-       mNewestProductAdaptor=new ProductRecyclerView(items,getActivity());
-       mRecyclerView2.setAdapter(mNewestProductAdaptor);
+        mNewestProductAdaptor = new ProductRecyclerView(items, getActivity());
+        mPopularProductAdaptor=new ProductRecyclerView(items,getActivity());
+        mRecentRecyclerView2.setAdapter(mNewestProductAdaptor);
+        mPopularRecyclerView.setAdapter(mPopularProductAdaptor);
+
 
     }
 
@@ -143,44 +151,6 @@ public void updateUi()
         updateAdaptor(items);
     }
 
-
-    //    private class NewestProductHolder extends RecyclerView.ViewHolder {
-//        private TextView mTextView;
-//
-//        public NewestProductHolder(@NonNull View itemView) {
-//            super(itemView);
-//            mTextView = itemView.findViewById(R.id.list_newest_products_text_view);
-//
-//        }
-//
-//
-//    }
-//
-//    private class NewestProductAdaptor extends RecyclerView.Adapter<NewestProductHolder> {
-//        private List<String> mToDoList;
-//
-//        public NewestProductAdaptor(List<String> toDoList) {
-//            mToDoList = toDoList;
-//        }
-//
-//        @NonNull
-//        @Override
-//        public NewestProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//            View view = LayoutInflater.from(getActivity()).inflate(R.layout.list_newest_products, parent, false);
-//            NewestProductHolder newestProductHolder = new NewestProductHolder(view);
-//            return newestProductHolder;
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(@NonNull NewestProductHolder holder, int position) {
-//            holder.mTextView.setText(mToDoList.get(position));
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            return mToDoList.size();
-//        }
-//    }
     private class ProductHolder extends RecyclerView.ViewHolder {
         private Button mButton;
 
