@@ -167,12 +167,11 @@ public class MainFragment extends Fragment  {
 
 
     public void updateAdaptor() {
-        items = Repository.getInstance().getWoocommerceBodies();
-        mNewestProductAdaptor = new NewestProductRecyclerView(items, getActivity());
-        mPopularProductAdaptor = new PopularProductRecyclerViews(items, getActivity());
-        mRatedRecyclerAdaptor = new RatedRecyclerViews(items, getActivity());
-        mProductAdaptor = new ProductAdaptor(items.get(0).getCategories());
-        mCategoryRecyclerView.setAdapter(mProductAdaptor);
+        mNewestProductAdaptor = new NewestProductRecyclerView(Repository.getInstance().getNewestProducts(), getActivity());
+        mPopularProductAdaptor = new PopularProductRecyclerViews(Repository.getInstance().getPopularProducts(), getActivity());
+        mRatedRecyclerAdaptor = new RatedRecyclerViews(Repository.getInstance().getRatedProducts(), getActivity());
+//        mProductAdaptor = new ProductAdaptor(items.get(0).getCategories());
+//        mCategoryRecyclerView.setAdapter(mProductAdaptor);
         mRecentRecyclerView.setAdapter(mNewestProductAdaptor);
         mPopularRecyclerView.setAdapter(mPopularProductAdaptor);
         mRatedRecyclerView.setAdapter(mRatedRecyclerAdaptor);

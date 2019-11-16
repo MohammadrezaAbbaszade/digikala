@@ -35,25 +35,25 @@ public class WooCommerce {
             .getRetrofit()
             .create(WoocommerceService.class);
 
-    public void productRecentPhotosAsync() {
+    public List<WoocommerceBody> productRecentPhotosAsync() throws IOException {
+        mQueries.put("orderby", "date");
+//        mQueries.put("page", "2");
+         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
+        return call.execute().body();
+    }
+
+    public List<WoocommerceBody> productPopularityAsync() throws IOException {
         mQueries.put("orderby", "date");
 //        mQueries.put("page", "2");
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
-        call.enqueue(getRetrofitCallback());
+        return call.execute().body();
     }
 
-    public void productPopularityAsync() {
-        mQueries.put("orderby", "popularity");
+    public List<WoocommerceBody> productRatedAsync() throws IOException {
+        mQueries.put("orderby", "date");
 //        mQueries.put("page", "2");
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
-        call.enqueue(getRetrofitCallback());
-    }
-
-    public void productRatedAsync() {
-        mQueries.put("orderby", "rating");
-//        mQueries.put("page", "2");
-        Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
-        call.enqueue(getRetrofitCallback());
+        return call.execute().body();
     }
 
 //    public void searchPhotosAsync(String query) {

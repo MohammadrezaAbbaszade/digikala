@@ -39,7 +39,7 @@ public class NoNetworkFragment extends Fragment {
         if (isNetworkConnected()) {
             mChangeFragment.changeFragment(true);
         }
-        Log.d("tag","onResume");
+        Log.d("tag","onResumeN");
     }
 
     @Override

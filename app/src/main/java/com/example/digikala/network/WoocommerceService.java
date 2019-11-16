@@ -9,6 +9,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
 public interface WoocommerceService {
@@ -18,5 +19,9 @@ public interface WoocommerceService {
 
     @GET("products/categories")
     Call<List<CategoriesItem>> getCategories();
+
+
+    @GET("products/{id}")
+    Call<List<CategoriesItem>> getProductById(@Path("id") String productId);
 
 }
