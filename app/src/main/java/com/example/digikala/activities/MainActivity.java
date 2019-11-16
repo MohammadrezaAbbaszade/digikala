@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import com.example.digikala.fragments.MainFragment;
 import com.example.digikala.R;
 import com.example.digikala.fragments.NoNetworkFragment;
+import com.example.digikala.fragments.changeFragment;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.WooCommerce;
 import com.google.android.material.navigation.NavigationView;
@@ -26,7 +27,7 @@ import java.util.List;
 
 import Woo.C.Repository;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements changeFragment {
     private static final String STATE = "state";
     private static final String WOOCOMEERCE_BODY = "woocommercebody";
     private DrawerLayout mDrawerLayout;
@@ -68,13 +69,28 @@ public class MainActivity extends AppCompatActivity  {
         if(state==1) {
             fm.beginTransaction().replace(R.id.fragment_container, MainFragment.newInstance())
                     .commit();
+            mToolbar.setVisibility(View.VISIBLE);
             Log.d("tag","mainActivity"+"1");
         }else
         {
             fm.beginTransaction().replace(R.id.fragment_container, NoNetworkFragment.newInstance())
                     .commit();
+            mToolbar.setVisibility(View.GONE);
             Log.d("tag","mainActivity"+"0");
         }
 
+    }
+
+    @Override
+    public void changeFragment(boolean check) {
+        if(check==false) {
+            fm.beginTransaction().replace(R.id.fragment_container, NoNetworkFragment.newInstance())
+                    .commit();
+            mToolbar.setVisibility(View.GONE);
+        }else {
+            fm.beginTransaction().replace(R.id.fragment_container, MainFragment.newInstance())
+                    .commit();
+            mToolbar.setVisibility(View.VISIBLE);
+        }
     }
 }

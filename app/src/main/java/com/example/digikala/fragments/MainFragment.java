@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,7 @@ import me.relex.circleindicator.CircleIndicator;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment  {
     private static final String STATE = "state";
     private static final String WOOCOMMERCE_BODY = "woocommercebody";
     private ViewPager mViewPager;
@@ -59,7 +60,7 @@ public class MainFragment extends Fragment {
     private RatedRecyclerViews mRatedRecyclerAdaptor;
     private WooCommerce mWooCommerce = new WooCommerce();
     private int state;
-    private changeFragment mChangeFragment;
+    private  changeFragment mChangeFragment;
     private List<WoocommerceBody> items;
 
     public static MainFragment newInstance() {
@@ -75,10 +76,26 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onResume() {
+        super.onResume();
+        if (!isNetworkConnected()) {
+            mChangeFragment.changeFragment(false);
+        }
+        Log.d("tag","onResume");
+    }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof changeFragment) {
+            mChangeFragment = (changeFragment) context;
+        }
+    }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mChangeFragment = null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -202,7 +219,11 @@ public class MainFragment extends Fragment {
         }
     }
 
-    public interface changeFragment {
-        void changeFragment();
+
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

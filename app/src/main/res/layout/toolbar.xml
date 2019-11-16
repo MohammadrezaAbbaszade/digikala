@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
+    android:layout_height="60dp"
     android:id="@+id/toolbar"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimaryDark"
@@ -10,6 +10,7 @@
 
     <ImageButton
         android:id="@+id/toolbar_user"
+        android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -19,8 +20,7 @@
         android:id="@+id/toolbar_shop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_marginLeft="14dp"
+        android:layout_margin="15dp"
         android:background="@drawable/ic_shop" />
 
     <androidx.appcompat.widget.SearchView
@@ -28,14 +28,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"/>
-    <ImageButton
+   <ImageButton
         android:padding="15dp"
         android:id="@+id/toolbar_burger"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_gravity="end"
         android:layout_marginRight="10dp"
-        android:layout_margin="10dp"
+        android:layout_margin="17dp"
         android:background="@drawable/ic_burger" />
 
 </androidx.appcompat.widget.Toolbar>
