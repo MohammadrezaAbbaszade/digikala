@@ -1,7 +1,6 @@
-package Woo.C;
+package Woo.Repository;
 
 import com.example.digikala.model.CategoriesItem;
-import com.example.digikala.model.ImagesItem;
 import com.example.digikala.model.WoocommerceBody;
 
 import java.util.List;
@@ -56,7 +55,7 @@ public class Repository {
     }
     public boolean isRepositoryNull()
     {
-        if(mRatedProducts==null&&mPopularProducts==null&&mNewestProducts==null&&mCategoriesItems==null)
+        if(mRatedProducts==null||mPopularProducts==null||mNewestProducts==null||mCategoriesItems==null)
             return true;
 
         return false;

@@ -7,18 +7,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.digikala.R;
-import com.example.digikala.fragments.MainFragment;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.WooCommerce;
-import com.example.digikala.network.WoocommerceService;
 
 import java.io.IOException;
 import java.util.List;
 
-import Woo.C.Repository;
+import Woo.Repository.Repository;
 
 public class SplashActivity extends AppCompatActivity {
     private Handler handler;
@@ -58,6 +55,11 @@ public class SplashActivity extends AppCompatActivity {
             if(!Repository.getInstance().isRepositoryNull()) {
                 Intent intent = MainActivity.newIntent(SplashActivity.this, 1);
                 Log.d("tag", "checkNetwork");
+                startActivity(intent);
+                finish();
+            }else {
+                Intent intent = MainActivity.newIntent(SplashActivity.this, 0);
+                Log.d("tag", "checkNetwork" + "0");
                 startActivity(intent);
                 finish();
             }

@@ -3,7 +3,6 @@ package com.example.digikala.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
@@ -19,13 +18,9 @@ import com.example.digikala.R;
 import com.example.digikala.fragments.NoNetworkFragment;
 import com.example.digikala.fragments.changeFragment;
 import com.example.digikala.model.WoocommerceBody;
-import com.example.digikala.network.WooCommerce;
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.Serializable;
 import java.util.List;
-
-import Woo.C.Repository;
 
 public class MainActivity extends AppCompatActivity implements changeFragment {
     private static final String STATE = "state";

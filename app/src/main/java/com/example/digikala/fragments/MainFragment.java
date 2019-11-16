@@ -7,10 +7,8 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -29,13 +27,11 @@ import com.example.digikala.RecyclersViews.RatedRecyclerViews;
 import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.WooCommerce;
-import com.squareup.picasso.Picasso;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import Woo.C.Repository;
+import Woo.Repository.Repository;
 import me.relex.circleindicator.CircleIndicator;
 
 
@@ -162,7 +158,6 @@ public class MainFragment extends Fragment  {
         mRecentRecyclerView = view.findViewById(R.id.fragment_main_newest_product_recycler);
         mPopularRecyclerView = view.findViewById(R.id.fragment_main_popular_product_recycler);
         mRatedRecyclerView = view.findViewById(R.id.fragment_main_rated_product_recycler);
-
     }
 
 

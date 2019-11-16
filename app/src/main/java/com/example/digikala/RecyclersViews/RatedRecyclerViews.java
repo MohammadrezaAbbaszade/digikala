@@ -1,6 +1,7 @@
 package com.example.digikala.RecyclersViews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.digikala.R;
+import com.example.digikala.activities.ProductDetailActivity;
 import com.example.digikala.model.WoocommerceBody;
 import com.squareup.picasso.Picasso;
 
@@ -50,15 +52,23 @@ public class RatedRecyclerViews extends RecyclerView.Adapter {
         private TextView mTextView;
         private ImageView mImageView;
         private TextView mRegularPriceTextView;
-
+        private WoocommerceBody mWoocommerceBody;
         public ProductHolder(@NonNull View itemView) {
             super(itemView);
             mTextView = itemView.findViewById(R.id.list_newest_products_text_view);
             mImageView = itemView.findViewById(R.id.list_newest_product_image_view);
             mRegularPriceTextView=itemView.findViewById(R.id.regular_price);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent= ProductDetailActivity.newIntent(mContext);
+                    mContext.startActivity(intent);
+                }
+            });
         }
 
         void bind(WoocommerceBody woocommerceBody) {
+            mWoocommerceBody=woocommerceBody;
             if(!woocommerceBody.getName().equalsIgnoreCase("تیشرت جذاب تابستانه با تخفیف ویژه دیجیکالا!!!!!"))
                 mTextView.setText(woocommerceBody.getName());
             mRegularPriceTextView.setText(woocommerceBody.getPrice()+""+"تومان");
