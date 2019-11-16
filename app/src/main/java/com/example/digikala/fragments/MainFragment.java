@@ -1,6 +1,8 @@
 package com.example.digikala.fragments;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -8,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -27,16 +30,20 @@ import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.WooCommerce;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import Woo.C.Repository;
 import me.relex.circleindicator.CircleIndicator;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment implements WooCommerce.WooCommerceCallback {
+public class MainFragment extends Fragment {
+    private static final String STATE = "state";
+    private static final String WOOCOMMERCE_BODY = "woocommercebody";
     private ViewPager mViewPager;
     private CircleIndicator mDotsIndicator;
     private ImageView mImageView;
@@ -51,11 +58,13 @@ public class MainFragment extends Fragment implements WooCommerce.WooCommerceCal
     private PopularProductRecyclerViews mPopularProductAdaptor;
     private RatedRecyclerViews mRatedRecyclerAdaptor;
     private WooCommerce mWooCommerce = new WooCommerce();
+    private int state;
+    private changeFragment mChangeFragment;
+    private List<WoocommerceBody> items;
 
     public static MainFragment newInstance() {
 
         Bundle args = new Bundle();
-
         MainFragment fragment = new MainFragment();
         fragment.setArguments(args);
         return fragment;
@@ -68,8 +77,7 @@ public class MainFragment extends Fragment implements WooCommerce.WooCommerceCal
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mWooCommerce.setCallback(this);
-        updateUi();
+
 
     }
 
@@ -80,7 +88,7 @@ public class MainFragment extends Fragment implements WooCommerce.WooCommerceCal
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         init(view);
-
+        updateAdaptor();
         mViewPager.setAdapter(new PagerAdapter() {
             @Override
             public int getCount() {
@@ -124,6 +132,8 @@ public class MainFragment extends Fragment implements WooCommerce.WooCommerceCal
             }
         });
         mDotsIndicator.setViewPager(mViewPager);
+
+
         return view;
     }
 
@@ -138,12 +148,9 @@ public class MainFragment extends Fragment implements WooCommerce.WooCommerceCal
 
     }
 
-    public void updateUi() {
-        mWooCommerce.productRecentPhotosAsync();
-        mWooCommerce.productPopularityAsync();
-    }
 
-    public void updateAdaptor(List<WoocommerceBody> items) {
+    public void updateAdaptor() {
+        items = Repository.getInstance().getWoocommerceBodies();
         mNewestProductAdaptor = new NewestProductRecyclerView(items, getActivity());
         mPopularProductAdaptor = new PopularProductRecyclerViews(items, getActivity());
         mRatedRecyclerAdaptor = new RatedRecyclerViews(items, getActivity());
@@ -152,13 +159,6 @@ public class MainFragment extends Fragment implements WooCommerce.WooCommerceCal
         mRecentRecyclerView.setAdapter(mNewestProductAdaptor);
         mPopularRecyclerView.setAdapter(mPopularProductAdaptor);
         mRatedRecyclerView.setAdapter(mRatedRecyclerAdaptor);
-
-
-    }
-
-    @Override
-    public void onRetrofitResponse(List<WoocommerceBody> items) {
-        updateAdaptor(items);
     }
 
     private class ProductHolder extends RecyclerView.ViewHolder {
@@ -200,5 +200,9 @@ public class MainFragment extends Fragment implements WooCommerce.WooCommerceCal
         public int getItemCount() {
             return mCategoriesItems.size();
         }
+    }
+
+    public interface changeFragment {
+        void changeFragment();
     }
 }

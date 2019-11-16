@@ -6,52 +6,74 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.digikala.fragments.MainFragment;
 import com.example.digikala.R;
+import com.example.digikala.fragments.NoNetworkFragment;
+import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.network.WooCommerce;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.Serializable;
+import java.util.List;
+
+import Woo.C.Repository;
+
+public class MainActivity extends AppCompatActivity  {
+    private static final String STATE = "state";
+    private static final String WOOCOMEERCE_BODY = "woocommercebody";
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
     private ImageButton mImageButton;
+    int state;
+    List<WoocommerceBody> woocommerceBodies;
+    FragmentManager fm = getSupportFragmentManager();
+
+    public static Intent newIntent(Context context,int state) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(STATE,state);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        state=getIntent().getIntExtra(STATE,0);
         mDrawerLayout = findViewById(R.id.acvity_drawer);
         mNavigationView = findViewById(R.id.navigation);
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        mImageButton=findViewById(R.id.toolbar_burger);
+        mImageButton = findViewById(R.id.toolbar_burger);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
-//                mDrawerLayout,
-//                mToolbar, R.string.open,  R.string.close);
-//
-//        mDrawerLayout.addDrawerListener(toggle);
-//        toggle.syncState();
         mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
                     mDrawerLayout.closeDrawer(Gravity.RIGHT);
-                }
-                else {
+                } else {
                     mDrawerLayout.openDrawer(Gravity.RIGHT);
                 }
             }
         });
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-        if (fragment == null) {
+//        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+        if(state==1) {
             fm.beginTransaction().replace(R.id.fragment_container, MainFragment.newInstance())
                     .commit();
+            Log.d("tag","mainActivity"+"1");
+        }else
+        {
+            fm.beginTransaction().replace(R.id.fragment_container, NoNetworkFragment.newInstance())
+                    .commit();
+            Log.d("tag","mainActivity"+"0");
         }
 
     }

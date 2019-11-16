@@ -21,11 +21,9 @@ public class WooCommerce {
     public static final String CONSUMER_KEY = "%20ck_7c028a04c9faf616410b09e2ab90b1884c875d01";
     public static final String CONSUMER_SECRET = "cs_8c39f626780f01d135719f64214fd092b848f4aa";
     private WooCommerceCallback mCallback;
-
     public void setCallback(WooCommerceCallback callback) {
         mCallback = callback;
     }
-
     private Map<String, String> mQueries = new HashMap<String, String>() {
         {
             put("consumer_key", CONSUMER_KEY);
@@ -43,12 +41,14 @@ public class WooCommerce {
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
         call.enqueue(getRetrofitCallback());
     }
+
     public void productPopularityAsync() {
         mQueries.put("orderby", "popularity");
 //        mQueries.put("page", "2");
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
         call.enqueue(getRetrofitCallback());
     }
+
     public void productRatedAsync() {
         mQueries.put("orderby", "rating");
 //        mQueries.put("page", "2");
@@ -71,19 +71,24 @@ public class WooCommerce {
                 if (response.isSuccessful()) {
                     List<ImagesItem> items = response.body().get(0).getImages();
                     mCallback.onRetrofitResponse(response.body());
-                    Log.d("tag","onResponse"+items);
+                    mCallback.checkNetwork(true);
+                    Log.d("tag", "onResponse" + items);
                 }
             }
 
             @Override
             public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
-
-                Log.d("tag","onFailure"+t.getMessage());
+                mCallback.checkNetwork(false);
+                Log.d("tag", "onFailure" + t.getMessage());
             }
         };
     }
+
     public interface WooCommerceCallback {
         void onRetrofitResponse(List<WoocommerceBody> items);
+        void checkNetwork(boolean check);
     }
-
+//    public interface FinishSplash {
+//        boolean onCheckBackground(boolean check);
+//    }
 }
