@@ -39,9 +39,10 @@ public class SplashActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
 
             try {
-                Repository.getInstance().setNewestProducts(mWooCommerce.productRecentPhotosAsync());
-                Repository.getInstance().setRatedProducts(mWooCommerce.productRatedAsync());
-                Repository.getInstance().setPopularProducts(mWooCommerce.productPopularityAsync());
+                Repository.getInstance().setNewestProducts(mWooCommerce.productRecentPhotosSync());
+                Repository.getInstance().setRatedProducts(mWooCommerce.productRatedSync());
+                Repository.getInstance().setPopularProducts(mWooCommerce.productPopularitySync());
+                Repository.getInstance().setCategoriesItems(mWooCommerce.productCategoriesSync());
             } catch (IOException e) {
                 Intent intent = MainActivity.newIntent(SplashActivity.this, 0);
                 Log.d("tag", "checkNetwork" + "0");

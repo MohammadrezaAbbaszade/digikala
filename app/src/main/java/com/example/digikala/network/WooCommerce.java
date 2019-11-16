@@ -35,24 +35,31 @@ public class WooCommerce {
             .getRetrofit()
             .create(WoocommerceService.class);
 
-    public List<WoocommerceBody> productRecentPhotosAsync() throws IOException {
+    public List<WoocommerceBody> productRecentPhotosSync() throws IOException {
         mQueries.put("orderby", "date");
 //        mQueries.put("page", "2");
          Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
         return call.execute().body();
     }
 
-    public List<WoocommerceBody> productPopularityAsync() throws IOException {
+    public List<WoocommerceBody> productPopularitySync() throws IOException {
         mQueries.put("orderby", "date");
 //        mQueries.put("page", "2");
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
         return call.execute().body();
     }
 
-    public List<WoocommerceBody> productRatedAsync() throws IOException {
+    public List<WoocommerceBody> productRatedSync() throws IOException {
         mQueries.put("orderby", "date");
 //        mQueries.put("page", "2");
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
+        return call.execute().body();
+    }
+
+    public List<CategoriesItem> productCategoriesSync() throws IOException {
+
+//        mQueries.put("page", "2");
+        Call<List<CategoriesItem>> call = mWoocommerceApi.getCategories();
         return call.execute().body();
     }
 

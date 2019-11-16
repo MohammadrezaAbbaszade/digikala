@@ -1,5 +1,6 @@
 package Woo.C;
 
+import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.ImagesItem;
 import com.example.digikala.model.WoocommerceBody;
 
@@ -10,12 +11,21 @@ public class Repository {
     private List<WoocommerceBody> mNewestProducts;
     private List<WoocommerceBody> mPopularProducts;
     private List<WoocommerceBody> mRatedProducts;
-
+    private List<CategoriesItem> mCategoriesItems;
     public static Repository getInstance() {
         if (repository == null) {
             repository = new Repository();
         }
         return repository;
+    }
+
+    public List<CategoriesItem> getCategoriesItems() {
+        return mCategoriesItems;
+    }
+
+    public void setCategoriesItems(List<CategoriesItem> categoriesItems) {
+        mCategoriesItems=null;
+        mCategoriesItems = categoriesItems;
     }
 
     public List<WoocommerceBody> getNewestProducts() {
@@ -46,7 +56,7 @@ public class Repository {
     }
     public boolean isRepositoryNull()
     {
-        if(mRatedProducts==null&&mPopularProducts==null&&mNewestProducts==null)
+        if(mRatedProducts==null&&mPopularProducts==null&&mNewestProducts==null&&mCategoriesItems==null)
             return true;
 
         return false;

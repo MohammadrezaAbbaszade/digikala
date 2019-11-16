@@ -170,8 +170,8 @@ public class MainFragment extends Fragment  {
         mNewestProductAdaptor = new NewestProductRecyclerView(Repository.getInstance().getNewestProducts(), getActivity());
         mPopularProductAdaptor = new PopularProductRecyclerViews(Repository.getInstance().getPopularProducts(), getActivity());
         mRatedRecyclerAdaptor = new RatedRecyclerViews(Repository.getInstance().getRatedProducts(), getActivity());
-//        mProductAdaptor = new ProductAdaptor(items.get(0).getCategories());
-//        mCategoryRecyclerView.setAdapter(mProductAdaptor);
+        mProductAdaptor = new ProductAdaptor(Repository.getInstance().getCategoriesItems());
+        mCategoryRecyclerView.setAdapter(mProductAdaptor);
         mRecentRecyclerView.setAdapter(mNewestProductAdaptor);
         mPopularRecyclerView.setAdapter(mPopularProductAdaptor);
         mRatedRecyclerView.setAdapter(mRatedRecyclerAdaptor);
