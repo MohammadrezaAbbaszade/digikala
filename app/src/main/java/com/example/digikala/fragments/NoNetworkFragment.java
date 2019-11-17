@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 
 import com.example.digikala.R;
 
+import Woo.Repository.Repository;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +38,7 @@ public class NoNetworkFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (isNetworkConnected()) {
+        if (isNetworkConnected()&&!Repository.getInstance().isRepositoryNull()) {
             mChangeFragment.changeFragment(true);
         }
         Log.d("tag","onResumeN");

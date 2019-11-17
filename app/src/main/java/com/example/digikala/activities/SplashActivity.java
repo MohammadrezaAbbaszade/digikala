@@ -41,10 +41,10 @@ public class SplashActivity extends AppCompatActivity {
                 Repository.getInstance().setPopularProducts(mWooCommerce.productPopularitySync());
                 Repository.getInstance().setCategoriesItems(mWooCommerce.productCategoriesSync());
             } catch (IOException e) {
-                Intent intent = MainActivity.newIntent(SplashActivity.this, 0);
-                Log.d("tag", "checkNetwork" + "0");
-                startActivity(intent);
-                finish();
+//                Intent intent = MainActivity.newIntent(SplashActivity.this, 0);
+//                Log.d("tag", "checkNetwork" + "0");
+//                startActivity(intent);
+//                finish();
                 e.printStackTrace();
             }
             return null;

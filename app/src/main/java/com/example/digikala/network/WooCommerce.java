@@ -39,14 +39,14 @@ public class WooCommerce {
     }
 
     public List<WoocommerceBody> productPopularitySync() throws IOException {
-        mQueries.put("orderby", "date");
+        mQueries.put("orderby", "popularity");
 //        mQueries.put("page", "2");
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
         return call.execute().body();
     }
 
     public List<WoocommerceBody> productRatedSync() throws IOException {
-        mQueries.put("orderby", "date");
+        mQueries.put("orderby", "rating");
 //        mQueries.put("page", "2");
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
         return call.execute().body();
@@ -56,6 +56,10 @@ public class WooCommerce {
 
 //        mQueries.put("page", "2");
         Call<List<CategoriesItem>> call = mWoocommerceApi.getCategories();
+        return call.execute().body();
+    }
+    public WoocommerceBody getProductById(int id) throws IOException {
+        Call<WoocommerceBody> call = mWoocommerceApi.getProductById(String.valueOf(id));
         return call.execute().body();
     }
 

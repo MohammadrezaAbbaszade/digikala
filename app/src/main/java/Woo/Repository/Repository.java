@@ -10,12 +10,22 @@ public class Repository {
     private List<WoocommerceBody> mNewestProducts;
     private List<WoocommerceBody> mPopularProducts;
     private List<WoocommerceBody> mRatedProducts;
+    private WoocommerceBody mProductById;
     private List<CategoriesItem> mCategoriesItems;
     public static Repository getInstance() {
         if (repository == null) {
             repository = new Repository();
         }
         return repository;
+    }
+
+    public WoocommerceBody getProductById() {
+        return mProductById;
+    }
+
+    public void setProductById(WoocommerceBody productById) {
+        mProductById=null;
+        mProductById = productById;
     }
 
     public List<CategoriesItem> getCategoriesItems() {
