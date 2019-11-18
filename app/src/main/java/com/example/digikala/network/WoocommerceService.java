@@ -10,6 +10,7 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 public interface WoocommerceService {
@@ -23,5 +24,8 @@ public interface WoocommerceService {
 
     @GET("products/{id}")
     Call<WoocommerceBody> getProductById(@Path("id") String productId);
+
+    @GET("products")
+    Call<List<WoocommerceBody>> getReleatedProducts(@Query("include") String releateds);
 
 }

@@ -3,6 +3,7 @@ package Woo.Repository;
 import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.WoocommerceBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Repository {
@@ -10,6 +11,8 @@ public class Repository {
     private List<WoocommerceBody> mNewestProducts;
     private List<WoocommerceBody> mPopularProducts;
     private List<WoocommerceBody> mRatedProducts;
+    private List<WoocommerceBody> mAllProducts;
+    private List<WoocommerceBody> mRelatedProducts;
     private WoocommerceBody mProductById;
     private List<CategoriesItem> mCategoriesItems;
     public static Repository getInstance() {
@@ -19,6 +22,23 @@ public class Repository {
         return repository;
     }
 
+    public List<WoocommerceBody> getRelatedProducts() {
+        return mRelatedProducts;
+    }
+
+    public void setRelatedProducts(List<WoocommerceBody> relatedProducts) {
+        mRelatedProducts=null;
+        mRelatedProducts = relatedProducts;
+    }
+
+    public List<WoocommerceBody> getAllProducts() {
+        return mAllProducts;
+    }
+
+    public void setAllProducts(List<WoocommerceBody> allProducts) {
+        mAllProducts = allProducts;
+    }
+
     public WoocommerceBody getProductById() {
         return mProductById;
     }
@@ -26,6 +46,7 @@ public class Repository {
     public void setProductById(WoocommerceBody productById) {
         mProductById=null;
         mProductById = productById;
+
     }
 
     public List<CategoriesItem> getCategoriesItems() {
@@ -44,6 +65,7 @@ public class Repository {
     public void setNewestProducts(List<WoocommerceBody> newestProducts) {
         mNewestProducts=null;
         mNewestProducts = newestProducts;
+
     }
 
     public List<WoocommerceBody> getPopularProducts() {
@@ -53,6 +75,7 @@ public class Repository {
     public void setPopularProducts(List<WoocommerceBody> popularProducts) {
         mPopularProducts=null;
         mPopularProducts = popularProducts;
+
     }
 
     public List<WoocommerceBody> getRatedProducts() {
@@ -62,6 +85,7 @@ public class Repository {
     public void setRatedProducts(List<WoocommerceBody> ratedProducts) {
         mRatedProducts=null;
         mRatedProducts = ratedProducts;
+
     }
     public boolean isRepositoryNull()
     {
@@ -70,4 +94,12 @@ public class Repository {
 
         return false;
     }
+//    private List<String> getRelatedProductsId(String id)
+//    {
+//        List<String> relatedIds=new ArrayList<>();
+//        for(WoocommerceBody woocommerceBody:mAllProducts)
+//        {
+//            if(woocommerceBody.getI)
+//        }
+//    }
 }

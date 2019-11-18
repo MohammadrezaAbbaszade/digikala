@@ -2,6 +2,7 @@ package com.example.digikala.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +23,10 @@ public class SplashActivity extends AppCompatActivity {
     private WooCommerce mWooCommerce = new WooCommerce();
     List<WoocommerceBody> mWoocommerceBodies;
 
+    public static Intent newIntent(Context context) {
+        Intent intent = new Intent(context, SplashActivity.class);
+        return intent;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

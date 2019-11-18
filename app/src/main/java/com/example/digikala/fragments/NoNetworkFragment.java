@@ -2,6 +2,7 @@ package com.example.digikala.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 
@@ -12,8 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.digikala.R;
+import com.example.digikala.activities.SplashActivity;
 
 import Woo.Repository.Repository;
 
@@ -23,6 +27,7 @@ import Woo.Repository.Repository;
  */
 public class NoNetworkFragment extends Fragment {
     private  changeFragment mChangeFragment;
+    private Button mTryNetworkButton;
     public static NoNetworkFragment newInstance() {
         
         Bundle args = new Bundle();
@@ -62,7 +67,29 @@ public class NoNetworkFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_no_network, container, false);
+        View view= inflater.inflate(R.layout.fragment_no_network, container, false);
+        mTryNetworkButton=view.findViewById(R.id.no_network_button);
+
+
+        mTryNetworkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isNetworkConnected()&&!Repository.getInstance().isRepositoryNull()) {
+                    mChangeFragment.changeFragment(true);
+                }else if(isNetworkConnected()&&Repository.getInstance().isRepositoryNull())
+                {
+                    Intent intent = SplashActivity.newIntent(getActivity());
+                    startActivity(intent);
+                   getActivity().finish();
+                }else
+                {
+                    Toast.makeText(getContext(),"خطا در برقراری ارتباط",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
+        return view;
     }
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);

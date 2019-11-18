@@ -31,6 +31,10 @@ public class WooCommerce {
             .getRetrofit()
             .create(WoocommerceService.class);
 
+    public WoocommerceService getWoocommerceApi() {
+        return mWoocommerceApi;
+    }
+
     public List<WoocommerceBody> productRecentPhotosSync() throws IOException {
         mQueries.put("orderby", "date");
 //        mQueries.put("page", "2");
@@ -62,7 +66,10 @@ public class WooCommerce {
         Call<WoocommerceBody> call = mWoocommerceApi.getProductById(String.valueOf(id));
         return call.execute().body();
     }
-
+    public List<WoocommerceBody> getRelatedProducts(int id) throws IOException {
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getReleatedProducts(String.valueOf(id));
+        return call.execute().body();
+    }
 //    public void searchPhotosAsync(String query) {
 //        mQueries.put("method", SEARCH_METHOD);
 //        mQueries.put("text", query);

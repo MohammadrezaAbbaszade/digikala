@@ -2,6 +2,7 @@ package com.example.digikala.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,6 +28,7 @@ import com.example.digikala.RecyclersViews.NewestProductRecyclerView;
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.PopularProductRecyclerViews;
 import com.example.digikala.RecyclersViews.RatedRecyclerViews;
+import com.example.digikala.activities.ListProductsActivity;
 import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.WooCommerce;
@@ -38,7 +43,7 @@ import me.relex.circleindicator.CircleIndicator;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment  {
+public class MainFragment extends Fragment {
     private static final String STATE = "state";
     private static final String WOOCOMMERCE_BODY = "woocommercebody";
     private ViewPager mViewPager;
@@ -56,7 +61,7 @@ public class MainFragment extends Fragment  {
     private RatedRecyclerViews mRatedRecyclerAdaptor;
     private WooCommerce mWooCommerce = new WooCommerce();
     private int state;
-    private  changeFragment mChangeFragment;
+    private changeFragment mChangeFragment;
     private List<WoocommerceBody> items;
 
     public static MainFragment newInstance() {
@@ -77,7 +82,7 @@ public class MainFragment extends Fragment  {
         if (!isNetworkConnected()) {
             mChangeFragment.changeFragment(false);
         }
-        Log.d("tag","onResume");
+        Log.d("tag", "onResume");
     }
 
     @Override
@@ -151,6 +156,8 @@ public class MainFragment extends Fragment  {
     }
 
 
+
+
     private void init(View view) {
         mViewPager = view.findViewById(R.id.view_pager);
         mDotsIndicator = view.findViewById(R.id.dots_indicator);
@@ -178,6 +185,12 @@ public class MainFragment extends Fragment  {
         public ProductHolder(@NonNull View itemView) {
             super(itemView);
             mButton = itemView.findViewById(R.id.product_items);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
 
         }
 
@@ -205,6 +218,7 @@ public class MainFragment extends Fragment  {
         @Override
         public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
             holder.bind(mCategoriesItems.get(position));
+
         }
 
         @Override
@@ -212,7 +226,6 @@ public class MainFragment extends Fragment  {
             return mCategoriesItems.size();
         }
     }
-
 
 
     private boolean isNetworkConnected() {
