@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="370dp"
-    android:layout_height="220dp"
+    android:layout_height="200dp"
     android:layout_gravity="center"
     android:layout_margin="8dp"
     android:layout_marginLeft="10dp"
@@ -35,7 +35,7 @@
             app:layout_constraintBottom_toTopOf="@+id/list_products_budget_price"
             app:layout_constraintEnd_toStartOf="@+id/list_products_image_view"
             app:layout_constraintTop_toBottomOf="@+id/list_products_text_view"
-            app:layout_constraintVertical_bias="0.767" />
+            app:layout_constraintVertical_bias="0.533" />
 
         <TextView
             android:id="@+id/list_products_text_view"
@@ -56,9 +56,9 @@
             android:id="@+id/list_products_budget_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginLeft="28dp"
-            android:layout_marginTop="76dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="52dp"
             android:text="45000 تومان"
             android:textColor="#EE0C0C"
             android:textSize="15sp"
@@ -69,8 +69,8 @@
             android:id="@+id/list_products_regular_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginLeft="28dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
 
             android:layout_marginTop="8dp"
             android:text="45000 تومان"

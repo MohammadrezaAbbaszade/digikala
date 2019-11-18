@@ -66,8 +66,8 @@ public class WooCommerce {
         Call<WoocommerceBody> call = mWoocommerceApi.getProductById(String.valueOf(id));
         return call.execute().body();
     }
-    public List<WoocommerceBody> getRelatedProducts(int id) throws IOException {
-        Call<List<WoocommerceBody>> call = mWoocommerceApi.getReleatedProducts(String.valueOf(id));
+    public List<WoocommerceBody> getRelatedProducts(String[] id) throws IOException {
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getReleatedProducts(id);
         return call.execute().body();
     }
 //    public void searchPhotosAsync(String query) {

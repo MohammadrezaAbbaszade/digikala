@@ -26,6 +26,6 @@ public interface WoocommerceService {
     Call<WoocommerceBody> getProductById(@Path("id") String productId);
 
     @GET("products")
-    Call<List<WoocommerceBody>> getReleatedProducts(@Query("include") String releateds);
+    Call<List<WoocommerceBody>> getReleatedProducts(@Query("include") String...releateds);
 
 }

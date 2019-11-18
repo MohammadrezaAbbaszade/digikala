@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.example.digikala.R;
 import com.example.digikala.activities.MainActivity;
+import com.example.digikala.activities.ProductDetailActivity;
 import com.example.digikala.activities.SplashActivity;
 import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.WoocommerceBody;
@@ -58,6 +59,7 @@ public class ProductDetailFragment extends Fragment {
     private RecyclerView mRelatedProductRecycler;
     private TextView mDiscriptionTextView;
     private ProductAdaptor mProductAdaptor;
+    private String[] realtedIds;
 
     public static ProductDetailFragment newInstance(int id) {
 
@@ -72,6 +74,7 @@ public class ProductDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         id = getArguments().getInt(ID);
+
         InitProductsAsynceTask initProductsAsynceTask = new InitProductsAsynceTask();
         initProductsAsynceTask.execute();
     }
@@ -95,6 +98,8 @@ public class ProductDetailFragment extends Fragment {
     }
 
     private void PrepareViewPager() {
+
+
         mViewPager.setAdapter(new PagerAdapter() {
             @Override
             public int getCount() {
@@ -125,10 +130,38 @@ public class ProductDetailFragment extends Fragment {
             }
 
         });
-//        setUpAdaptor();
         mDotsIndicator.setViewPager(mViewPager);
         mTextView.setText(Repository.getInstance().getProductById().getName());
         mDiscriptionTextView.setText(Repository.getInstance().getProductById().getDescription());
+
+
+
+    }
+
+    private void PrepareRelatedProducts() {
+        List<Integer> integers=Repository.getInstance().getProductById().getRelatedIds();
+
+//        realtedIds = new String[Repository.getInstance().getProductById().getRelatedIds().size()];
+//        for (int i = 0; i < Repository.getInstance().getProductById().getRelatedIds().size(); i++) {
+//            realtedIds[i] = String.valueOf(Repository.getInstance().getProductById().getRelatedIds().get(i));
+//        }
+       mWooCommerce.getWoocommerceApi().getReleatedProducts(integers.toString()).enqueue(new Callback<List<WoocommerceBody>>() {
+           @Override
+           public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+               if(response.isSuccessful()){
+                   Repository.getInstance().setRelatedProducts(response.body());
+                   setUpAdaptor();
+               }
+           }
+
+           @Override
+           public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+               Intent intent = MainActivity.newIntent(getActivity(), 0);
+               startActivity(intent);
+               getActivity().finish();
+           }
+       });
+
     }
 
     private void init(View view) {
@@ -153,7 +186,6 @@ public class ProductDetailFragment extends Fragment {
 
             try {
                 Repository.getInstance().setProductById(mWooCommerce.getProductById(id));
-//                Repository.getInstance().setRelatedProducts(mWooCommerce.getRelatedProducts(id));
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -170,6 +202,7 @@ public class ProductDetailFragment extends Fragment {
 //                mDotsIndicator.setVisibility(View.VISIBLE);
 //                mCardView.setVisibility(View.VISIBLE);
                 PrepareViewPager();
+                PrepareRelatedProducts();
 
             } else {
                 Intent intent = MainActivity.newIntent(getActivity(), 0);
@@ -192,6 +225,13 @@ public class ProductDetailFragment extends Fragment {
             mTextView = itemView.findViewById(R.id.list_newest_products_text_view);
             mImageView = itemView.findViewById(R.id.list_newest_product_image_view);
             mRegularPriceTextView = itemView.findViewById(R.id.regular_price);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent= ProductDetailActivity.newIntent(getActivity(),mWoocommerceBody.getId());
+                    getActivity().startActivity(intent);
+                }
+            });
 
         }
 
