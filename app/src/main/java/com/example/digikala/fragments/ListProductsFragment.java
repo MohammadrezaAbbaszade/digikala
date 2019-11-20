@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.digikala.R;
+import com.example.digikala.activities.MainActivity;
 import com.example.digikala.activities.ProductDetailActivity;
 import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.WoocommerceBody;
@@ -54,23 +55,15 @@ public class ListProductsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!isNetworkConnected()) {
-            mChangeFragment.changeFragment(false);
+            Intent intent = MainActivity.newIntent(getActivity(), 0);
+            Log.d("tag", "checkNetwork" + "0");
+            startActivity(intent);
+            getActivity().finish();
+            Log.d("tag","finished");
         }
         state=getArguments().getInt(STATE);
     }
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof changeFragment) {
-            mChangeFragment = (changeFragment) context;
-        }
-    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mChangeFragment = null;
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

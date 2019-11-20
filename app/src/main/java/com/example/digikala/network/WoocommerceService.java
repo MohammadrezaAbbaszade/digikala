@@ -28,4 +28,8 @@ public interface WoocommerceService {
     @GET("products")
     Call<List<WoocommerceBody>> getReleatedProducts(@Query("include") String...releateds);
 
+    @GET("products")
+    Call<List<CategoriesItem>> getProductsSubCategoires( @Query("category") String categoryId);
+
+
 }

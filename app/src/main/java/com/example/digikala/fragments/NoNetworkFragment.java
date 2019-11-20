@@ -43,9 +43,16 @@ public class NoNetworkFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (isNetworkConnected()&&!Repository.getInstance().isRepositoryNull()) {
-            mChangeFragment.changeFragment(true);
-        }
+
+//        if(isNetworkConnected())
+//        {
+//            Intent intent = SplashActivity.newIntent(getActivity());
+//            startActivity(intent);
+//            getActivity().finish();
+//        }else
+//        {
+//            Toast.makeText(getContext(),"خطا در برقراری ارتباط",Toast.LENGTH_LONG).show();
+//        }
         Log.d("tag","onResumeN");
     }
 
@@ -74,9 +81,8 @@ public class NoNetworkFragment extends Fragment {
         mTryNetworkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isNetworkConnected()&&!Repository.getInstance().isRepositoryNull()) {
-                    mChangeFragment.changeFragment(true);
-                }else if(isNetworkConnected()&&Repository.getInstance().isRepositoryNull())
+
+                 if(isNetworkConnected())
                 {
                     Intent intent = SplashActivity.newIntent(getActivity());
                     startActivity(intent);

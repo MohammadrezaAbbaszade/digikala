@@ -52,12 +52,14 @@ public class RatedRecyclerViews extends RecyclerView.Adapter {
         private TextView mTextView;
         private ImageView mImageView;
         private TextView mRegularPriceTextView;
+        private TextView mBudgetPriceTextView;
         private WoocommerceBody mWoocommerceBody;
         public ProductHolder(@NonNull View itemView) {
             super(itemView);
             mTextView = itemView.findViewById(R.id.list_newest_products_text_view);
             mImageView = itemView.findViewById(R.id.list_newest_product_image_view);
-            mRegularPriceTextView=itemView.findViewById(R.id.regular_price);
+            mRegularPriceTextView = itemView.findViewById(R.id.regular_price);
+            mBudgetPriceTextView=itemView.findViewById(R.id.budget_price);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -71,7 +73,8 @@ public class RatedRecyclerViews extends RecyclerView.Adapter {
             mWoocommerceBody=woocommerceBody;
             if(!woocommerceBody.getName().equalsIgnoreCase("تیشرت جذاب تابستانه با تخفیف ویژه دیجیکالا!!!!!"))
                 mTextView.setText(woocommerceBody.getName());
-            mRegularPriceTextView.setText(woocommerceBody.getPrice()+""+"تومان");
+            mRegularPriceTextView.setText(woocommerceBody.getPrice()+" "+"تومان");
+            mBudgetPriceTextView.setText(woocommerceBody.getRegularPrice() + " " + "تومان");
             Picasso.with(mContext).load(woocommerceBody.getImages().get(0).getSrc()).placeholder(R.drawable.digikala)
                     .into(mImageView);
         }

@@ -89,7 +89,7 @@ public class Repository {
     }
     public boolean isRepositoryNull()
     {
-        if(mRatedProducts==null||mPopularProducts==null||mNewestProducts==null||mCategoriesItems==null)
+        if(mRatedProducts==null&&mPopularProducts==null&&mNewestProducts==null&&mCategoriesItems==null)
             return true;
 
         return false;

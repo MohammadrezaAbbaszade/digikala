@@ -1,7 +1,9 @@
 package com.example.digikala.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -22,6 +24,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.digikala.R;
 import com.example.digikala.activities.MainActivity;
@@ -58,9 +61,11 @@ public class ProductDetailFragment extends Fragment {
     private TextView mTextView;
     private RecyclerView mRelatedProductRecycler;
     private TextView mDiscriptionTextView;
+    private TextView mRegularPriceTextView;
+    private TextView mBudgetPriceTextView;
     private ProductAdaptor mProductAdaptor;
     private String[] realtedIds;
-
+    private  changeFragment mChangeFragment;
     public static ProductDetailFragment newInstance(int id) {
 
         Bundle args = new Bundle();
@@ -73,16 +78,36 @@ public class ProductDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        id = getArguments().getInt(ID);
 
-        InitProductsAsynceTask initProductsAsynceTask = new InitProductsAsynceTask();
-        initProductsAsynceTask.execute();
+        if(isNetworkConnected())
+        {
+            id = getArguments().getInt(ID);
+            InitProductsAsynceTask initProductsAsynceTask = new InitProductsAsynceTask();
+            initProductsAsynceTask.execute();
+        }else
+        {
+            Intent intent = MainActivity.newIntent(getActivity(), 0);
+            Log.d("tag", "checkNetwork" + "0");
+            startActivity(intent);
+            getActivity().finish();
+            Log.d("tag","finished");
+        }
+
     }
 
-    public ProductDetailFragment() {
-        // Required empty public constructor
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof changeFragment) {
+            mChangeFragment = (changeFragment) context;
+        }
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mChangeFragment = null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,10 +115,10 @@ public class ProductDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_product_detail, container, false);
         init(view);
-//        mProgressBar.setVisibility(View.VISIBLE);
-//        mViewPager.setVisibility(View.GONE);
-//        mDotsIndicator.setVisibility(View.GONE);
-//        mCardView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mViewPager.setVisibility(View.GONE);
+        mDotsIndicator.setVisibility(View.GONE);
+        mCardView.setVisibility(View.GONE);
         return view;
     }
 
@@ -133,34 +158,35 @@ public class ProductDetailFragment extends Fragment {
         mDotsIndicator.setViewPager(mViewPager);
         mTextView.setText(Repository.getInstance().getProductById().getName());
         mDiscriptionTextView.setText(Repository.getInstance().getProductById().getDescription());
-
+        mRegularPriceTextView.setText(Repository.getInstance().getProductById().getPrice()+" "+"تومان");
+        mBudgetPriceTextView.setText(Repository.getInstance().getProductById().getRegularPrice()+" "+"تومان");
 
 
     }
 
     private void PrepareRelatedProducts() {
-        List<Integer> integers=Repository.getInstance().getProductById().getRelatedIds();
+        List<Integer> integers = Repository.getInstance().getProductById().getRelatedIds();
 
 //        realtedIds = new String[Repository.getInstance().getProductById().getRelatedIds().size()];
 //        for (int i = 0; i < Repository.getInstance().getProductById().getRelatedIds().size(); i++) {
 //            realtedIds[i] = String.valueOf(Repository.getInstance().getProductById().getRelatedIds().get(i));
 //        }
-       mWooCommerce.getWoocommerceApi().getReleatedProducts(integers.toString()).enqueue(new Callback<List<WoocommerceBody>>() {
-           @Override
-           public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
-               if(response.isSuccessful()){
-                   Repository.getInstance().setRelatedProducts(response.body());
-                   setUpAdaptor();
-               }
-           }
+        mWooCommerce.getWoocommerceApi().getReleatedProducts(integers.toString()).enqueue(new Callback<List<WoocommerceBody>>() {
+            @Override
+            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+                if (response.isSuccessful()) {
+                    Repository.getInstance().setRelatedProducts(response.body());
+                    setUpAdaptor();
+                }
+            }
 
-           @Override
-           public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
-               Intent intent = MainActivity.newIntent(getActivity(), 0);
-               startActivity(intent);
-               getActivity().finish();
-           }
-       });
+            @Override
+            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+                Intent intent = MainActivity.newIntent(getActivity(), 0);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
 
     }
 
@@ -172,6 +198,8 @@ public class ProductDetailFragment extends Fragment {
         mTextView = view.findViewById(R.id.detal_fragment_text_view);
         mDiscriptionTextView = view.findViewById(R.id.detal_fragment_discription_text_view);
         mRelatedProductRecycler = view.findViewById(R.id.detail_fragment_related_recycler);
+        mBudgetPriceTextView = view.findViewById(R.id.detail_fragment_budget_price_textView);
+        mRegularPriceTextView = view.findViewById(R.id.detail_fragment_regular_price_textView);
     }
 
     private void setUpAdaptor() {
@@ -197,10 +225,10 @@ public class ProductDetailFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             if (Repository.getInstance().getProductById() != null) {
-//                mProgressBar.setVisibility(View.GONE);
-//                mViewPager.setVisibility(View.VISIBLE);
-//                mDotsIndicator.setVisibility(View.VISIBLE);
-//                mCardView.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
+                mViewPager.setVisibility(View.VISIBLE);
+                mDotsIndicator.setVisibility(View.VISIBLE);
+                mCardView.setVisibility(View.VISIBLE);
                 PrepareViewPager();
                 PrepareRelatedProducts();
 
@@ -218,6 +246,7 @@ public class ProductDetailFragment extends Fragment {
         private TextView mTextView;
         private ImageView mImageView;
         private TextView mRegularPriceTextView;
+        private TextView mBudgetPriceTextView;
         private WoocommerceBody mWoocommerceBody;
 
         public ProductHolder(@NonNull View itemView) {
@@ -225,11 +254,12 @@ public class ProductDetailFragment extends Fragment {
             mTextView = itemView.findViewById(R.id.list_newest_products_text_view);
             mImageView = itemView.findViewById(R.id.list_newest_product_image_view);
             mRegularPriceTextView = itemView.findViewById(R.id.regular_price);
+            mBudgetPriceTextView=itemView.findViewById(R.id.budget_price);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent= ProductDetailActivity.newIntent(getActivity(),mWoocommerceBody.getId());
-                    getActivity().startActivity(intent);
+                    Intent intent = ProductDetailActivity.newIntent(getActivity(), mWoocommerceBody.getId());
+                  startActivity(intent);
                 }
             });
 
@@ -239,7 +269,8 @@ public class ProductDetailFragment extends Fragment {
             mWoocommerceBody = woocommerceBody;
             if (!woocommerceBody.getName().equalsIgnoreCase("تیشرت جذاب تابستانه با تخفیف ویژه دیجیکالا!!!!!"))
                 mTextView.setText(woocommerceBody.getName());
-            mRegularPriceTextView.setText(woocommerceBody.getPrice() + "" + "تومان");
+            mRegularPriceTextView.setText(woocommerceBody.getPrice() + " " + "تومان");
+            mBudgetPriceTextView.setText(woocommerceBody.getRegularPrice() + " " + "تومان");
             Picasso.with(getActivity()).load(woocommerceBody.getImages().get(0).getSrc()).placeholder(R.drawable.digikala)
                     .into(mImageView);
         }
@@ -271,5 +302,9 @@ public class ProductDetailFragment extends Fragment {
             return mWoocommerceBodies.size();
         }
     }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
 }

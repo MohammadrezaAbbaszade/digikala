@@ -109,35 +109,7 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
             }
         });
     }
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.navigation_menu, menu);
-//        return super.onCreateOptionsMenu(menu);
-//
-//    }
 
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        @Override
-        public boolean onOptionsItemSelected (@NonNull MenuItem item){
-
-            switch (item.getItemId()) {
-                case R.id.newest_menu:
-                    Intent intent = ListProductsActivity.newIntent(this, 3);
-                    startActivity(intent);
-
-                    break;
-                case R.id.most_seen__menu:
-                    Intent intent2 = ListProductsActivity.newIntent(this, 2);
-                    startActivity(intent2);
-                    break;
-                case R.id.most_sales__menu:
-                    Intent intent3 = ListProductsActivity.newIntent(this, 1);
-                    startActivity(intent3);
-                    break;
-
-            }
-            return super.onOptionsItemSelected(item);
-        }
 
         @Override
         public void changeFragment ( boolean check){
