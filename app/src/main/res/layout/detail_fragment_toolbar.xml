@@ -7,10 +7,23 @@
 
 
     <ImageButton
-        android:id="@+id/toolbar_shop"
+        android:id="@+id/detail_fragment_toolbar_shop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:background="@drawable/ic_shop" />
-
+    <ImageButton
+        android:id="@+id/detail_fragment_toolbar_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_gravity="end"
+        android:background="@drawable/ic_arrow" />
+    <TextView
+        android:id="@+id/detail_fragment_toolbar_text_view"
+        android:layout_gravity="end"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </androidx.appcompat.widget.Toolbar>

@@ -48,6 +48,12 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mDrawerLayout.closeDrawers();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -56,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
         mNavigationView = findViewById(R.id.navigation);
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+
+
 
         mImageButton = findViewById(R.id.toolbar_burger);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -85,25 +93,27 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Log.d("tag","onNavigationItemSelected");
+                Log.d("tag", "onNavigationItemSelected");
                 switch (menuItem.getItemId()) {
                     case R.id.newest_menu:
-                        Log.d("tag","newest_menu");
-                        Intent intent = ListProductsActivity.newIntent(MainActivity.this,3);
+                        Log.d("tag", "newest_menu");
+                        Intent intent = ListProductsActivity.newIntent(MainActivity.this, 3);
                         startActivity(intent);
 
                         break;
                     case R.id.most_seen__menu:
-                        Log.d("tag","most_seen__menu");
+                        Log.d("tag", "most_seen__menu");
                         Intent intent2 = ListProductsActivity.newIntent(MainActivity.this, 2);
                         startActivity(intent2);
                         break;
                     case R.id.most_sales__menu:
-                        Log.d("tag","most_seen__menu");
+                        Log.d("tag", "most_seen__menu");
                         Intent intent3 = ListProductsActivity.newIntent(MainActivity.this, 1);
                         startActivity(intent3);
                         break;
-
+                    case R.id.home_menu:
+                        mDrawerLayout.closeDrawers();
+                        break;
                 }
                 return true;
             }
@@ -111,18 +121,19 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
     }
 
 
-        @Override
-        public void changeFragment ( boolean check){
-            if (check == false) {
-                fm.beginTransaction().replace(R.id.fragment_container, NoNetworkFragment.newInstance())
-                        .commit();
-                mToolbar.setVisibility(View.GONE);
-                mNavigationView.setVisibility(View.GONE);
-            } else {
-                fm.beginTransaction().replace(R.id.fragment_container, MainFragment.newInstance())
-                        .commit();
-                mToolbar.setVisibility(View.VISIBLE);
-                mNavigationView.setVisibility(View.VISIBLE);
-            }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void changeFragment(boolean check) {
+        if (check == false) {
+            fm.beginTransaction().replace(R.id.fragment_container, NoNetworkFragment.newInstance())
+                    .commit();
+            mToolbar.setVisibility(View.GONE);
+            mNavigationView.cancelDragAndDrop();
+        } else {
+            fm.beginTransaction().replace(R.id.fragment_container, MainFragment.newInstance())
+                    .commit();
+            mToolbar.setVisibility(View.VISIBLE);
+            mNavigationView.setVisibility(View.VISIBLE);
         }
     }
+}

@@ -32,6 +32,7 @@ import com.example.digikala.activities.ListProductsActivity;
 import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.WooCommerce;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +111,7 @@ public class MainFragment extends Fragment {
         mViewPager.setAdapter(new PagerAdapter() {
             @Override
             public int getCount() {
-                return 4;
+                return Repository.getInstance().getPopularProducts().get(0).getImages().size();
             }
 
             @NonNull
@@ -118,7 +119,8 @@ public class MainFragment extends Fragment {
             public Object instantiateItem(@NonNull ViewGroup container, int position) {
                 View view = LayoutInflater.from(getActivity()).inflate(R.layout.image_view, null);
                 ImageView imageView = view.findViewById(R.id.image);
-                imageView.setImageDrawable(getActivity().getResources().getDrawable(getImageAt(position)));
+                Picasso.with(getActivity()).load(Repository.getInstance().getPopularProducts().get(0).getImages().get(position).getSrc()).placeholder(R.drawable.digikala)
+                        .into(imageView);
                 container.addView(view);
                 return view;
 
@@ -134,20 +136,7 @@ public class MainFragment extends Fragment {
                 return object == view;
             }
 
-            private int getImageAt(int position) {
-                switch (position) {
-                    case 0:
-                        return R.drawable.add;
-                    case 1:
-                        return R.drawable.add;
-                    case 2:
-                        return R.drawable.add;
-                    case 3:
-                        return R.drawable.add;
-                    default:
-                        return R.drawable.add;
-                }
-            }
+
         });
         mDotsIndicator.setViewPager(mViewPager);
 

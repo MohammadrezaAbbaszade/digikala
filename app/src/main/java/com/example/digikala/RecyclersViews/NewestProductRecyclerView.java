@@ -66,7 +66,7 @@ public class NewestProductRecyclerView extends RecyclerView.Adapter {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent= ProductDetailActivity.newIntent(mContext,mWoocommerceBody.getId());
+                    Intent intent= ProductDetailActivity.newIntent(mContext,mWoocommerceBody.getId(),mWoocommerceBody.getName());
                     mContext.startActivity(intent);
                 }
             });

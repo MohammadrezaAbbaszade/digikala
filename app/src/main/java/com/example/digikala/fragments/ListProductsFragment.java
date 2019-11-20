@@ -55,9 +55,9 @@ public class ListProductsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!isNetworkConnected()) {
-            Intent intent = MainActivity.newIntent(getActivity(), 0);
-            Log.d("tag", "checkNetwork" + "0");
-            startActivity(intent);
+//            Intent intent = MainActivity.newIntent(getActivity(), 0);
+//            Log.d("tag", "checkNetwork" + "0");
+//            startActivity(intent);
             getActivity().finish();
             Log.d("tag","finished");
         }
@@ -97,8 +97,13 @@ public class ListProductsFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = ProductDetailActivity.newIntent(getActivity(), mWoocommerceBody.getId());
-                    getActivity().startActivity(intent);
+                    if(!isNetworkConnected())
+                    {
+                        getActivity().finish();
+                    }else {
+                        Intent intent = ProductDetailActivity.newIntent(getActivity(), mWoocommerceBody.getId(), mWoocommerceBody.getName());
+                        startActivity(intent);
+                    }
                 }
             });
 

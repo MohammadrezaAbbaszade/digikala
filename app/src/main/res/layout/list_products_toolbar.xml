@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
     android:background="@color/colorPrimaryDark"
-    android:layout_height="60dp">
+    android:orientation="vertical">
 
     <ImageButton
         android:id="@+id/list_products_toolbar_shop"
@@ -11,10 +12,27 @@
         android:layout_margin="15dp"
         android:background="@drawable/ic_shop" />
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/list_products_search_view"
+    <ImageButton
+        android:id="@+id/list_product_toolbar_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="15dp"
+        android:background="@drawable/ic_arrow" />
+
+    <TextView
+        android:id="@+id/list_product_toolbar_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <ImageButton
+        android:id="@+id/list_product_toolbar_search_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_search"
         android:layout_marginRight="10dp"/>
 
 </androidx.appcompat.widget.Toolbar>

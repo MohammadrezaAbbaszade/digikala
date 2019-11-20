@@ -8,29 +8,54 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.digikala.R;
 import com.example.digikala.fragments.ListProductsFragment;
 
 public class ListProductsActivity extends AppCompatActivity {
-
+    private ImageButton mArrowButton;
+    private TextView mToolbarTextView;
     private static final String STATE = "state";
 
     public static Intent newIntent(Context context, int state) {
         Intent intent = new Intent(context, ListProductsActivity.class);
-        intent.putExtra(STATE,state);
+        intent.putExtra(STATE, state);
         return intent;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_products);
-        Log.d("tag","onCreateViewLA");
-        int state=getIntent().getIntExtra(STATE,0);
-        FragmentManager fm=getSupportFragmentManager();
-        Fragment fragment=fm.findFragmentById(R.id.list_products_activity_container);
-        if(fragment==null)
-        {
+        int state = getIntent().getIntExtra(STATE, 0);
+        mArrowButton = findViewById(R.id.list_product_toolbar_arrow);
+        mToolbarTextView = findViewById(R.id.list_product_toolbar_text_view);
+        switch (state) {
+            case 1:
+                mToolbarTextView.setText("پرفروش ترین ها");
+                break;
+            case 2:
+                mToolbarTextView.setText("پربازدیدترین ها");
+                break;
+            default:
+                mToolbarTextView.setText("جدیدترین ها");
+        }
+
+
+        mArrowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        Log.d("tag", "onCreateViewLA");
+
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.list_products_activity_container);
+        if (fragment == null) {
             fm.beginTransaction().replace(R.id.list_products_activity_container, ListProductsFragment.newInstance(state))
                     .commit();
         }
