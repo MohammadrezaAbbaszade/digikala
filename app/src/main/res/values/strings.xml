@@ -5,4 +5,48 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="no_internet_connection">خطا در اتصال به اینترنت</string>
+    <string name="problem_response">خطا در برقراری ارتباط</string>
+
+    <string name="list_category_menu">لیست دسته بندی محصولات</string>
+
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
+    <string name="new_products">جدید ترین محصولات</string>
+    <string name="visited_products">پر بازدید ترین محصولات</string>
+    <string name="rated_products">پر امتیاز ترین محصولات</string>
+    <string name="progress_product">در حال دریافت اطلاعات محصول</string>
+    <string name="progress_category">در حال دریافت دسته بندی ها</string>
+    <string name="product_info">مشخصات</string>
+    <string name="product_description">توضیحات</string>
+    <string name="no_item">محصولی یافت نشد</string>
+    <string name="load_data">در حال بارگذاری اطلاعات</string>
+    <string name="search">جستجو کردن محصول</string>
+    <string name="all_product_list">لیست کامل</string>
+    <string name="no_page">صفحه ی بیشتری یافت نشد</string>
+    <string name="try_again">دوباره تلاش کن</string>
+    <string name="shop_bag">سبد خرید</string>
+    <string name="add_shop_successfully">محصول به سبد خرید اضافه شد.</string>
+    <string name="shopping_final_sum">جمع خرید کل</string>
+    <string name="submit_shopping">خرید خود را نهایی کنید</string>
+    <string name="full_price">قیمت کل</string>
+    <string name="final_price">قیمت نهایی</string>
+    <string name="delete">حذف</string>
+    <string name="price_format">  %s ریال</string>
+    <string name="dialog_bag_question">آیا مایل به حذف این محصول از سبد خرید هستید؟</string>
+    <string name="like_dialog_question">آیا مایل به حذف این محصول از لیست علاقه مندی ها هستید؟</string>
+    <string name="liked_products_list">لیست محصولات مورد علاقه</string>
+    <string name="yes">بله</string>
+    <string name="no">خیر</string>
+    <string name="filtering">رنگ، نوع، قیمت و…</string>
+    <string name="filter">فیلتر کردن</string>
+    <string name="sort">مرتب سازی</string>
+    <string name="check_box_newest">جدید ترین</string>
+    <string name="check_box_rated">پر امتیاز ترین</string>
+    <string name="check_box_selles">پر بازدید ترین</string>
+    <string name="check_box_cost_low_high">قیمت از کم به زیاد</string>
+    <string name="check_box_cost_high_low">قیمت از زیاد به کم</string>
+    <string name="filter_action_bar">فیلتر کردن محصول</string>
+
+    <string name="related_products">محصولات مشابه</string>
 </resources>

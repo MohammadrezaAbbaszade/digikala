@@ -2,6 +2,7 @@ package com.example.digikala.RecyclersViews;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.digikala.R;
 import com.example.digikala.activities.ProductDetailActivity;
+import com.example.digikala.model.ImagesItem;
 import com.example.digikala.model.WoocommerceBody;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class PopularProductRecyclerViews extends RecyclerView.Adapter {
+public class ProductsRecyclerView extends RecyclerView.Adapter {
     private List<WoocommerceBody> productList;
     private Context mContext;
     private View view;
 
-    public PopularProductRecyclerViews(List<WoocommerceBody> toDoList, Context context) {
+    public ProductsRecyclerView(List<WoocommerceBody> toDoList, Context context) {
         productList = toDoList;
         mContext = context;
     }
@@ -32,7 +34,7 @@ public class PopularProductRecyclerViews extends RecyclerView.Adapter {
     @Override
     public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         view = LayoutInflater.from(mContext).inflate(R.layout.list_newest_products, parent, false);
-      ProductHolder productHolder = new ProductHolder(view);
+        ProductHolder productHolder = new ProductHolder(view);
         return productHolder;
     }
 
@@ -54,6 +56,7 @@ public class PopularProductRecyclerViews extends RecyclerView.Adapter {
         private TextView mRegularPriceTextView;
         private TextView mBudgetPriceTextView;
         private WoocommerceBody mWoocommerceBody;
+
         public ProductHolder(@NonNull View itemView) {
             super(itemView);
             mTextView = itemView.findViewById(R.id.list_newest_products_text_view);
@@ -71,12 +74,18 @@ public class PopularProductRecyclerViews extends RecyclerView.Adapter {
 
         void bind(WoocommerceBody woocommerceBody) {
             mWoocommerceBody=woocommerceBody;
-            if(!woocommerceBody.getName().equalsIgnoreCase("تیشرت جذاب تابستانه با تخفیف ویژه دیجیکالا!!!!!"))
+            if (!woocommerceBody.getName().equalsIgnoreCase("تیشرت جذاب تابستانه با تخفیف ویژه دیجیکالا!!!!!"))
                 mTextView.setText(woocommerceBody.getName());
-            mRegularPriceTextView.setText(woocommerceBody.getPrice()+" "+"تومان");
+            mRegularPriceTextView.setText(woocommerceBody.getPrice() + " " + "تومان");
             mBudgetPriceTextView.setText(woocommerceBody.getRegularPrice() + " " + "تومان");
             Picasso.with(mContext).load(woocommerceBody.getImages().get(0).getSrc()).placeholder(R.drawable.digikala)
                     .into(mImageView);
         }
     }
 }
+
+
+
+
+
+

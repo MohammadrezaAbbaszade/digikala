@@ -1,6 +1,9 @@
 package Woo.Repository;
 
 import com.example.digikala.model.CategoriesItem;
+import com.example.digikala.model.DaoSession;
+import com.example.digikala.model.ShoppingBag;
+import com.example.digikala.model.ShoppingBagDao;
 import com.example.digikala.model.WoocommerceBody;
 
 import java.util.ArrayList;
@@ -15,6 +18,16 @@ public class Repository {
     private List<WoocommerceBody> mRelatedProducts;
     private WoocommerceBody mProductById;
     private List<CategoriesItem> mCategoriesItems;
+    private List<ShoppingBag> mShoppingBags=new ArrayList<>();
+    private DaoSession daoSession;
+    private ShoppingBagDao mShoppingBagDao;
+
+    private Repository() {
+        daoSession = DBApplication.getInstance().getDaoSession();
+        mShoppingBagDao = daoSession.getShoppingBagDao();
+    }
+
+
     public static Repository getInstance() {
         if (repository == null) {
             repository = new Repository();
@@ -22,12 +35,48 @@ public class Repository {
         return repository;
     }
 
+    public List<ShoppingBag> getShoppingBags() {
+        return mShoppingBags;
+    }
+
+    public void addBag(int id) {
+        List<ShoppingBag> checkList=mShoppingBagDao
+        .queryBuilder()
+                .where(ShoppingBagDao.Properties.MProductId.eq(id))
+                .list();
+        if (checkList == null) {
+            ShoppingBag shoppingBag=new ShoppingBag();
+            shoppingBag.setMProductId(Integer.toString(id));
+            mShoppingBagDao.insert(shoppingBag);
+        }
+    }
+
+    public void deleteBag(String id) {
+        mShoppingBagDao.delete(getBag(id));
+    }
+
+    public ShoppingBag getBag(String id) {
+        return mShoppingBagDao.queryBuilder()
+                .where(ShoppingBagDao.Properties.MProductId.eq(id))
+                .unique();
+    }
+
+    public List<String> getBagsIds() {
+        List<ShoppingBag> checkList=mShoppingBagDao
+               .loadAll();
+        List<String> mIds = new ArrayList<>();
+        for (ShoppingBag shoppingBag :checkList) {
+            mIds.add(shoppingBag.getMProductId());
+        }
+        return mIds;
+    }
+
     public List<WoocommerceBody> getRelatedProducts() {
         return mRelatedProducts;
     }
 
     public void setRelatedProducts(List<WoocommerceBody> relatedProducts) {
-        mRelatedProducts=null;
+        mRelatedProducts = null;
         mRelatedProducts = relatedProducts;
     }
 
@@ -44,7 +93,7 @@ public class Repository {
     }
 
     public void setProductById(WoocommerceBody productById) {
-        mProductById=null;
+        mProductById = null;
         mProductById = productById;
 
     }
@@ -54,7 +103,7 @@ public class Repository {
     }
 
     public void setCategoriesItems(List<CategoriesItem> categoriesItems) {
-        mCategoriesItems=null;
+        mCategoriesItems = null;
         mCategoriesItems = categoriesItems;
     }
 
@@ -63,7 +112,7 @@ public class Repository {
     }
 
     public void setNewestProducts(List<WoocommerceBody> newestProducts) {
-        mNewestProducts=null;
+        mNewestProducts = null;
         mNewestProducts = newestProducts;
 
     }
@@ -73,7 +122,7 @@ public class Repository {
     }
 
     public void setPopularProducts(List<WoocommerceBody> popularProducts) {
-        mPopularProducts=null;
+        mPopularProducts = null;
         mPopularProducts = popularProducts;
 
     }
@@ -83,13 +132,13 @@ public class Repository {
     }
 
     public void setRatedProducts(List<WoocommerceBody> ratedProducts) {
-        mRatedProducts=null;
+        mRatedProducts = null;
         mRatedProducts = ratedProducts;
 
     }
-    public boolean isRepositoryNull()
-    {
-        if(mRatedProducts==null&&mPopularProducts==null&&mNewestProducts==null&&mCategoriesItems==null)
+
+    public boolean isRepositoryNull() {
+        if (mRatedProducts == null && mPopularProducts == null && mNewestProducts == null && mCategoriesItems == null)
             return true;
 
         return false;

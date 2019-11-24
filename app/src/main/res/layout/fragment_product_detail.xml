@@ -152,6 +152,7 @@
 
                     android:textSize="20sp"
 
+                    app:layout_constraintEnd_toStartOf="@+id/detail_fragment_budget_price_textView"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

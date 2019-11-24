@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.example.digikala.R;
 import com.example.digikala.activities.MainActivity;
 import com.example.digikala.activities.ProductDetailActivity;
+import com.example.digikala.activities.ShopBagFragmentActivity;
 import com.example.digikala.activities.SplashActivity;
 import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.WoocommerceBody;
@@ -64,8 +65,12 @@ public class ProductDetailFragment extends Fragment {
     private TextView mRegularPriceTextView;
     private TextView mBudgetPriceTextView;
     private ProductAdaptor mProductAdaptor;
+    private Button mBuyButton;
+    public static final int REQUEST_CODE_FOR_SHOP_BAG_FRAGMENT = 1;
+    public static final String SHOP_BAG_FRAGMENT_TAG = "shopbagfragmenttag";
     private String[] realtedIds;
-    private  changeFragment mChangeFragment;
+    private changeFragment mChangeFragment;
+
     public static ProductDetailFragment newInstance(int id) {
 
         Bundle args = new Bundle();
@@ -79,20 +84,22 @@ public class ProductDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(isNetworkConnected())
-        {
+        if (isNetworkConnected()) {
             id = getArguments().getInt(ID);
-            InitProductsAsynceTask initProductsAsynceTask = new InitProductsAsynceTask();
-            initProductsAsynceTask.execute();
-        }else
-        {
+            startAsynkRequest();
+        } else {
 //            Intent intent = MainActivity.newIntent(getActivity(), 0);
 //            Log.d("tag", "checkNetwork" + "0");
 //            startActivity(intent);
             getActivity().finish();
-            Log.d("tag","finished");
+            Log.d("tag", "finished");
         }
 
+    }
+
+    private void startAsynkRequest() {
+        InitProductsAsynceTask initProductsAsynceTask = new InitProductsAsynceTask();
+        initProductsAsynceTask.execute();
     }
 
     @Override
@@ -119,7 +126,22 @@ public class ProductDetailFragment extends Fragment {
         mViewPager.setVisibility(View.GONE);
         mDotsIndicator.setVisibility(View.GONE);
         mCardView.setVisibility(View.GONE);
+        mBuyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addProductToBag();
+              Intent intent= ShopBagFragmentActivity.newIntent(getActivity(),id,1);
+              startActivity(intent);
+//                ShopBagFragment shopBagFragment = ShopBagFragment.newInstance(id, 1);
+////                shopBagFragment.setTargetFragment(ProductDetailFragment.this, REQUEST_CODE_FOR_SHOP_BAG_FRAGMENT);
+//                shopBagFragment.show(getFragmentManager(), SHOP_BAG_FRAGMENT_TAG);
+            }
+        });
         return view;
+    }
+
+    private void addProductToBag() {
+        Repository.getInstance().addBag(Repository.getInstance().getProductById().getId());
     }
 
     private void PrepareViewPager() {
@@ -158,10 +180,8 @@ public class ProductDetailFragment extends Fragment {
         mDotsIndicator.setViewPager(mViewPager);
         mTextView.setText(Repository.getInstance().getProductById().getName());
         mDiscriptionTextView.setText(Repository.getInstance().getProductById().getDescription());
-        mRegularPriceTextView.setText(Repository.getInstance().getProductById().getPrice()+" "+"تومان");
-        mBudgetPriceTextView.setText(Repository.getInstance().getProductById().getRegularPrice()+" "+"تومان");
-
-
+        mRegularPriceTextView.setText(Repository.getInstance().getProductById().getPrice() + " " + "تومان");
+        mBudgetPriceTextView.setText(Repository.getInstance().getProductById().getRegularPrice() + " " + "تومان");
     }
 
     private void PrepareRelatedProducts() {
@@ -182,9 +202,10 @@ public class ProductDetailFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
-                Intent intent = MainActivity.newIntent(getActivity(), 0);
-                startActivity(intent);
-                getActivity().finish();
+//                Intent intent = MainActivity.newIntent(getActivity(), 0);
+//                startActivity(intent);
+//                getActivity().finish();
+
             }
         });
 
@@ -200,6 +221,7 @@ public class ProductDetailFragment extends Fragment {
         mRelatedProductRecycler = view.findViewById(R.id.detail_fragment_related_recycler);
         mBudgetPriceTextView = view.findViewById(R.id.detail_fragment_budget_price_textView);
         mRegularPriceTextView = view.findViewById(R.id.detail_fragment_regular_price_textView);
+        mBuyButton = view.findViewById(R.id.detail_fragment_buy_button);
     }
 
     private void setUpAdaptor() {
@@ -217,6 +239,7 @@ public class ProductDetailFragment extends Fragment {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                getActivity().finish();
             }
             return null;
         }
@@ -233,10 +256,12 @@ public class ProductDetailFragment extends Fragment {
                 PrepareRelatedProducts();
 
             } else {
+                mProgressBar.setVisibility(View.GONE);
 //                Intent intent = MainActivity.newIntent(getActivity(), 0);
 //                Log.d("tag", "checkNetwork" + "0");
 //                startActivity(intent);
-                getActivity().finish();
+//                getActivity().finish();
+                startAsynkRequest();
             }
         }
 
@@ -254,12 +279,12 @@ public class ProductDetailFragment extends Fragment {
             mTextView = itemView.findViewById(R.id.list_newest_products_text_view);
             mImageView = itemView.findViewById(R.id.list_newest_product_image_view);
             mRegularPriceTextView = itemView.findViewById(R.id.regular_price);
-            mBudgetPriceTextView=itemView.findViewById(R.id.budget_price);
+            mBudgetPriceTextView = itemView.findViewById(R.id.budget_price);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = ProductDetailActivity.newIntent(getActivity(), mWoocommerceBody.getId(),mWoocommerceBody.getName());
-                  startActivity(intent);
+                    Intent intent = ProductDetailActivity.newIntent(getActivity(), mWoocommerceBody.getId(), mWoocommerceBody.getName());
+                    startActivity(intent);
                 }
             });
 
@@ -302,6 +327,7 @@ public class ProductDetailFragment extends Fragment {
             return mWoocommerceBodies.size();
         }
     }
+
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 

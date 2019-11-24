@@ -47,11 +47,7 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
         return intent;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mDrawerLayout.closeDrawers();
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,19 +95,26 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
                         Log.d("tag", "newest_menu");
                         Intent intent = ListProductsActivity.newIntent(MainActivity.this, 3);
                         startActivity(intent);
-
+                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.most_seen__menu:
                         Log.d("tag", "most_seen__menu");
                         Intent intent2 = ListProductsActivity.newIntent(MainActivity.this, 2);
                         startActivity(intent2);
+                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.most_sales__menu:
                         Log.d("tag", "most_seen__menu");
                         Intent intent3 = ListProductsActivity.newIntent(MainActivity.this, 1);
                         startActivity(intent3);
+                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.home_menu:
+                        mDrawerLayout.closeDrawers();
+                        break;
+                    case R.id.product_list__menu:
+                        Intent intent4=CategoriesViewPagerActivity.newIntent(MainActivity.this);
+                        startActivity(intent4);
                         mDrawerLayout.closeDrawers();
                         break;
                 }

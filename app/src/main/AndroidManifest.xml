@@ -3,13 +3,15 @@
     package="com.example.digikala">
 
     <application
+        android:name="Woo.Repository.DBApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.CategoriesViewPagerActivity"></activity>
+        <activity android:name=".activities.ShopBagFragmentActivity"></activity>
+        <activity android:name=".activities.CategoriesViewPagerActivity" />
         <activity android:name=".activities.ListProductsActivity" />
         <activity android:name=".activities.ProductDetailActivity" />
         <activity android:name=".activities.SplashActivity">
@@ -21,9 +23,9 @@
         </activity>
         <activity android:name=".activities.MainActivity" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

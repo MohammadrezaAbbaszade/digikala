@@ -16,19 +16,14 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.digikala.RecyclersViews.NewestProductRecyclerView;
+import com.example.digikala.RecyclersViews.ProductsRecyclerView;
 import com.example.digikala.R;
-import com.example.digikala.RecyclersViews.PopularProductRecyclerViews;
-import com.example.digikala.RecyclersViews.RatedRecyclerViews;
-import com.example.digikala.activities.ListProductsActivity;
+import com.example.digikala.activities.CategoriesViewPagerActivity;
 import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.WooCommerce;
@@ -57,9 +52,9 @@ public class MainFragment extends Fragment {
     private ProductAdaptor mProductAdaptor;
     private RecyclerView mRecentRecyclerView;
     private List<String> mStrings2 = new ArrayList<>();
-    private NewestProductRecyclerView mNewestProductAdaptor;
-    private PopularProductRecyclerViews mPopularProductAdaptor;
-    private RatedRecyclerViews mRatedRecyclerAdaptor;
+    private ProductsRecyclerView mNewestProductAdaptor;
+    private ProductsRecyclerView mPopularProductAdaptor;
+    private ProductsRecyclerView mRatedRecyclerAdaptor;
     private WooCommerce mWooCommerce = new WooCommerce();
     private int state;
     private changeFragment mChangeFragment;
@@ -158,9 +153,9 @@ public class MainFragment extends Fragment {
 
 
     public void updateAdaptor() {
-        mNewestProductAdaptor = new NewestProductRecyclerView(Repository.getInstance().getNewestProducts(), getActivity());
-        mPopularProductAdaptor = new PopularProductRecyclerViews(Repository.getInstance().getPopularProducts(), getActivity());
-        mRatedRecyclerAdaptor = new RatedRecyclerViews(Repository.getInstance().getRatedProducts(), getActivity());
+        mNewestProductAdaptor = new ProductsRecyclerView(Repository.getInstance().getNewestProducts(), getActivity());
+        mPopularProductAdaptor = new ProductsRecyclerView(Repository.getInstance().getPopularProducts(), getActivity());
+        mRatedRecyclerAdaptor = new ProductsRecyclerView(Repository.getInstance().getRatedProducts(), getActivity());
         mProductAdaptor = new ProductAdaptor(Repository.getInstance().getCategoriesItems());
         mCategoryRecyclerView.setAdapter(mProductAdaptor);
         mRecentRecyclerView.setAdapter(mNewestProductAdaptor);
@@ -177,7 +172,8 @@ public class MainFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Intent intent= CategoriesViewPagerActivity.newIntent(getActivity());
+                    startActivity(intent);
                 }
             });
 
