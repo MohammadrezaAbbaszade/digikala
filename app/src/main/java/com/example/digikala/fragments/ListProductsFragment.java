@@ -1,6 +1,7 @@
 package com.example.digikala.fragments;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -15,15 +16,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.digikala.R;
-import com.example.digikala.activities.MainActivity;
+import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
 import com.example.digikala.activities.ProductDetailActivity;
-import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.WoocommerceBody;
 import com.squareup.picasso.Picasso;
 
@@ -38,7 +36,12 @@ public class ListProductsFragment extends Fragment {
     private static final String STATE = "state";
     private RecyclerView mListProductsRecycler;
     private TextView mTextView;
+    private TextView mSortTextView;
+    private TextView mSubSortTextView;
+    private TextView mFilterTextView;
     private int state;
+    public static final int REQUEST_CODE_FOR_SORT_DIALOG_FRAGMENT = 0;
+    public static final String SORT_DIALOG_FRAGMENT_TAG = "sortdialogfragmenttag";
     private changeFragment mChangeFragment;
 
     public static ListProductsFragment newInstance(int state) {
@@ -57,8 +60,7 @@ public class ListProductsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(Repository.getInstance().getSearchedProducts()!=null&&Repository.getInstance().getSearchedProducts().size()==0)
-        {
+        if (Repository.getInstance().getSearchedProducts() != null && Repository.getInstance().getSearchedProducts().size() == 0) {
             mTextView.setVisibility(View.VISIBLE);
         }
     }
@@ -82,6 +84,29 @@ public class ListProductsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list_products, container, false);
         init(view);
+        if (state == 1) {
+            mSubSortTextView.setText(R.string.check_box_rated);
+            SharedPreferencesData.setRadioGroupId(getActivity(), 2);
+        } else if (state == 2) {
+            mSubSortTextView.setText(R.string.check_box_selles);
+            SharedPreferencesData.setRadioGroupId(getActivity(), 3);
+        }
+        else if (state == 3) {
+            mSubSortTextView.setText(R.string.check_box_newest);
+            SharedPreferencesData.setRadioGroupId(getActivity(), 1);
+        }
+        else {
+            mSubSortTextView.setText(R.string.check_box_selles);
+            SharedPreferencesData.setRadioGroupId(getActivity(), 0);
+        }
+        mSortTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SortDialogFragment sortDialogFragment = SortDialogFragment.newInstance(SharedPreferencesData.getRadioGroupId(getContext()));
+                sortDialogFragment.setTargetFragment(ListProductsFragment.this, REQUEST_CODE_FOR_SORT_DIALOG_FRAGMENT);
+                sortDialogFragment.show(getFragmentManager(), SORT_DIALOG_FRAGMENT_TAG);
+            }
+        });
         Log.d("tag", "onCreateViewL");
         ProductAdaptor productAdaptor = new ProductAdaptor(state);
         mListProductsRecycler.setAdapter(productAdaptor);
@@ -90,8 +115,48 @@ public class ListProductsFragment extends Fragment {
 
     private void init(View view) {
         mListProductsRecycler = view.findViewById(R.id.list_products_fragment_recycler);
-        mTextView=view.findViewById(R.id.list_products_fragment_text_view);
+        mTextView = view.findViewById(R.id.list_products_fragment_text_view);
+        mSortTextView = view.findViewById(R.id.list_product_fragment_sort_text_view);
+        mSubSortTextView = view.findViewById(R.id.list_product_fragment_sub_sort_text_view);
+    }
 
+    private void setSortTextView() {
+        switch (SharedPreferencesData.getRadioGroupId(getActivity())) {
+            case 1:
+                mSubSortTextView.setText(R.string.check_box_newest);
+                break;
+            case 2:
+                mSubSortTextView.setText(R.string.check_box_rated);
+                break;
+            case 3:
+                mSubSortTextView.setText(R.string.check_box_selles);
+                break;
+            case 4:
+                mSubSortTextView.setText(R.string.check_box_cost_high_low);
+                break;
+            case 5:
+                mSubSortTextView.setText(R.string.check_box_cost_low_high);
+                break;
+            default: {
+                Log.d("default",String.valueOf(SharedPreferencesData.getRadioGroupId(getActivity())));
+                if (state == 1) {
+                    mSubSortTextView.setText(R.string.check_box_rated);
+                    SharedPreferencesData.setRadioGroupId(getActivity(), 2);
+                } else if (state == 2) {
+                    mSubSortTextView.setText(R.string.check_box_selles);
+                    SharedPreferencesData.setRadioGroupId(getActivity(), 3);
+                }
+                else if (state == 3) {
+                    mSubSortTextView.setText(R.string.check_box_newest);
+                    SharedPreferencesData.setRadioGroupId(getActivity(), 1);
+                }
+                else {
+                    mSubSortTextView.setText(R.string.check_box_selles);
+                    SharedPreferencesData.setRadioGroupId(getActivity(), 0);
+                }
+
+            }
+        }
     }
 
     private class ProductHolder extends RecyclerView.ViewHolder {
@@ -178,5 +243,17 @@ public class ListProductsFragment extends Fragment {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK || data == null)
+            return;
+
+        if (requestCode == REQUEST_CODE_FOR_SORT_DIALOG_FRAGMENT) {
+           setSortTextView();
+        }
+
     }
 }

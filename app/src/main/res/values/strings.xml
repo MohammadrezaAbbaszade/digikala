@@ -42,7 +42,7 @@
     <string name="filter">فیلتر کردن</string>
     <string name="sort">مرتب سازی</string>
     <string name="check_box_newest">جدید ترین</string>
-    <string name="check_box_rated">پر امتیاز ترین</string>
+    <string name="check_box_rated">پر فروش ترین</string>
     <string name="check_box_selles">پر بازدید ترین</string>
     <string name="check_box_cost_low_high">قیمت از کم به زیاد</string>
     <string name="check_box_cost_high_low">قیمت از زیاد به کم</string>

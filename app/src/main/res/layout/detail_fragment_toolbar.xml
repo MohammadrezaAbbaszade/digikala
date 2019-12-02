@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
      android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="?attr/actionBarSize"
     android:id="@+id/detail_fragment_toolbar"
     android:background="@color/colorPrimaryDark">
 
@@ -36,8 +36,11 @@
         android:layout_gravity="end"
         android:textColor="@color/white"
         android:textSize="20sp"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:layout_marginRight="55dp"
         android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
+        android:textDirection="rtl"
         android:layout_height="wrap_content"/>
 </FrameLayout>

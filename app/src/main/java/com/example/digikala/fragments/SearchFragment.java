@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
@@ -15,26 +14,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.digikala.R;
-import com.example.digikala.RecyclersViews.utils.QueryPreferences;
+import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
 import com.example.digikala.activities.ListProductsActivity;
-import com.example.digikala.activities.ProductDetailActivity;
-import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.WooCommerce;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.util.List;
 
 import Woo.Repository.Repository;
 
@@ -85,7 +75,7 @@ public class SearchFragment extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 SearchAsynceTask searchAsynceTask = new SearchAsynceTask();
                 searchAsynceTask.execute(query);
-                QueryPreferences.setQuery(getActivity(),query);
+                SharedPreferencesData.setQuery(getActivity(),query);
                 return true;
             }
 

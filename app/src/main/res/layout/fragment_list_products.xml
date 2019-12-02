@@ -1,29 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.ListProductsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <include layout="@layout/filter_view"/>
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/list_products_fragment_recycler"
-    android:layout_gravity="center"
-    android:orientation="vertical"
-    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
-
     <TextView
         android:id="@+id/list_products_fragment_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone"
+        android:text="محصول مورد نظر شما یافت نشد!"
         android:textSize="20sp"
-        android:text="محصول مورد نظر شما یافت نشد!"/>
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_products_fragment_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="680dp"
+        android:layout_margin="8dp"
+        android:layout_marginLeft="12dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/include" />
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/filter_view"
+        app:layout_constraintBottom_toTopOf="@+id/list_products_fragment_recycler"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

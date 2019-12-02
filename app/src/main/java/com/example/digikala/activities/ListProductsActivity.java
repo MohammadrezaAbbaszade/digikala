@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.digikala.R;
-import com.example.digikala.RecyclersViews.utils.QueryPreferences;
+import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
 import com.example.digikala.fragments.ListProductsFragment;
 
 import Woo.Repository.Repository;
@@ -65,7 +65,7 @@ public class ListProductsActivity extends AppCompatActivity {
                 mToolbarTextView.setText("جدیدترین ها");
                 break;
             default:
-                mToolbarTextView.setText(QueryPreferences.getQuery(this));
+                mToolbarTextView.setText(SharedPreferencesData.getQuery(this));
         }
 
 
