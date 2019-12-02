@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.digikala.R;
 import com.example.digikala.activities.MainActivity;
@@ -36,8 +37,10 @@ import Woo.Repository.Repository;
 public class ListProductsFragment extends Fragment {
     private static final String STATE = "state";
     private RecyclerView mListProductsRecycler;
+    private TextView mTextView;
     private int state;
     private changeFragment mChangeFragment;
+
     public static ListProductsFragment newInstance(int state) {
 
         Bundle args = new Bundle();
@@ -52,6 +55,15 @@ public class ListProductsFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(Repository.getInstance().getSearchedProducts()!=null&&Repository.getInstance().getSearchedProducts().size()==0)
+        {
+            mTextView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!isNetworkConnected()) {
@@ -59,9 +71,9 @@ public class ListProductsFragment extends Fragment {
 //            Log.d("tag", "checkNetwork" + "0");
 //            startActivity(intent);
             getActivity().finish();
-            Log.d("tag","finished");
+            Log.d("tag", "finished");
         }
-        state=getArguments().getInt(STATE);
+        state = getArguments().getInt(STATE);
     }
 
     @Override
@@ -70,7 +82,7 @@ public class ListProductsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list_products, container, false);
         init(view);
-        Log.d("tag","onCreateViewL");
+        Log.d("tag", "onCreateViewL");
         ProductAdaptor productAdaptor = new ProductAdaptor(state);
         mListProductsRecycler.setAdapter(productAdaptor);
         return view;
@@ -78,6 +90,7 @@ public class ListProductsFragment extends Fragment {
 
     private void init(View view) {
         mListProductsRecycler = view.findViewById(R.id.list_products_fragment_recycler);
+        mTextView=view.findViewById(R.id.list_products_fragment_text_view);
 
     }
 
@@ -97,10 +110,9 @@ public class ListProductsFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(!isNetworkConnected())
-                    {
+                    if (!isNetworkConnected()) {
                         getActivity().finish();
-                    }else {
+                    } else {
                         Intent intent = ProductDetailActivity.newIntent(getActivity(), mWoocommerceBody.getId(), mWoocommerceBody.getName());
                         startActivity(intent);
                     }
@@ -134,8 +146,11 @@ public class ListProductsFragment extends Fragment {
                 case 2:
                     mWoocommerceBodies = Repository.getInstance().getRatedProducts();
                     break;
-                default:
+                case 3:
                     mWoocommerceBodies = Repository.getInstance().getNewestProducts();
+                    break;
+                default:
+                    mWoocommerceBodies = Repository.getInstance().getSearchedProducts();
             }
         }
 
@@ -158,6 +173,7 @@ public class ListProductsFragment extends Fragment {
             return mWoocommerceBodies.size();
         }
     }
+
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 

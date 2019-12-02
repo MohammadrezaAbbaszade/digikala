@@ -3,6 +3,7 @@ package com.example.digikala.network;
 import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.ImagesItem;
 import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.model.categoriesmodel.CategoriesBody;
 
 import java.util.List;
 import java.util.Map;
@@ -19,17 +20,15 @@ public interface WoocommerceService {
     Call<List<WoocommerceBody>> getWooCommerceBody(@QueryMap Map<String, String> queries);
 
     @GET("products/categories")
-    Call<List<CategoriesItem>> getCategories();
-
+    Call<List<CategoriesBody>> getCategories();
 
     @GET("products/{id}")
     Call<WoocommerceBody> getProductById(@Path("id") String productId);
 
     @GET("products")
-    Call<List<WoocommerceBody>> getReleatedProducts(@Query("include") String...releateds);
+    Call<List<WoocommerceBody>> getReleatedProducts(@QueryMap Map<String, String> queries,@Query("include") String...releateds);
+
 
     @GET("products")
-    Call<List<CategoriesItem>> getProductsSubCategoires( @Query("category") String categoryId);
-
-
+    Call<List<WoocommerceBody>> searchProducts(@Query("search") String productName);
 }

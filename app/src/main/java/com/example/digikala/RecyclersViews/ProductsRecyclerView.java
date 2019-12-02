@@ -78,6 +78,7 @@ public class ProductsRecyclerView extends RecyclerView.Adapter {
                 mTextView.setText(woocommerceBody.getName());
             mRegularPriceTextView.setText(woocommerceBody.getPrice() + " " + "تومان");
             mBudgetPriceTextView.setText(woocommerceBody.getRegularPrice() + " " + "تومان");
+            if(woocommerceBody.getImages().size()>0)
             Picasso.with(mContext).load(woocommerceBody.getImages().get(0).getSrc()).placeholder(R.drawable.digikala)
                     .into(mImageView);
         }

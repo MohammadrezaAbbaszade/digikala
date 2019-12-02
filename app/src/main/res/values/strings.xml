@@ -32,7 +32,7 @@
     <string name="full_price">قیمت کل</string>
     <string name="final_price">قیمت نهایی</string>
     <string name="delete">حذف</string>
-    <string name="price_format">  %s ریال</string>
+    <string name="price_format">  %s تومان</string>
     <string name="dialog_bag_question">آیا مایل به حذف این محصول از سبد خرید هستید؟</string>
     <string name="like_dialog_question">آیا مایل به حذف این محصول از لیست علاقه مندی ها هستید؟</string>
     <string name="liked_products_list">لیست محصولات مورد علاقه</string>

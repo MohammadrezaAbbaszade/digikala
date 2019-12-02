@@ -13,11 +13,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.digikala.R;
+import com.example.digikala.RecyclersViews.utils.QueryPreferences;
 import com.example.digikala.fragments.ListProductsFragment;
+
+import Woo.Repository.Repository;
 
 public class ListProductsActivity extends AppCompatActivity {
     private ImageButton mArrowButton;
     private TextView mToolbarTextView;
+    private ImageButton mToolbarBag;
+    private TextView mCartBadge;
     private static final String STATE = "state";
 
     public static Intent newIntent(Context context, int state) {
@@ -25,7 +30,13 @@ public class ListProductsActivity extends AppCompatActivity {
         intent.putExtra(STATE, state);
         return intent;
     }
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mCartBadge != null) {
+            mCartBadge.setText(Repository.getInstance().getBagsIds().size() + "");
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +44,16 @@ public class ListProductsActivity extends AppCompatActivity {
         int state = getIntent().getIntExtra(STATE, 0);
         mArrowButton = findViewById(R.id.list_product_toolbar_arrow);
         mToolbarTextView = findViewById(R.id.list_product_toolbar_text_view);
+        mToolbarBag=findViewById(R.id.list_products_toolbar_shop);
+        mCartBadge=findViewById(R.id.list_product_toolbar_cart_badge);
+        mCartBadge.setText(Repository.getInstance().getBagsIds().size() + "");
+        mToolbarBag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = ShopBagFragmentActivity.newIntent(ListProductsActivity.this);
+                startActivity(intent);
+            }
+        });
         switch (state) {
             case 1:
                 mToolbarTextView.setText("پرفروش ترین ها");
@@ -40,8 +61,11 @@ public class ListProductsActivity extends AppCompatActivity {
             case 2:
                 mToolbarTextView.setText("پربازدیدترین ها");
                 break;
-            default:
+            case 3:
                 mToolbarTextView.setText("جدیدترین ها");
+                break;
+            default:
+                mToolbarTextView.setText(QueryPreferences.getQuery(this));
         }
 
 

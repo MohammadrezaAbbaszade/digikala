@@ -130,7 +130,7 @@ public class ProductDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 addProductToBag();
-              Intent intent= ShopBagFragmentActivity.newIntent(getActivity(),id,1);
+              Intent intent= ShopBagFragmentActivity.newIntent(getActivity());
               startActivity(intent);
 //                ShopBagFragment shopBagFragment = ShopBagFragment.newInstance(id, 1);
 ////                shopBagFragment.setTargetFragment(ProductDetailFragment.this, REQUEST_CODE_FOR_SHOP_BAG_FRAGMENT);
@@ -191,7 +191,7 @@ public class ProductDetailFragment extends Fragment {
 //        for (int i = 0; i < Repository.getInstance().getProductById().getRelatedIds().size(); i++) {
 //            realtedIds[i] = String.valueOf(Repository.getInstance().getProductById().getRelatedIds().get(i));
 //        }
-        mWooCommerce.getWoocommerceApi().getReleatedProducts(integers.toString()).enqueue(new Callback<List<WoocommerceBody>>() {
+        mWooCommerce.getWoocommerceApi().getReleatedProducts(mWooCommerce.getQueries(),integers.toString()).enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
                 if (response.isSuccessful()) {

@@ -67,7 +67,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-
+android:layout_marginRight="6dp"
                     android:text="@string/full_price"
                     android:textSize="20sp" />
 
@@ -97,7 +97,7 @@
                     android:textStyle="bold"
                     android:textColor="@android:color/holo_green_dark"
                     android:text="@string/final_price"
-
+                    android:layout_marginRight="6dp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 

@@ -1,10 +1,13 @@
 package Woo.Repository;
 
+import android.util.Log;
+
 import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.DaoSession;
 import com.example.digikala.model.ShoppingBag;
 import com.example.digikala.model.ShoppingBagDao;
 import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.model.categoriesmodel.CategoriesBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +17,11 @@ public class Repository {
     private List<WoocommerceBody> mNewestProducts;
     private List<WoocommerceBody> mPopularProducts;
     private List<WoocommerceBody> mRatedProducts;
+    private List<WoocommerceBody> mSearchedProducts;
     private List<WoocommerceBody> mAllProducts;
     private List<WoocommerceBody> mRelatedProducts;
     private WoocommerceBody mProductById;
-    private List<CategoriesItem> mCategoriesItems;
+    private List<CategoriesBody> mCategoriesItems;
     private List<ShoppingBag> mShoppingBags=new ArrayList<>();
     private DaoSession daoSession;
     private ShoppingBagDao mShoppingBagDao;
@@ -35,24 +39,40 @@ public class Repository {
         return repository;
     }
 
+    public List<WoocommerceBody> getSearchedProducts() {
+        return mSearchedProducts;
+    }
+
+    public void setSearchedProducts(List<WoocommerceBody> searchedProducts) {
+        mSearchedProducts = searchedProducts;
+    }
+
     public List<ShoppingBag> getShoppingBags() {
-        return mShoppingBags;
+        return mShoppingBagDao.loadAll();
     }
 
     public void addBag(int id) {
         List<ShoppingBag> checkList=mShoppingBagDao
         .queryBuilder()
-                .where(ShoppingBagDao.Properties.MProductId.eq(id))
+                .where(ShoppingBagDao.Properties.MProductId.eq(Integer.toString(id)))
                 .list();
-        if (checkList == null) {
+        Log.d("tag",checkList.toString());
+        if (checkList != null && checkList.size() > 0)
+            return;
+
+            Log.d("tag","addbag"+"null");
             ShoppingBag shoppingBag=new ShoppingBag();
             shoppingBag.setMProductId(Integer.toString(id));
             mShoppingBagDao.insert(shoppingBag);
-        }
+
     }
 
     public void deleteBag(String id) {
-        mShoppingBagDao.delete(getBag(id));
+        List<ShoppingBag> result = mShoppingBagDao.queryBuilder()
+                .where(ShoppingBagDao.Properties.MProductId.eq(id))
+                .list();
+        ShoppingBag bag = result.get(0);
+        mShoppingBagDao.delete(bag);
     }
 
     public ShoppingBag getBag(String id) {
@@ -98,11 +118,11 @@ public class Repository {
 
     }
 
-    public List<CategoriesItem> getCategoriesItems() {
+    public List<CategoriesBody> getCategoriesItems() {
         return mCategoriesItems;
     }
 
-    public void setCategoriesItems(List<CategoriesItem> categoriesItems) {
+    public void setCategoriesItems(List<CategoriesBody> categoriesItems) {
         mCategoriesItems = null;
         mCategoriesItems = categoriesItems;
     }

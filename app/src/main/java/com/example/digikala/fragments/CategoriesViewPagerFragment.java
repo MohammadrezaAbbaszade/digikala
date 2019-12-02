@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
@@ -21,7 +22,7 @@ import com.google.android.material.tabs.TabLayout;
  * A simple {@link Fragment} subclass.
  */
 public class CategoriesViewPagerFragment extends Fragment {
-
+    private RecyclerView mRecyclerView;
 
     public static CategoriesViewPagerFragment newInstance() {
 
@@ -42,6 +43,9 @@ public class CategoriesViewPagerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_categories_view_pager, container, false);
+
+
+
 
 
         return view;

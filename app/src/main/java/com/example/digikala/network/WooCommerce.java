@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.ImagesItem;
 import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.model.categoriesmodel.CategoriesBody;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -27,6 +28,11 @@ public class WooCommerce {
 
         }
     };
+
+    public Map<String, String> getQueries() {
+        return mQueries;
+    }
+
     private WoocommerceService mWoocommerceApi = RetrofitInstance.getInstance(FLICKR_REST_PATH)
             .getRetrofit()
             .create(WoocommerceService.class);
@@ -55,11 +61,15 @@ public class WooCommerce {
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
         return call.execute().body();
     }
+    public List<WoocommerceBody> searchInProducts(String searchQuery) throws IOException {
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.searchProducts(searchQuery);
+        return call.execute().body();
+    }
 
-    public List<CategoriesItem> productCategoriesSync() throws IOException {
+    public List<CategoriesBody> productCategoriesSync() throws IOException {
 
 //        mQueries.put("page", "2");
-        Call<List<CategoriesItem>> call = mWoocommerceApi.getCategories();
+        Call<List<CategoriesBody>> call = mWoocommerceApi.getCategories();
         return call.execute().body();
     }
     public WoocommerceBody getProductById(int id) throws IOException {
@@ -67,7 +77,7 @@ public class WooCommerce {
         return call.execute().body();
     }
     public List<WoocommerceBody> getRelatedProducts(String[] id) throws IOException {
-        Call<List<WoocommerceBody>> call = mWoocommerceApi.getReleatedProducts(id);
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getReleatedProducts(mQueries,id);
         return call.execute().body();
     }
 //    public void searchPhotosAsync(String query) {

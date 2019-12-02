@@ -23,7 +23,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.947"
-            app:layout_constraintStart_toEndOf="@+id/list_products_text_view"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
@@ -39,7 +38,7 @@
 
         <TextView
             android:id="@+id/list_products_text_view"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
             android:layout_marginLeft="28dp"
@@ -48,6 +47,8 @@
             android:text="جدید ترین محصولات"
             android:textAlignment="center"
             android:textSize="20sp"
+
+            app:layout_constraintEnd_toEndOf="@+id/list_products_line_imageView"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

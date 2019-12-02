@@ -19,7 +19,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.digikala.fragments.MainFragment;
 import com.example.digikala.R;
@@ -30,13 +32,18 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
+import Woo.Repository.Repository;
+
 public class MainActivity extends AppCompatActivity implements changeFragment {
     private static final String STATE = "state";
     private static final String WOOCOMEERCE_BODY = "woocommercebody";
     private DrawerLayout mDrawerLayout;
-    private Toolbar mToolbar;
+    private FrameLayout mToolbar;
+    private TextView mcart_badge;
     private NavigationView mNavigationView;
     private ImageButton mImageButton;
+    private ImageButton mSearchImageButton;
+    private ImageButton mToolbarBag;
     int state;
     List<WoocommerceBody> woocommerceBodies;
     FragmentManager fm = getSupportFragmentManager();
@@ -47,7 +54,13 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
         return intent;
     }
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mcart_badge != null) {
+            mcart_badge.setText(Repository.getInstance().getBagsIds().size() + "");
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +70,29 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
         mDrawerLayout = findViewById(R.id.acvity_drawer);
         mNavigationView = findViewById(R.id.navigation);
         mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        mcart_badge = findViewById(R.id.cart_badge);
+        mToolbarBag = findViewById(R.id.toolbar_shop);
+        mSearchImageButton = findViewById(R.id.search_view_button);
+//        setSupportActionBar(mToolbar);
 
 
-
+        mSearchImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = SearchActivity.newIntent(MainActivity.this);
+                startActivity(intent);
+            }
+        });
+        mcart_badge.setText(Repository.getInstance().getBagsIds().size() + "");
+        mToolbarBag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = ShopBagFragmentActivity.newIntent(MainActivity.this);
+                startActivity(intent);
+            }
+        });
         mImageButton = findViewById(R.id.toolbar_burger);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
         mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,8 +143,13 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
                         mDrawerLayout.closeDrawers();
                         break;
                     case R.id.product_list__menu:
-                        Intent intent4=CategoriesViewPagerActivity.newIntent(MainActivity.this);
+                        Intent intent4 = CategoriesViewPagerActivity.newIntent(MainActivity.this);
                         startActivity(intent4);
+                        mDrawerLayout.closeDrawers();
+                        break;
+                    case R.id.sale_bag__menu:
+                        Intent intent5 = ShopBagFragmentActivity.newIntent(MainActivity.this);
+                        startActivity(intent5);
                         mDrawerLayout.closeDrawers();
                         break;
                 }

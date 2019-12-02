@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -26,6 +27,7 @@ import com.example.digikala.R;
 import com.example.digikala.activities.CategoriesViewPagerActivity;
 import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.model.categoriesmodel.CategoriesBody;
 import com.example.digikala.network.WooCommerce;
 import com.squareup.picasso.Picasso;
 
@@ -179,16 +181,17 @@ public class MainFragment extends Fragment {
 
         }
 
-        void bind(CategoriesItem categoriesItem) {
+        void bind(CategoriesBody categoriesItem) {
+      if(categoriesItem.getParent()==0)
             mButton.setText(categoriesItem.getName());
         }
 
     }
 
     private class ProductAdaptor extends RecyclerView.Adapter<ProductHolder> {
-        private List<CategoriesItem> mCategoriesItems;
+        private List<CategoriesBody> mCategoriesItems;
 
-        public ProductAdaptor(List<CategoriesItem> categoriesItems) {
+        public ProductAdaptor(List<CategoriesBody> categoriesItems) {
             mCategoriesItems = categoriesItems;
         }
 
@@ -208,7 +211,7 @@ public class MainFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return mCategoriesItems.size();
+            return 2;
         }
     }
 
