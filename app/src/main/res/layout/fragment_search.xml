@@ -4,33 +4,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".fragments.SearchFragment">
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <ImageButton
-        android:id="@+id/fragment_search_toolbar_arrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/ic_black_arrow" />
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/fragment_search_search_view"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="40dp"
-        app:iconifiedByDefault="false" />
-</FrameLayout>
+        android:layout_height="56dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_search_recycler"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/fragment_search_search_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginRight="15dp"
+                android:background="@null"
+                android:hint="جستجو در دیجی کالا..."
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textDirection="rtl"
+                app:layout_constraintEnd_toStartOf="@+id/fragment_search_toolbar_arrow"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/fragment_search_toolbar_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/ic_black_arrow"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/fragment_search_clear_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:tint="@color/gray"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_exit"
+                tools:ignore="VectorDrawableCompat" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
     <!-- TODO: Update blank fragment layout -->
 
 </LinearLayout>
