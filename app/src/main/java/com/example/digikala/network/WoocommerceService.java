@@ -1,7 +1,5 @@
 package com.example.digikala.network;
 
-import com.example.digikala.model.CategoriesItem;
-import com.example.digikala.model.ImagesItem;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.model.categoriesmodel.CategoriesBody;
 

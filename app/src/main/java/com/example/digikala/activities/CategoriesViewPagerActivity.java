@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -16,11 +15,7 @@ import android.widget.ImageButton;
 
 import com.example.digikala.R;
 import com.example.digikala.fragments.CategoriesViewPagerFragment;
-import com.example.digikala.model.categoriesmodel.CategoriesBody;
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import Woo.Repository.Repository;
 

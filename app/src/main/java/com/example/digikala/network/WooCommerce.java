@@ -1,9 +1,5 @@
 package com.example.digikala.network;
 
-import android.util.Log;
-
-import com.example.digikala.model.CategoriesItem;
-import com.example.digikala.model.ImagesItem;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.model.categoriesmodel.CategoriesBody;
 
@@ -13,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class WooCommerce {
     public static final String TAG = "FlickrFetcher";

@@ -2,7 +2,6 @@ package Woo.Repository;
 
 import android.util.Log;
 
-import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.DaoSession;
 import com.example.digikala.model.ShoppingBag;
 import com.example.digikala.model.ShoppingBagDao;
@@ -11,7 +10,6 @@ import com.example.digikala.model.categoriesmodel.CategoriesBody;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Repository {
     private static Repository repository;
@@ -191,7 +189,7 @@ public class Repository {
                 mSubCategoriesItems.add(mCategoriesItems.get(i));
             }
         }
-
+Log.d("sub",mSubCategoriesItems.size()+"");
         return mSubCategoriesItems;
     }
 }

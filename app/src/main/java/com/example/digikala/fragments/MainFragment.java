@@ -10,9 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
@@ -26,13 +24,11 @@ import com.example.digikala.RecyclersViews.ProductsRecyclerView;
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.SliderAdaptor;
 import com.example.digikala.activities.CategoriesViewPagerActivity;
-import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.model.categoriesmodel.CategoriesBody;
 import com.example.digikala.network.WooCommerce;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderView;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -13,9 +13,6 @@ public class Links{
 	@SerializedName("collection")
 	private List<CollectionItem> collection;
 
-	@SerializedName("up")
-	private List<UpItem> up;
-
 	public void setSelf(List<SelfItem> self){
 		this.self = self;
 	}
@@ -32,21 +29,12 @@ public class Links{
 		return collection;
 	}
 
-	public void setUp(List<UpItem> up){
-		this.up = up;
-	}
-
-	public List<UpItem> getUp(){
-		return up;
-	}
-
 	@Override
  	public String toString(){
 		return 
 			"Links{" + 
 			"self = '" + self + '\'' + 
 			",collection = '" + collection + '\'' + 
-			",up = '" + up + '\'' + 
 			"}";
 		}
 }

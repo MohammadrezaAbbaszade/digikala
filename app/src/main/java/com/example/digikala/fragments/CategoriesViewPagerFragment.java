@@ -2,33 +2,25 @@ package com.example.digikala.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.digikala.R;
-import com.example.digikala.activities.CategoriesViewPagerActivity;
 import com.example.digikala.model.categoriesmodel.CategoriesBody;
-import com.google.android.material.tabs.TabLayout;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -75,6 +67,7 @@ public class CategoriesViewPagerFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_categories_view_pager, container, false);
         mRecyclerView = view.findViewById(R.id.sub_categories_recycler);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         SubCategoriesAdaptor subCategoriesAdaptor = new SubCategoriesAdaptor(Repository.getInstance().getSubCategory(id));
         mRecyclerView.setAdapter(subCategoriesAdaptor);
         return view;
@@ -93,7 +86,10 @@ public class CategoriesViewPagerFragment extends Fragment {
         }
 
         void bind(CategoriesBody categoriesItem) {
+
             mTextView.setText(categoriesItem.getName());
+            Picasso.with(getActivity()).load(categoriesItem.getImage().getSrc()).placeholder(R.drawable.digikala)
+                    .into(mImageView);
         }
 
     }
@@ -103,6 +99,7 @@ public class CategoriesViewPagerFragment extends Fragment {
 
         public SubCategoriesAdaptor(List<CategoriesBody> categoriesItems) {
             mCategoriesItems = categoriesItems;
+            Log.d("sub",mCategoriesItems.size()+"");
         }
 
         @NonNull
@@ -116,6 +113,7 @@ public class CategoriesViewPagerFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull SubCategoriesHolder holder, int position) {
             holder.bind(mCategoriesItems.get(position));
+
 
         }
 

@@ -10,7 +10,7 @@ public class CategoriesBody{
 	private int parent;
 
 	@SerializedName("image")
-	private Object image;
+	private Image image;
 
 	@SerializedName("menu_order")
 	private int menuOrder;
@@ -44,11 +44,11 @@ public class CategoriesBody{
 		return parent;
 	}
 
-	public void setImage(Object image){
+	public void setImage(Image image){
 		this.image = image;
 	}
 
-	public Object getImage(){
+	public Image getImage(){
 		return image;
 	}
 
