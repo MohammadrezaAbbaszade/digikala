@@ -43,7 +43,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/ic_search" />
 <ImageView
-    android:src="@drawable/m_d"
+    android:src="@drawable/digikala_logo2"
     android:layout_gravity="right"
     android:layout_marginRight="70dp"
     android:layout_width="100dp"
@@ -55,7 +55,7 @@
         android:layout_gravity="end"
         android:layout_marginTop="13dp"
         android:layout_marginRight="18dp"
-        android:background="@drawable/ic_burger"
+        android:background="@drawable/ic_menu_black_24dp"
         android:padding="18dp" />
 
 </FrameLayout>

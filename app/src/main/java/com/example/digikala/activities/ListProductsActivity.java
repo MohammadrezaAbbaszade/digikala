@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.digikala.R;
@@ -19,7 +20,7 @@ import com.example.digikala.fragments.ListProductsFragment;
 import Woo.Repository.Repository;
 
 public class ListProductsActivity extends AppCompatActivity {
-    private ImageButton mArrowButton;
+    private ImageView mArrowButton;
     private TextView mToolbarTextView;
     private ImageButton mToolbarBag;
     private TextView mCartBadge;

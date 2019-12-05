@@ -76,8 +76,13 @@ public class ProductsRecyclerView extends RecyclerView.Adapter {
             mWoocommerceBody=woocommerceBody;
             if (!woocommerceBody.getName().equalsIgnoreCase("تیشرت جذاب تابستانه با تخفیف ویژه دیجیکالا!!!!!"))
                 mTextView.setText(woocommerceBody.getName());
-            mRegularPriceTextView.setText(woocommerceBody.getPrice() + " " + "تومان");
-            mBudgetPriceTextView.setText(woocommerceBody.getRegularPrice() + " " + "تومان");
+            if(!woocommerceBody.getPrice().equals(woocommerceBody.getRegularPrice())) {
+                mRegularPriceTextView.setText(woocommerceBody.getPrice() + " " + "تومان");
+                mBudgetPriceTextView.setText(woocommerceBody.getRegularPrice() + " " + "تومان");
+            }else
+            {
+                mRegularPriceTextView.setText(woocommerceBody.getPrice() + " " + "تومان");
+            }
             if(woocommerceBody.getImages().size()>0)
             Picasso.with(mContext).load(woocommerceBody.getImages().get(0).getSrc()).placeholder(R.drawable.digikala)
                     .into(mImageView);

@@ -116,10 +116,12 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
             mToolbar.setVisibility(View.GONE);
             Log.d("tag", "mainActivity" + "0");
         }
+
+
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Log.d("tag", "onNavigationItemSelected");
+                Log.d("nav", "onNavigationItemSelected");
                 switch (menuItem.getItemId()) {
                     case R.id.newest_menu:
                         Log.d("tag", "newest_menu");

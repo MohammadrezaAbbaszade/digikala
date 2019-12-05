@@ -11,6 +11,7 @@ import com.example.digikala.model.categoriesmodel.CategoriesBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Repository {
     private static Repository repository;
@@ -22,6 +23,7 @@ public class Repository {
     private List<WoocommerceBody> mRelatedProducts;
     private WoocommerceBody mProductById;
     private List<CategoriesBody> mCategoriesItems;
+    private List<CategoriesBody> mFilteredCategoriesItems;
     private List<ShoppingBag> mShoppingBags=new ArrayList<>();
     private DaoSession daoSession;
     private ShoppingBagDao mShoppingBagDao;
@@ -37,6 +39,16 @@ public class Repository {
             repository = new Repository();
         }
         return repository;
+    }
+
+    public List<CategoriesBody> getFilteredCategoriesItems() {
+        mFilteredCategoriesItems=new ArrayList<>();
+        for(CategoriesBody categoriesBody:mCategoriesItems)
+        {
+            if(categoriesBody.getParent()==0)
+                mFilteredCategoriesItems.add(categoriesBody);
+        }
+        return mFilteredCategoriesItems;
     }
 
     public List<WoocommerceBody> getSearchedProducts() {
@@ -162,6 +174,14 @@ public class Repository {
             return true;
 
         return false;
+    }
+    public int getPosition(int id) {
+        for (int i = 0; i < mFilteredCategoriesItems.size(); i++) {
+            if (mFilteredCategoriesItems.get(i).getId()==id)
+                return i;
+        }
+
+        return 0;
     }
 //    private List<String> getRelatedProductsId(String id)
 //    {

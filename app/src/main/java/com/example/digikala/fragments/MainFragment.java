@@ -142,8 +142,6 @@ public class MainFragment extends Fragment {
     }
 
 
-
-
     private void init(View view) {
         mViewPager = view.findViewById(R.id.view_pager);
         mDotsIndicator = view.findViewById(R.id.dots_indicator);
@@ -158,7 +156,7 @@ public class MainFragment extends Fragment {
         mNewestProductAdaptor = new ProductsRecyclerView(Repository.getInstance().getNewestProducts(), getActivity());
         mPopularProductAdaptor = new ProductsRecyclerView(Repository.getInstance().getPopularProducts(), getActivity());
         mRatedRecyclerAdaptor = new ProductsRecyclerView(Repository.getInstance().getRatedProducts(), getActivity());
-        mProductAdaptor = new ProductAdaptor(Repository.getInstance().getCategoriesItems());
+        mProductAdaptor = new ProductAdaptor(Repository.getInstance().getFilteredCategoriesItems());
         mCategoryRecyclerView.setAdapter(mProductAdaptor);
         mRecentRecyclerView.setAdapter(mNewestProductAdaptor);
         mPopularRecyclerView.setAdapter(mPopularProductAdaptor);
@@ -167,6 +165,7 @@ public class MainFragment extends Fragment {
 
     private class ProductHolder extends RecyclerView.ViewHolder {
         private Button mButton;
+        private CategoriesBody mCategoriesBody;
 
         public ProductHolder(@NonNull View itemView) {
             super(itemView);
@@ -174,7 +173,7 @@ public class MainFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent= CategoriesViewPagerActivity.newIntent(getActivity());
+                    Intent intent = CategoriesViewPagerActivity.newIntent(getActivity(),mCategoriesBody.getId());
                     startActivity(intent);
                 }
             });
@@ -182,7 +181,7 @@ public class MainFragment extends Fragment {
         }
 
         void bind(CategoriesBody categoriesItem) {
-      if(categoriesItem.getParent()==0)
+            mCategoriesBody = categoriesItem;
             mButton.setText(categoriesItem.getName());
         }
 
