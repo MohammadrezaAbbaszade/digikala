@@ -24,6 +24,7 @@ public class Repository {
     private WoocommerceBody mProductById;
     private List<CategoriesBody> mCategoriesItems;
     private List<CategoriesBody> mFilteredCategoriesItems;
+    private List<CategoriesBody> mSubCategoriesItems;
     private List<ShoppingBag> mShoppingBags=new ArrayList<>();
     private DaoSession daoSession;
     private ShoppingBagDao mShoppingBagDao;
@@ -183,12 +184,14 @@ public class Repository {
 
         return 0;
     }
-//    private List<String> getRelatedProductsId(String id)
-//    {
-//        List<String> relatedIds=new ArrayList<>();
-//        for(WoocommerceBody woocommerceBody:mAllProducts)
-//        {
-//            if(woocommerceBody.getI)
-//        }
-//    }
+    public List<CategoriesBody> getSubCategory(int id) {
+        mSubCategoriesItems=new ArrayList<>();
+        for (int i = 0; i < mCategoriesItems.size(); i++) {
+            if (mCategoriesItems.get(i).getParent() == id) {
+                mSubCategoriesItems.add(mCategoriesItems.get(i));
+            }
+        }
+
+        return mSubCategoriesItems;
+    }
 }

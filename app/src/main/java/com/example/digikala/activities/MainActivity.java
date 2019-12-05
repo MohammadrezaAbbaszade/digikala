@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
     private DrawerLayout mDrawerLayout;
     private FrameLayout mToolbar;
     private TextView mcart_badge;
+    private TextView mBagTextView;
     private NavigationView mNavigationView;
     private ImageButton mImageButton;
     private ImageButton mSearchImageButton;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
         super.onStart();
         if (mcart_badge != null) {
             mcart_badge.setText(Repository.getInstance().getBagsIds().size() + "");
+            initBagTextview();
         }
     }
 
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
         mSearchImageButton = findViewById(R.id.search_view_button);
 //        setSupportActionBar(mToolbar);
 
-
+        initBagTextview();
         mSearchImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,39 +129,42 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
                         Log.d("tag", "newest_menu");
                         Intent intent = ListProductsActivity.newIntent(MainActivity.this, 3);
                         startActivity(intent);
-                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.most_seen__menu:
                         Log.d("tag", "most_seen__menu");
                         Intent intent2 = ListProductsActivity.newIntent(MainActivity.this, 2);
                         startActivity(intent2);
-                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.most_sales__menu:
                         Log.d("tag", "most_seen__menu");
                         Intent intent3 = ListProductsActivity.newIntent(MainActivity.this, 1);
                         startActivity(intent3);
-                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.home_menu:
-                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.product_list__menu:
                         Intent intent4 = CategoriesViewPagerActivity.newIntent(MainActivity.this);
                         startActivity(intent4);
-                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.sale_bag__menu:
                         Intent intent5 = ShopBagFragmentActivity.newIntent(MainActivity.this);
                         startActivity(intent5);
-                        mDrawerLayout.closeDrawers();
                         break;
                 }
+                mDrawerLayout.closeDrawers();
                 return true;
             }
         });
     }
 
+    private void initBagTextview() {
+        mBagTextView = (TextView) (mNavigationView.getMenu().findItem(R.id.sale_bag__menu).getActionView());
+        mBagTextView.setGravity(Gravity.CENTER_VERTICAL);
+        mBagTextView.setTextColor(getResources().getColor(R.color.black));
+        mBagTextView.setTextSize(16);
+        mBagTextView.setText(Repository.getInstance().getBagsIds().size() + "");
+
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override

@@ -24,11 +24,14 @@ import android.widget.ImageView;
 
 import com.example.digikala.RecyclersViews.ProductsRecyclerView;
 import com.example.digikala.R;
+import com.example.digikala.RecyclersViews.SliderAdaptor;
 import com.example.digikala.activities.CategoriesViewPagerActivity;
 import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.model.categoriesmodel.CategoriesBody;
 import com.example.digikala.network.WooCommerce;
+import com.smarteist.autoimageslider.IndicatorAnimations;
+import com.smarteist.autoimageslider.SliderView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -59,8 +62,10 @@ public class MainFragment extends Fragment {
     private ProductsRecyclerView mRatedRecyclerAdaptor;
     private WooCommerce mWooCommerce = new WooCommerce();
     private int state;
+    private SliderView mSliderView;
     private changeFragment mChangeFragment;
     private List<WoocommerceBody> items;
+    private SliderAdaptor mSliderAdaptor;
 
     public static MainFragment newInstance() {
 
@@ -105,46 +110,20 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         init(view);
         updateAdaptor();
-        mViewPager.setAdapter(new PagerAdapter() {
-            @Override
-            public int getCount() {
-                return Repository.getInstance().getPopularProducts().get(0).getImages().size();
-            }
-
-            @NonNull
-            @Override
-            public Object instantiateItem(@NonNull ViewGroup container, int position) {
-                View view = LayoutInflater.from(getActivity()).inflate(R.layout.image_view, null);
-                ImageView imageView = view.findViewById(R.id.image);
-                Picasso.with(getActivity()).load(Repository.getInstance().getPopularProducts().get(0).getImages().get(position).getSrc()).placeholder(R.drawable.digikala)
-                        .into(imageView);
-                container.addView(view);
-                return view;
-
-            }
-
-            @Override
-            public void destroyItem(ViewGroup container, int position, Object view) {
-                container.removeView((View) view);
-            }
-
-            @Override
-            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-                return object == view;
-            }
-
-
-        });
-        mDotsIndicator.setViewPager(mViewPager);
+        initSliderView();
 
 
         return view;
     }
 
+    private void initSliderView() {
+        mSliderAdaptor = new SliderAdaptor(Repository.getInstance().getPopularProducts(), getActivity());
+        mSliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
+        mSliderView.setSliderAdapter(mSliderAdaptor);
+    }
 
     private void init(View view) {
-        mViewPager = view.findViewById(R.id.view_pager);
-        mDotsIndicator = view.findViewById(R.id.dots_indicator);
+        mSliderView=view.findViewById(R.id.imageSlider);
         mCategoryRecyclerView = view.findViewById(R.id.fragment_main_recycler);
         mRecentRecyclerView = view.findViewById(R.id.fragment_main_newest_product_recycler);
         mPopularRecyclerView = view.findViewById(R.id.fragment_main_popular_product_recycler);
@@ -173,7 +152,7 @@ public class MainFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = CategoriesViewPagerActivity.newIntent(getActivity(),mCategoriesBody.getId());
+                    Intent intent = CategoriesViewPagerActivity.newIntent(getActivity(), mCategoriesBody.getId());
                     startActivity(intent);
                 }
             });
@@ -210,7 +189,7 @@ public class MainFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return 2;
+            return mCategoriesItems.size();
         }
     }
 

@@ -58,7 +58,8 @@ public class CategoriesViewPagerActivity extends AppCompatActivity {
             @NonNull
             @Override
             public Fragment getItem(int position) {
-                return CategoriesViewPagerFragment.newInstance();
+                return CategoriesViewPagerFragment.newInstance(Repository.getInstance().getFilteredCategoriesItems()
+                .get(position).getId());
             }
 
             @Override
