@@ -27,7 +27,8 @@ public interface WoocommerceService {
 
     @GET("products")
     Call<List<WoocommerceBody>> getReleatedProducts(@QueryMap Map<String, String> queries,@Query("include") String...releateds);
-
+    @GET("products")
+    Call<List<WoocommerceBody>> getSortedBaseProducts(@QueryMap Map<String, String> queries);
 
     @GET("products")
     Call<List<WoocommerceBody>> searchProducts(@Query("search") String productName);

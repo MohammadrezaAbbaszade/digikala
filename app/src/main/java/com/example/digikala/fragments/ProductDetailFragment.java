@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.digikala.R;
+import com.example.digikala.RecyclersViews.SliderAdaptor;
 import com.example.digikala.activities.MainActivity;
 import com.example.digikala.activities.ProductDetailActivity;
 import com.example.digikala.activities.ShopBagFragmentActivity;
@@ -36,6 +37,8 @@ import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.RetrofitInstance;
 import com.example.digikala.network.WooCommerce;
 import com.example.digikala.network.WoocommerceService;
+import com.smarteist.autoimageslider.IndicatorAnimations;
+import com.smarteist.autoimageslider.SliderView;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -55,8 +58,6 @@ public class ProductDetailFragment extends Fragment {
     private static final String ID = "id";
     private int id;
     private WooCommerce mWooCommerce = new WooCommerce();
-    private ViewPager mViewPager;
-    private CircleIndicator mDotsIndicator;
     private ProgressBar mProgressBar;
     private CardView mCardView;
     private TextView mTextView;
@@ -66,6 +67,8 @@ public class ProductDetailFragment extends Fragment {
     private TextView mBudgetPriceTextView;
     private ProductAdaptor mProductAdaptor;
     private Button mBuyButton;
+    private SliderView mSliderView;
+    private SliderAdaptor mSliderAdaptor;
     public static final int REQUEST_CODE_FOR_SHOP_BAG_FRAGMENT = 1;
     public static final String SHOP_BAG_FRAGMENT_TAG = "shopbagfragmenttag";
     private String[] realtedIds;
@@ -123,8 +126,8 @@ public class ProductDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product_detail, container, false);
         init(view);
         mProgressBar.setVisibility(View.VISIBLE);
-        mViewPager.setVisibility(View.GONE);
-        mDotsIndicator.setVisibility(View.GONE);
+
+        mSliderView.setVisibility(View.GONE);
         mCardView.setVisibility(View.GONE);
         mBuyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,37 +150,11 @@ public class ProductDetailFragment extends Fragment {
     private void PrepareViewPager() {
 
 
-        mViewPager.setAdapter(new PagerAdapter() {
-            @Override
-            public int getCount() {
-                return Repository.getInstance().getProductById().getImages().size();
-            }
+        mSliderAdaptor = new SliderAdaptor(Repository.getInstance().getProductById(), getActivity());
+        mSliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
+       mSliderView.setSliderAdapter(mSliderAdaptor);
 
-            @NonNull
-            @Override
-            public Object instantiateItem(@NonNull ViewGroup container, int position) {
-                View view = LayoutInflater.from(getActivity()).inflate(R.layout.image_view, null);
-                ImageView imageView = view.findViewById(R.id.image);
-                Picasso.with(getActivity()).load(Repository.getInstance().getProductById().getImages().get(position).getSrc()).placeholder(R.drawable.digikala)
-                        .into(imageView);
 
-                container.addView(view);
-                return view;
-
-            }
-
-            @Override
-            public void destroyItem(ViewGroup container, int position, Object view) {
-                container.removeView((View) view);
-            }
-
-            @Override
-            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-                return object == view;
-            }
-
-        });
-        mDotsIndicator.setViewPager(mViewPager);
         mTextView.setText(Repository.getInstance().getProductById().getName());
         mDiscriptionTextView.setText(Repository.getInstance().getProductById().getDescription());
         mRegularPriceTextView.setText(Repository.getInstance().getProductById().getPrice() + " " + "تومان");
@@ -212,8 +189,7 @@ public class ProductDetailFragment extends Fragment {
     }
 
     private void init(View view) {
-        mViewPager = view.findViewById(R.id.detail_fragment_view_pager);
-        mDotsIndicator = view.findViewById(R.id.detail_fragment_dots_indicator);
+        mSliderView=view.findViewById(R.id.detail_fragment_imageSlider);
         mProgressBar = view.findViewById(R.id.detal_fragment_progress_bar);
         mCardView = view.findViewById(R.id.detail_fragment_card_view);
         mTextView = view.findViewById(R.id.detal_fragment_text_view);
@@ -249,8 +225,7 @@ public class ProductDetailFragment extends Fragment {
             super.onPostExecute(aVoid);
             if (Repository.getInstance().getProductById() != null) {
                 mProgressBar.setVisibility(View.GONE);
-                mViewPager.setVisibility(View.VISIBLE);
-                mDotsIndicator.setVisibility(View.VISIBLE);
+                mSliderView.setVisibility(View.VISIBLE);
                 mCardView.setVisibility(View.VISIBLE);
                 PrepareViewPager();
                 PrepareRelatedProducts();

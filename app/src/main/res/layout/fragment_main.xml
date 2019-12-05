@@ -95,6 +95,8 @@
             app:sliderIndicatorMargin="15dp"
             app:sliderIndicatorOrientation="horizontal"
             app:sliderIndicatorPadding="3dp"
+            app:sliderScrollTimeInSec="3"
+            app:sliderStartAutoCycle="true"
             app:sliderIndicatorRadius="1.3dp"
             app:sliderIndicatorSelectedColor="@color/colorPrimaryDark"
             app:sliderIndicatorUnselectedColor="#FFF">

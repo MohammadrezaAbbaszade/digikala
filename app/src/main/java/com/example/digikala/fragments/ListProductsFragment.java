@@ -17,28 +17,48 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
 import com.example.digikala.activities.ProductDetailActivity;
 import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.network.WooCommerce;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import Woo.Repository.Repository;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ListProductsFragment extends Fragment {
     private static final String STATE = "state";
+    public static final String CONSUMER_KEY = "%20ck_7c028a04c9faf616410b09e2ab90b1884c875d01";
+    public static final String CONSUMER_SECRET = "cs_8c39f626780f01d135719f64214fd092b848f4aa";
+    private Map<String, String> mQueries = new HashMap<String, String>() {
+        {
+            put("consumer_key", CONSUMER_KEY);
+            put("consumer_secret", CONSUMER_SECRET);
+
+        }
+    };
+    private List<WoocommerceBody> mNewProductList;
     private RecyclerView mListProductsRecycler;
     private TextView mTextView;
     private TextView mSortTextView;
+    private ProgressBar mProgressBar;
     private TextView mSubSortTextView;
     private TextView mFilterTextView;
+    private WooCommerce mWooCommerce = new WooCommerce();
     private int state;
     public static final int REQUEST_CODE_FOR_SORT_DIALOG_FRAGMENT = 0;
     public static final String SORT_DIALOG_FRAGMENT_TAG = "sortdialogfragmenttag";
@@ -90,12 +110,10 @@ public class ListProductsFragment extends Fragment {
         } else if (state == 2) {
             mSubSortTextView.setText(R.string.check_box_selles);
             SharedPreferencesData.setRadioGroupId(getActivity(), 3);
-        }
-        else if (state == 3) {
+        } else if (state == 3) {
             mSubSortTextView.setText(R.string.check_box_newest);
             SharedPreferencesData.setRadioGroupId(getActivity(), 1);
-        }
-        else {
+        } else {
             mSubSortTextView.setText(R.string.check_box_selles);
             SharedPreferencesData.setRadioGroupId(getActivity(), 0);
         }
@@ -108,12 +126,20 @@ public class ListProductsFragment extends Fragment {
             }
         });
         Log.d("tag", "onCreateViewL");
-        ProductAdaptor productAdaptor = new ProductAdaptor(state);
-        mListProductsRecycler.setAdapter(productAdaptor);
+        initAdaptor(state);
         return view;
     }
 
+    private void initAdaptor(int state) {
+        ProductAdaptor productAdaptor = new ProductAdaptor(state);
+        mListProductsRecycler.setAdapter(productAdaptor);
+    }
+    private void initAdaptor(List<WoocommerceBody> woocommerceBodies) {
+        ProductAdaptor productAdaptor = new ProductAdaptor(woocommerceBodies);
+        mListProductsRecycler.setAdapter(productAdaptor);
+    }
     private void init(View view) {
+        mProgressBar=view.findViewById(R.id.list_products_fragment_progress_bar);
         mListProductsRecycler = view.findViewById(R.id.list_products_fragment_recycler);
         mTextView = view.findViewById(R.id.list_products_fragment_text_view);
         mSortTextView = view.findViewById(R.id.list_product_fragment_sort_text_view);
@@ -138,19 +164,17 @@ public class ListProductsFragment extends Fragment {
                 mSubSortTextView.setText(R.string.check_box_cost_low_high);
                 break;
             default: {
-                Log.d("default",String.valueOf(SharedPreferencesData.getRadioGroupId(getActivity())));
+                Log.d("default", String.valueOf(SharedPreferencesData.getRadioGroupId(getActivity())));
                 if (state == 1) {
                     mSubSortTextView.setText(R.string.check_box_rated);
                     SharedPreferencesData.setRadioGroupId(getActivity(), 2);
                 } else if (state == 2) {
                     mSubSortTextView.setText(R.string.check_box_selles);
                     SharedPreferencesData.setRadioGroupId(getActivity(), 3);
-                }
-                else if (state == 3) {
+                } else if (state == 3) {
                     mSubSortTextView.setText(R.string.check_box_newest);
                     SharedPreferencesData.setRadioGroupId(getActivity(), 1);
-                }
-                else {
+                } else {
                     mSubSortTextView.setText(R.string.check_box_selles);
                     SharedPreferencesData.setRadioGroupId(getActivity(), 0);
                 }
@@ -218,7 +242,9 @@ public class ListProductsFragment extends Fragment {
                     mWoocommerceBodies = Repository.getInstance().getSearchedProducts();
             }
         }
-
+        public ProductAdaptor(List<WoocommerceBody> woocommerceBodies) {
+           mWoocommerceBodies=woocommerceBodies;
+        }
         @NonNull
         @Override
         public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -252,8 +278,51 @@ public class ListProductsFragment extends Fragment {
             return;
 
         if (requestCode == REQUEST_CODE_FOR_SORT_DIALOG_FRAGMENT) {
-           setSortTextView();
+            mListProductsRecycler.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.VISIBLE);
+            setSortTextView();
+            requestForNewSoert();
         }
 
+    }
+
+    private void requestForNewSoert() {
+        switch (SharedPreferencesData.getRadioGroupId(getActivity())) {
+            case 1:
+                mQueries.put("orderby", "date");
+                mQueries.put("order", "desc");
+                break;
+            case 2:
+                mQueries.put("orderby", "popularity");
+                mQueries.put("order", "desc");
+                break;
+            case 3:
+                mQueries.put("orderby", "rating");
+                mQueries.put("order", "desc");
+                break;
+            case 4:
+                mQueries.put("orderby", "price");
+                mQueries.put("order", "desc");
+                break;
+            case 5:
+                mQueries.put("orderby", "price");
+                mQueries.put("order", "asc");
+                break;
+        }
+        mWooCommerce.getWoocommerceApi().getSortedBaseProducts(mQueries).enqueue(new Callback<List<WoocommerceBody>>() {
+            @Override
+            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+                if (response.isSuccessful()) {
+                    initAdaptor(response.body());
+                    mListProductsRecycler.setVisibility(View.VISIBLE);
+                    mProgressBar.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+                Toast.makeText(getActivity(), "خطا در برقراری ارتباط", Toast.LENGTH_LONG);
+            }
+        });
     }
 }

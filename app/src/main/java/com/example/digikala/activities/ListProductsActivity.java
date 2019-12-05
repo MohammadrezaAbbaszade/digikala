@@ -24,6 +24,7 @@ public class ListProductsActivity extends AppCompatActivity {
     private TextView mToolbarTextView;
     private ImageButton mToolbarBag;
     private TextView mCartBadge;
+    private ImageButton mSearchImageButton;
     private static final String STATE = "state";
 
     public static Intent newIntent(Context context, int state) {
@@ -46,12 +47,20 @@ public class ListProductsActivity extends AppCompatActivity {
         mArrowButton = findViewById(R.id.list_product_toolbar_arrow);
         mToolbarTextView = findViewById(R.id.list_product_toolbar_text_view);
         mToolbarBag=findViewById(R.id.list_products_toolbar_shop);
+        mSearchImageButton = findViewById(R.id.list_product_toolbar_search_view);
         mCartBadge=findViewById(R.id.list_product_toolbar_cart_badge);
         mCartBadge.setText(Repository.getInstance().getBagsIds().size() + "");
         mToolbarBag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = ShopBagFragmentActivity.newIntent(ListProductsActivity.this);
+                startActivity(intent);
+            }
+        });
+        mSearchImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = SearchActivity.newIntent(ListProductsActivity.this);
                 startActivity(intent);
             }
         });
