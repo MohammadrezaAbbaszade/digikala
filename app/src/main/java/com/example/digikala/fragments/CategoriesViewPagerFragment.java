@@ -1,7 +1,9 @@
 package com.example.digikala.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +14,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,8 +59,13 @@ public class CategoriesViewPagerFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        id = getArguments().getInt(ID);
-        position = Repository.getInstance().getPosition(id);
+        if (!isNetworkConnected()) {
+            getActivity().finish();
+            Log.d("tag", "finished");
+        }else {
+            id = getArguments().getInt(ID);
+            position = Repository.getInstance().getPosition(id);
+        }
 //        prepareNamesSubCategories();
     }
 
@@ -116,5 +124,9 @@ public class CategoriesViewPagerFragment extends Fragment {
             return mCategoriesItems.size();
         }
     }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
 }

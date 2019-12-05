@@ -3,7 +3,9 @@ package com.example.digikala.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -44,7 +46,12 @@ public class SortDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRadioId = getArguments().getInt(RADIO_ID);
+        if (!isNetworkConnected()) {
+            getActivity().finish();
+            Log.d("tag", "finished");
+        }else {
+            mRadioId = getArguments().getInt(RADIO_ID);
+        }
     }
 
     @NonNull
@@ -118,5 +125,10 @@ public class SortDialogFragment extends DialogFragment {
         Fragment fragment = getTargetFragment();
         Intent intent = new Intent();
         fragment.onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+    }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }
