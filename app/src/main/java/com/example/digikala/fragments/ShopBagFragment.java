@@ -44,10 +44,6 @@ import retrofit2.Response;
  */
 public class ShopBagFragment extends Fragment {
     private List<WoocommerceBody> mRelatedProducts = new ArrayList<>();
-    private static final String PRODUCT_ID = "id";
-    private static final String STATE = "state";
-    private int id;
-    private int state;
     private RecyclerView mRelatedProductRecycler;
     private ProductAdaptor mProductAdaptor;
     private WooCommerce mWooCommerce = new WooCommerce();
@@ -111,25 +107,6 @@ public class ShopBagFragment extends Fragment {
 
             }
         });
-
-    }
-
-    public void prepareforone(String id) {
-        mWooCommerce.getWoocommerceApi().getProductById(id).enqueue(new Callback<WoocommerceBody>() {
-            @Override
-            public void onResponse(Call<WoocommerceBody> call, Response<WoocommerceBody> response) {
-                if (response.isSuccessful()) {
-                    mRelatedProducts.add(response.body());
-                    setUpAdaptor();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<WoocommerceBody> call, Throwable t) {
-
-            }
-        });
-
 
     }
 

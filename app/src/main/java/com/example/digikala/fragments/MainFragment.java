@@ -41,26 +41,16 @@ import me.relex.circleindicator.CircleIndicator;
  * A simple {@link Fragment} subclass.
  */
 public class MainFragment extends Fragment {
-    private static final String STATE = "state";
-    private static final String WOOCOMMERCE_BODY = "woocommercebody";
-    private ViewPager mViewPager;
-    private CircleIndicator mDotsIndicator;
-    private ImageView mImageView;
     private RecyclerView mCategoryRecyclerView;
     private RecyclerView mRatedRecyclerView;
     private RecyclerView mPopularRecyclerView;
-    private List<String> mStrings = new ArrayList<>();
     private ProductAdaptor mProductAdaptor;
     private RecyclerView mRecentRecyclerView;
-    private List<String> mStrings2 = new ArrayList<>();
     private ProductsRecyclerView mNewestProductAdaptor;
     private ProductsRecyclerView mPopularProductAdaptor;
     private ProductsRecyclerView mRatedRecyclerAdaptor;
-    private WooCommerce mWooCommerce = new WooCommerce();
-    private int state;
     private SliderView mSliderView;
     private changeFragment mChangeFragment;
-    private List<WoocommerceBody> items;
     private SliderAdaptor mSliderAdaptor;
 
     public static MainFragment newInstance() {
@@ -131,7 +121,7 @@ public class MainFragment extends Fragment {
         mNewestProductAdaptor = new ProductsRecyclerView(Repository.getInstance().getNewestProducts(), getActivity());
         mPopularProductAdaptor = new ProductsRecyclerView(Repository.getInstance().getPopularProducts(), getActivity());
         mRatedRecyclerAdaptor = new ProductsRecyclerView(Repository.getInstance().getRatedProducts(), getActivity());
-        mProductAdaptor = new ProductAdaptor(Repository.getInstance().getFilteredCategoriesItems());
+//        mProductAdaptor = new ProductAdaptor(Repository.getInstance().getFilteredCategoriesItems());
         mCategoryRecyclerView.setAdapter(mProductAdaptor);
         mRecentRecyclerView.setAdapter(mNewestProductAdaptor);
         mPopularRecyclerView.setAdapter(mPopularProductAdaptor);

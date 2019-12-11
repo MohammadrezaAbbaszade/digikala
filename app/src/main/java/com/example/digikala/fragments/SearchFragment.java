@@ -42,7 +42,6 @@ import Woo.Repository.Repository;
 public class SearchFragment extends Fragment {
     private WooCommerce mWooCommerce = new WooCommerce();
     private EditText searchEditText;
-    private RecyclerView mRecyclerView;
     private ImageButton mArrowButton;
     private ImageView mClearEditText;
     public static SearchFragment newInstance() {

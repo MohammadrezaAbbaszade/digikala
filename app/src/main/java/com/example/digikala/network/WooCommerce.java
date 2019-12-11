@@ -13,7 +13,7 @@ import retrofit2.Call;
 public class WooCommerce {
     public static final String TAG = "FlickrFetcher";
     public static final String FLICKR_REST_PATH = "https://woocommerce.maktabsharif.ir/wp-json/wc/v3/";
-    public static final String CONSUMER_KEY = "%20ck_7c028a04c9faf616410b09e2ab90b1884c875d01";
+    public static final String CONSUMER_KEY = "ck_7c028a04c9faf616410b09e2ab90b1884c875d01";
     public static final String CONSUMER_SECRET = "cs_8c39f626780f01d135719f64214fd092b848f4aa";
     private Map<String, String> mQueries = new HashMap<String, String>() {
         {
@@ -56,7 +56,7 @@ public class WooCommerce {
         return call.execute().body();
     }
     public List<WoocommerceBody> searchInProducts(String searchQuery) throws IOException {
-        Call<List<WoocommerceBody>> call = mWoocommerceApi.searchProducts(searchQuery);
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.searchProducts(searchQuery,mQueries);
         return call.execute().body();
     }
 
@@ -67,7 +67,7 @@ public class WooCommerce {
         return call.execute().body();
     }
     public WoocommerceBody getProductById(int id) throws IOException {
-        Call<WoocommerceBody> call = mWoocommerceApi.getProductById(String.valueOf(id));
+        Call<WoocommerceBody> call = mWoocommerceApi.getProductById(String.valueOf(id),mQueries);
         return call.execute().body();
     }
     public List<WoocommerceBody> getRelatedProducts(String[] id) throws IOException {

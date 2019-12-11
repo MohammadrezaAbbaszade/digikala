@@ -4,19 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="100dp"
     android:orientation="vertical">
 
     <ImageView
         android:id="@+id/sub_categories_image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_width="75dp"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_digikala_w"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sub_categories_text_view"
+        app:layout_constraintHorizontal_bias="0.052"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.482" />
 
     <ImageView
         android:id="@+id/seperator"
@@ -24,7 +26,7 @@
         android:layout_height="1.5dp"
         android:layout_alignParentBottom="true"
         android:scaleType="fitXY"
-        android:src="#534F4F"
+        android:src="#9E9292"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -34,6 +36,7 @@ android:text="محصول"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
+        android:textSize="15sp"
         android:layout_marginRight="40dp"
         android:layout_marginBottom="29dp"
         app:layout_constraintBottom_toBottomOf="parent"

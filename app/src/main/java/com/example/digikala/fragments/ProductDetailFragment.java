@@ -69,9 +69,6 @@ public class ProductDetailFragment extends Fragment {
     private Button mBuyButton;
     private SliderView mSliderView;
     private SliderAdaptor mSliderAdaptor;
-    public static final int REQUEST_CODE_FOR_SHOP_BAG_FRAGMENT = 1;
-    public static final String SHOP_BAG_FRAGMENT_TAG = "shopbagfragmenttag";
-    private String[] realtedIds;
     private changeFragment mChangeFragment;
 
     public static ProductDetailFragment newInstance(int id) {
