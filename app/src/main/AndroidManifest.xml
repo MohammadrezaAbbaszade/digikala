@@ -10,19 +10,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.SearchActivity"></activity>
-        <activity android:name=".activities.ShopBagFragmentActivity" />
-        <activity android:name=".activities.CategoriesViewPagerActivity" />
-        <activity android:name=".activities.ListProductsActivity" />
-        <activity android:name=".activities.ProductDetailActivity" />
-        <activity android:name=".activities.SplashActivity">
+        <activity android:name="com.example.digikala.views.SearchActivity"></activity>
+        <activity android:name="com.example.digikala.views.ShopBagFragmentActivity" />
+        <activity android:name="com.example.digikala.views.CategoriesViewPagerActivity" />
+        <activity android:name="com.example.digikala.views.ListProductsActivity" />
+        <activity android:name="com.example.digikala.views.ProductDetailActivity" />
+        <activity android:name="com.example.digikala.views.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainActivity" />
+        <activity android:name="com.example.digikala.views.MainActivity" />
     </application>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />

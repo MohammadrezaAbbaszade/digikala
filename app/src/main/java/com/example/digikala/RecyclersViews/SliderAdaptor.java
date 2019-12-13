@@ -2,6 +2,7 @@ package com.example.digikala.RecyclersViews;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,7 @@ public class SliderAdaptor extends SliderViewAdapter<SliderAdaptor.SliderProduct
                     .into(imageViewBackground);
         }
         void bind(WoocommerceBody woocommerceBody,int position) {
+            Log.d("pos",String.valueOf(position));
             mWoocommerceBody=woocommerceBody;
             Picasso.with(mContext).load(woocommerceBody.getImages().get(position).getSrc()).placeholder(R.drawable.digikala)
                     .into(imageViewBackground);

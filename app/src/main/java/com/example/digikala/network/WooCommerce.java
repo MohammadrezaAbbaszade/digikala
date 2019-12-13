@@ -18,7 +18,7 @@ import retrofit2.Response;
 public class WooCommerce {
     public static final String TAG = "FlickrFetcher";
     public static final String FLICKR_REST_PATH = "https://woocommerce.maktabsharif.ir/wp-json/wc/v3/";
-    public static final String CONSUMER_KEY = "ck_7c028a04c9faf616410b09e2ab90b1884c875d01";
+    public static final String CONSUMER_KEY = " ck_7c028a04c9faf616410b09e2ab90b1884c875d01";
     public static final String CONSUMER_SECRET = "cs_8c39f626780f01d135719f64214fd092b848f4aa";
     private Map<String, String> mQueries = new HashMap<String, String>() {
         {
@@ -179,5 +179,31 @@ public class WooCommerce {
             }
         });
         return Repository.getInstance().getRelatedProducts();
+    }
+    public MutableLiveData<List<WoocommerceBody>>  getSortedBaseProducts(Map<String, String> queries)throws IOException
+    {
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getSortedBaseProducts(queries);
+
+        call.enqueue(new Callback<List<WoocommerceBody>>() {
+            @Override
+            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+                if(response.isSuccessful())
+                {
+                    Repository.getInstance().getSortedProducts().setValue(response.body());
+
+                }else
+                {
+                    Repository.getInstance().setSortedProducts(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+                Repository.getInstance().setSortedProducts(null);
+            }
+        });
+
+
+        return Repository.getInstance().getSortedProducts();
     }
 }

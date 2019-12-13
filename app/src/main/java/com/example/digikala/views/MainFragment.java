@@ -106,7 +106,7 @@ public class MainFragment extends Fragment {
         mMainViewModel.getPopularProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-                initSliderView(woocommerceBodies);
+                initSliderView();
                 updateAdaptor(woocommerceBodies,1);
             }
         });
@@ -122,15 +122,11 @@ public class MainFragment extends Fragment {
                 updateAdaptor(woocommerceBodies,2);
             }
         });
-
-
-
-
         return view;
     }
 
-    private void initSliderView(List<WoocommerceBody> woocommerceBodies) {
-        mSliderAdaptor = new SliderAdaptor(woocommerceBodies, getActivity());
+    private void initSliderView() {
+        mSliderAdaptor = new SliderAdaptor(mMainViewModel.getPopularProducts().getValue(), getActivity());
         mSliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
         mSliderView.setSliderAdapter(mSliderAdaptor);
     }

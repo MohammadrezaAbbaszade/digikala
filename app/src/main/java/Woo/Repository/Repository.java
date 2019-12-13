@@ -19,6 +19,7 @@ public class Repository {
     private MutableLiveData<List<WoocommerceBody>> mPopularProducts;
     private MutableLiveData<List<WoocommerceBody>> mRatedProducts;
     private MutableLiveData<List<WoocommerceBody>> mSearchedProducts;
+    private MutableLiveData<List<WoocommerceBody>> mSortedProducts;
     private MutableLiveData<List<WoocommerceBody>> mAllProducts;
     private MutableLiveData<List<WoocommerceBody>> mRelatedProducts;
     private MutableLiveData<WoocommerceBody> mProductById;
@@ -37,6 +38,7 @@ public class Repository {
         mAllProducts=new MutableLiveData<>();
         mRelatedProducts=new MutableLiveData<>();
         mProductById=new MutableLiveData<>();
+        mSortedProducts=new MutableLiveData<>();
         daoSession = DBApplication.getInstance().getDaoSession();
         mShoppingBagDao = daoSession.getShoppingBagDao();
     }
@@ -47,6 +49,14 @@ public class Repository {
             repository = new Repository();
         }
         return repository;
+    }
+
+    public MutableLiveData<List<WoocommerceBody>> getSortedProducts() {
+        return mSortedProducts;
+    }
+
+    public void setSortedProducts(MutableLiveData<List<WoocommerceBody>> sortedProducts) {
+        mSortedProducts = sortedProducts;
     }
 
     public MutableLiveData<List<WoocommerceBody>> getNewestProducts() {

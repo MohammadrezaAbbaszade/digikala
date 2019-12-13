@@ -10,6 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -25,8 +27,10 @@ import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.WooCommerce;
+import com.example.digikala.viewmodels.ListProductsViewModel;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +44,7 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 public class ListProductsFragment extends Fragment {
+    private ListProductsViewModel mListProductViewModel;
     private static final String STATE = "state";
     public static final String CONSUMER_KEY = "%20ck_7c028a04c9faf616410b09e2ab90b1884c875d01";
     public static final String CONSUMER_SECRET = "cs_8c39f626780f01d135719f64214fd092b848f4aa";
@@ -76,13 +81,6 @@ public class ListProductsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (Repository.getInstance().getSearchedProducts() != null && Repository.getInstance().getSearchedProducts().size() == 0) {
-            mTextView.setVisibility(View.VISIBLE);
-        }
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,8 +92,11 @@ public class ListProductsFragment extends Fragment {
             getActivity().finish();
             Log.d("tag", "finished");
         }
+        mListProductViewModel = ViewModelProviders.of(this).get(ListProductsViewModel.class);
         state = getArguments().getInt(STATE);
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -126,6 +127,15 @@ public class ListProductsFragment extends Fragment {
         });
         Log.d("tag", "onCreateViewL");
         initAdaptor(state);
+        mListProductViewModel.getSearchedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+            @Override
+            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                if(woocommerceBodies!=null)
+                    initAdaptor(4);
+                else
+                    mTextView.setVisibility(View.VISIBLE);
+            }
+        });
         return view;
     }
 
@@ -133,12 +143,14 @@ public class ListProductsFragment extends Fragment {
         ProductAdaptor productAdaptor = new ProductAdaptor(state);
         mListProductsRecycler.setAdapter(productAdaptor);
     }
+
     private void initAdaptor(List<WoocommerceBody> woocommerceBodies) {
         ProductAdaptor productAdaptor = new ProductAdaptor(woocommerceBodies);
         mListProductsRecycler.setAdapter(productAdaptor);
     }
+
     private void init(View view) {
-        mProgressBar=view.findViewById(R.id.list_products_fragment_progress_bar);
+        mProgressBar = view.findViewById(R.id.list_products_fragment_progress_bar);
         mListProductsRecycler = view.findViewById(R.id.list_products_fragment_recycler);
         mTextView = view.findViewById(R.id.list_products_fragment_text_view);
         mSortTextView = view.findViewById(R.id.list_product_fragment_sort_text_view);
@@ -229,21 +241,23 @@ public class ListProductsFragment extends Fragment {
                 case 0:
                     break;
                 case 1:
-                    mWoocommerceBodies = Repository.getInstance().getPopularProducts();
+                    mWoocommerceBodies = mListProductViewModel.getPopularProducts().getValue();
                     break;
                 case 2:
-                    mWoocommerceBodies = Repository.getInstance().getRatedProducts();
+                    mWoocommerceBodies = mListProductViewModel.getRatedProducts().getValue();
                     break;
                 case 3:
-                    mWoocommerceBodies = Repository.getInstance().getNewestProducts();
+                    mWoocommerceBodies = mListProductViewModel.getNewestProducts().getValue();
                     break;
                 default:
-                    mWoocommerceBodies = Repository.getInstance().getSearchedProducts();
+                    mWoocommerceBodies = mListProductViewModel.getSearchedProducts().getValue();
             }
         }
+
         public ProductAdaptor(List<WoocommerceBody> woocommerceBodies) {
-           mWoocommerceBodies=woocommerceBodies;
+            mWoocommerceBodies = woocommerceBodies;
         }
+
         @NonNull
         @Override
         public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -308,19 +322,20 @@ public class ListProductsFragment extends Fragment {
                 mQueries.put("order", "asc");
                 break;
         }
-        mWooCommerce.getWoocommerceApi().getSortedBaseProducts(mQueries).enqueue(new Callback<List<WoocommerceBody>>() {
+        try {
+            mWooCommerce.getSortedBaseProducts(mQueries);
+        } catch (IOException e) {
+            Toast.makeText(getActivity(), "خطا در برقراری ارتباط", Toast.LENGTH_LONG);
+            e.printStackTrace();
+        }
+        mListProductViewModel.getSortedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
-            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
-                if (response.isSuccessful()) {
-                    initAdaptor(response.body());
+            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                if (woocommerceBodies != null) {
+                    initAdaptor(woocommerceBodies);
                     mListProductsRecycler.setVisibility(View.VISIBLE);
                     mProgressBar.setVisibility(View.GONE);
                 }
-            }
-
-            @Override
-            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
-                Toast.makeText(getActivity(), "خطا در برقراری ارتباط", Toast.LENGTH_LONG);
             }
         });
     }

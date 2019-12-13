@@ -107,19 +107,19 @@ public class SearchFragment extends Fragment {
 
             }
         });
-        mSearchViewModel.getSearchedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
-            @Override
-            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-                if(woocommerceBodies!=null)
-                {
-                    Intent intent = ListProductsActivity.newIntent(getActivity(), 4);
-                    startActivity(intent);
-                }else
-                {
-                    Toast.makeText(getActivity(), "موردی یافت نشد", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+//        mSearchViewModel.getSearchedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+//            @Override
+//            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+//                if(woocommerceBodies!=null)
+//                {
+//                    Intent intent = ListProductsActivity.newIntent(getActivity(), 4);
+//                    startActivity(intent);
+//                }else
+//                {
+//                    Toast.makeText(getActivity(), "موردی یافت نشد", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
         mClearEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
