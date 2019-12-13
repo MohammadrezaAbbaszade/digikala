@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -26,6 +28,7 @@ import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.SliderAdaptor;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.WooCommerce;
+import com.example.digikala.viewmodels.ProductDetailViewModel;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderView;
 import com.squareup.picasso.Picasso;
@@ -58,7 +61,7 @@ public class ProductDetailFragment extends Fragment {
     private SliderView mSliderView;
     private SliderAdaptor mSliderAdaptor;
     private changeFragment mChangeFragment;
-
+private ProductDetailViewModel mProductDetailViewModel;
     public static ProductDetailFragment newInstance(int id) {
 
         Bundle args = new Bundle();
@@ -74,7 +77,8 @@ public class ProductDetailFragment extends Fragment {
 
         if (isNetworkConnected()) {
             id = getArguments().getInt(ID);
-            startAsynkRequest();
+            mProductDetailViewModel= ViewModelProviders.of(this).get(ProductDetailViewModel.class);
+            mProductDetailViewModel.loadSingleProduct(id);
         } else {
 //            Intent intent = MainActivity.newIntent(getActivity(), 0);
 //            Log.d("tag", "checkNetwork" + "0");
@@ -84,12 +88,6 @@ public class ProductDetailFragment extends Fragment {
         }
 
     }
-
-    private void startAsynkRequest() {
-        InitProductsAsynceTask initProductsAsynceTask = new InitProductsAsynceTask();
-        initProductsAsynceTask.execute();
-    }
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -117,59 +115,51 @@ public class ProductDetailFragment extends Fragment {
         mBuyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addProductToBag();
-              Intent intent= ShopBagFragmentActivity.newIntent(getActivity());
-              startActivity(intent);
-//                ShopBagFragment shopBagFragment = ShopBagFragment.newInstance(id, 1);
-////                shopBagFragment.setTargetFragment(ProductDetailFragment.this, REQUEST_CODE_FOR_SHOP_BAG_FRAGMENT);
-//                shopBagFragment.show(getFragmentManager(), SHOP_BAG_FRAGMENT_TAG);
+                mProductDetailViewModel.addToBag(id);
+                Intent intent= ShopBagFragmentActivity.newIntent(getActivity());
+                startActivity(intent);
+
+            }
+        });
+        mProductDetailViewModel.getRelatedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+            @Override
+            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                setUpAdaptor(woocommerceBodies);
+            }
+        });
+        mProductDetailViewModel.getProductById().observe(this, new Observer<WoocommerceBody>() {
+            @Override
+            public void onChanged(WoocommerceBody woocommerceBody) {
+                if(woocommerceBody!=null) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mSliderView.setVisibility(View.VISIBLE);
+                    mCardView.setVisibility(View.VISIBLE);
+                    PrepareViewPager(woocommerceBody);
+                    PrepareRelatedProducts(woocommerceBody.getRelatedIds());
+                }else
+                {
+                    mProgressBar.setVisibility(View.GONE);
+                }
             }
         });
         return view;
     }
-
-    private void addProductToBag() {
-        Repository.getInstance().addBag(Repository.getInstance().getProductById().getId());
-    }
-
-    private void PrepareViewPager() {
+    private void PrepareViewPager(WoocommerceBody woocommerceBody) {
 
 
-        mSliderAdaptor = new SliderAdaptor(Repository.getInstance().getProductById(), getActivity());
+        mSliderAdaptor = new SliderAdaptor(woocommerceBody, getActivity());
         mSliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
        mSliderView.setSliderAdapter(mSliderAdaptor);
 
 
-        mTextView.setText(Repository.getInstance().getProductById().getName());
-        mDiscriptionTextView.setText(Repository.getInstance().getProductById().getDescription());
-        mRegularPriceTextView.setText(Repository.getInstance().getProductById().getPrice() + " " + "تومان");
-        mBudgetPriceTextView.setText(Repository.getInstance().getProductById().getRegularPrice() + " " + "تومان");
+        mTextView.setText(woocommerceBody.getName());
+        mDiscriptionTextView.setText(woocommerceBody.getDescription());
+        mRegularPriceTextView.setText(woocommerceBody.getPrice() + " " + "تومان");
+        mBudgetPriceTextView.setText(woocommerceBody.getRegularPrice() + " " + "تومان");
     }
 
-    private void PrepareRelatedProducts() {
-        List<Integer> integers = Repository.getInstance().getProductById().getRelatedIds();
-
-//        realtedIds = new String[Repository.getInstance().getProductById().getRelatedIds().size()];
-//        for (int i = 0; i < Repository.getInstance().getProductById().getRelatedIds().size(); i++) {
-//            realtedIds[i] = String.valueOf(Repository.getInstance().getProductById().getRelatedIds().get(i));
-//        }
-        mWooCommerce.getWoocommerceApi().getReleatedProducts(mWooCommerce.getQueries(),integers.toString()).enqueue(new Callback<List<WoocommerceBody>>() {
-            @Override
-            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
-                if (response.isSuccessful()) {
-                    Repository.getInstance().setRelatedProducts(response.body());
-                    setUpAdaptor();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
-//                Intent intent = MainActivity.newIntent(getActivity(), 0);
-//                startActivity(intent);
-//                getActivity().finish();
-
-            }
-        });
+    private void PrepareRelatedProducts(List<Integer> integers) {
+       mProductDetailViewModel.loadRelatedProducts(integers);
 
     }
 
@@ -185,46 +175,9 @@ public class ProductDetailFragment extends Fragment {
         mBuyButton = view.findViewById(R.id.detail_fragment_buy_button);
     }
 
-    private void setUpAdaptor() {
-        mProductAdaptor = new ProductAdaptor(Repository.getInstance().getRelatedProducts());
+    private void setUpAdaptor(List<WoocommerceBody> woocommerceBodies) {
+        mProductAdaptor = new ProductAdaptor(woocommerceBodies);
         mRelatedProductRecycler.setAdapter(mProductAdaptor);
-    }
-
-    private class InitProductsAsynceTask extends AsyncTask<Void, String, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            try {
-                Repository.getInstance().setProductById(mWooCommerce.getProductById(id));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                getActivity().finish();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (Repository.getInstance().getProductById() != null) {
-                mProgressBar.setVisibility(View.GONE);
-                mSliderView.setVisibility(View.VISIBLE);
-                mCardView.setVisibility(View.VISIBLE);
-                PrepareViewPager();
-                PrepareRelatedProducts();
-
-            } else {
-                mProgressBar.setVisibility(View.GONE);
-//                Intent intent = MainActivity.newIntent(getActivity(), 0);
-//                Log.d("tag", "checkNetwork" + "0");
-//                startActivity(intent);
-//                getActivity().finish();
-                startAsynkRequest();
-            }
-        }
-
     }
 
     private class ProductHolder extends RecyclerView.ViewHolder {

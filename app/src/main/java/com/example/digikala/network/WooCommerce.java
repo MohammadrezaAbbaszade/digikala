@@ -141,7 +141,7 @@ public class WooCommerce {
         });
         return Repository.getInstance().getProductById();
     }
-    public MutableLiveData<List<WoocommerceBody>> getRelatedProducts(String[] id) throws IOException {
+    public MutableLiveData<List<WoocommerceBody>> getRelatedProducts(String...id) throws IOException {
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getReleatedProducts(mQueries,id);
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
