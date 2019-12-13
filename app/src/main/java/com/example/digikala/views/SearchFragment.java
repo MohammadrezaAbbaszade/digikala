@@ -9,6 +9,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,9 +28,12 @@ import android.widget.Toast;
 
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
+import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.WooCommerce;
+import com.example.digikala.viewmodels.SearchViewModel;
 
 import java.io.IOException;
+import java.util.List;
 
 import Woo.Repository.Repository;
 
@@ -40,6 +45,7 @@ public class SearchFragment extends Fragment {
     private EditText searchEditText;
     private ImageButton mArrowButton;
     private ImageView mClearEditText;
+    private SearchViewModel mSearchViewModel;
     public static SearchFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -59,8 +65,10 @@ public class SearchFragment extends Fragment {
         if (!isNetworkConnected()) {
             getActivity().finish();
             Log.d("tag", "finished");
+        }else
+        {
+            mSearchViewModel= ViewModelProviders.of(this).get(SearchViewModel.class);
         }
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -77,21 +85,7 @@ public class SearchFragment extends Fragment {
                 getActivity().finish();
             }
         });
-//        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                SearchAsynceTask searchAsynceTask = new SearchAsynceTask();
-//                searchAsynceTask.execute(query);
-//                SharedPreferencesData.setQuery(getActivity(), query);
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                return false;
-//            }
-//        });
+
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -113,6 +107,19 @@ public class SearchFragment extends Fragment {
 
             }
         });
+        mSearchViewModel.getSearchedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+            @Override
+            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                if(woocommerceBodies!=null)
+                {
+                    Intent intent = ListProductsActivity.newIntent(getActivity(), 4);
+                    startActivity(intent);
+                }else
+                {
+                    Toast.makeText(getActivity(), "موردی یافت نشد", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         mClearEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,8 +130,7 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_SEARCH) {
-                    SearchAsynceTask searchAsynceTask = new SearchAsynceTask();
-                    searchAsynceTask.execute(textView.getText().toString());
+                   mSearchViewModel.loadSearchedProducts(textView.toString());
                     SharedPreferencesData.setQuery(getActivity(), textView.getText().toString());
                     return true;
                 }
@@ -132,35 +138,6 @@ public class SearchFragment extends Fragment {
             }
         });
         return view;
-    }
-
-
-    private class SearchAsynceTask extends AsyncTask<String, String, Void> {
-
-        @Override
-        protected Void doInBackground(String... searchQuery) {
-
-            try {
-                Repository.getInstance().setSearchedProducts(mWooCommerce.searchInProducts(searchQuery[0]));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                getActivity().finish();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (Repository.getInstance().getSearchedProducts() != null) {
-                Intent intent = ListProductsActivity.newIntent(getActivity(), 4);
-                startActivity(intent);
-            } else {
-                Toast.makeText(getActivity(), "موردی یافت نشد", Toast.LENGTH_LONG).show();
-            }
-        }
-
     }
 
     private boolean isNetworkConnected() {
