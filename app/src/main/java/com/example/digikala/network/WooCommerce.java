@@ -1,5 +1,7 @@
 package com.example.digikala.network;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.model.categoriesmodel.CategoriesBody;
 
@@ -8,7 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Woo.Repository.Repository;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WooCommerce {
     public static final String TAG = "FlickrFetcher";
@@ -35,25 +40,74 @@ public class WooCommerce {
         return mWoocommerceApi;
     }
 
-    public List<WoocommerceBody> productRecentPhotosSync() throws IOException {
+    public MutableLiveData<List<WoocommerceBody>> productRecentPhotosSync() throws IOException {
         mQueries.put("orderby", "date");
-//        mQueries.put("page", "2");
          Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
-        return call.execute().body();
+         call.enqueue(new Callback<List<WoocommerceBody>>() {
+             @Override
+             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+                 if(response.isSuccessful())
+                 {
+                     Repository.getInstance().getNewestProducts().setValue(response.body());
+                 }else
+                 {
+                     Repository.getInstance().setNewestProducts(null);
+                 }
+             }
+
+             @Override
+             public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+                 Repository.getInstance().setNewestProducts(null);
+             }
+         });
+        return Repository.getInstance().getNewestProducts();
     }
 
-    public List<WoocommerceBody> productPopularitySync() throws IOException {
+    public MutableLiveData<List<WoocommerceBody>> productPopularitySync() throws IOException {
         mQueries.put("orderby", "popularity");
-//        mQueries.put("page", "2");
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
-        return call.execute().body();
+        call.enqueue(new Callback<List<WoocommerceBody>>() {
+            @Override
+            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+                if(response.isSuccessful())
+                {
+                    Repository.getInstance().getPopularProducts().setValue(response.body());
+                }else
+                {
+                    Repository.getInstance().setPopularProducts(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+                Repository.getInstance().setPopularProducts(null);
+            }
+        });
+        return Repository.getInstance().getPopularProducts();
     }
 
-    public List<WoocommerceBody> productRatedSync() throws IOException {
+    public MutableLiveData<List<WoocommerceBody>> productRatedSync() throws IOException {
         mQueries.put("orderby", "rating");
 //        mQueries.put("page", "2");
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
-        return call.execute().body();
+        call.enqueue(new Callback<List<WoocommerceBody>>() {
+            @Override
+            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+                if(response.isSuccessful())
+                {
+                    Repository.getInstance().getRatedProducts().setValue(response.body());
+                }else
+                {
+                    Repository.getInstance().setRatedProducts(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+                Repository.getInstance().setRatedProducts(null);
+            }
+        });
+        return  Repository.getInstance().getRatedProducts();
     }
     public List<WoocommerceBody> searchInProducts(String searchQuery) throws IOException {
         Call<List<WoocommerceBody>> call = mWoocommerceApi.searchProducts(searchQuery,mQueries);
@@ -66,24 +120,47 @@ public class WooCommerce {
         Call<List<CategoriesBody>> call = mWoocommerceApi.getCategories();
         return call.execute().body();
     }
-    public WoocommerceBody getProductById(int id) throws IOException {
+    public MutableLiveData<WoocommerceBody> getProductById(int id) throws IOException {
         Call<WoocommerceBody> call = mWoocommerceApi.getProductById(String.valueOf(id),mQueries);
-        return call.execute().body();
+        call.enqueue(new Callback<WoocommerceBody>() {
+            @Override
+            public void onResponse(Call<WoocommerceBody> call, Response<WoocommerceBody> response) {
+                if(response.isSuccessful())
+                {
+                    Repository.getInstance().getProductById().setValue(response.body());
+                }else
+                {
+                   Repository.getInstance().setProductById(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WoocommerceBody> call, Throwable t) {
+                Repository.getInstance().setProductById(null);
+            }
+        });
+        return Repository.getInstance().getProductById();
     }
-    public List<WoocommerceBody> getRelatedProducts(String[] id) throws IOException {
+    public MutableLiveData<List<WoocommerceBody>> getRelatedProducts(String[] id) throws IOException {
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getReleatedProducts(mQueries,id);
-        return call.execute().body();
+        call.enqueue(new Callback<List<WoocommerceBody>>() {
+            @Override
+            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+                if(response.isSuccessful())
+                {
+                    Repository.getInstance().getRelatedProducts().setValue(response.body());
+
+                }else
+                {
+                    Repository.getInstance().setRelatedProducts(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+                Repository.getInstance().setRelatedProducts(null);
+            }
+        });
+        return Repository.getInstance().getRelatedProducts();
     }
-//    public void searchPhotosAsync(String query) {
-//        mQueries.put("method", SEARCH_METHOD);
-//        mQueries.put("text", query);
-//
-//        Call<WoocommerceBody> call = mWoocommerceApi.getWooCommerceBody(mQueries);
-//        call.enqueue(getRetrofitCallback());
-//    }
-
-
-//    public interface FinishSplash {
-//        boolean onCheckBackground(boolean check);
-//    }
 }

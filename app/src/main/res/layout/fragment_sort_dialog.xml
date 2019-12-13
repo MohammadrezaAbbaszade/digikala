@@ -6,7 +6,7 @@
     android:layout_height="300dp"
     android:layout_margin="8dp"
     android:padding="8dp"
-    tools:context=".fragments.SortDialogFragment">
+    tools:context=".views.SortDialogFragment">
 
     <RadioButton
         android:id="@+id/newest_check_box"

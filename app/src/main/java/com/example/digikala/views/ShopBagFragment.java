@@ -1,7 +1,6 @@
-package com.example.digikala.fragments;
+package com.example.digikala.views;
 
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,13 +23,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.digikala.R;
-import com.example.digikala.activities.ProductDetailActivity;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.WooCommerce;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import Woo.Repository.Repository;

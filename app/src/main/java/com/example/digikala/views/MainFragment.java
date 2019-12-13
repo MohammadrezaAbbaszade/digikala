@@ -1,4 +1,4 @@
-package com.example.digikala.fragments;
+package com.example.digikala.views;
 
 
 import android.content.Context;
@@ -8,33 +8,31 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import com.example.digikala.RecyclersViews.ProductsRecyclerView;
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.SliderAdaptor;
-import com.example.digikala.activities.CategoriesViewPagerActivity;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.model.categoriesmodel.CategoriesBody;
-import com.example.digikala.network.WooCommerce;
+import com.example.digikala.viewmodels.MainViewModel;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import Woo.Repository.Repository;
-import me.relex.circleindicator.CircleIndicator;
 
 
 /**
@@ -52,6 +50,7 @@ public class MainFragment extends Fragment {
     private SliderView mSliderView;
     private changeFragment mChangeFragment;
     private SliderAdaptor mSliderAdaptor;
+    private MainViewModel mMainViewModel;
 
     public static MainFragment newInstance() {
 
@@ -63,6 +62,15 @@ public class MainFragment extends Fragment {
 
     public MainFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mMainViewModel= ViewModelProviders.of(this).get(MainViewModel.class);
+        mMainViewModel.loadNewestProducts();
+        mMainViewModel.loadPopularProducts();
+        mMainViewModel.loadRatedProducts();
     }
 
     @Override
@@ -95,21 +103,40 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         init(view);
-        updateAdaptor();
-        initSliderView();
+        mMainViewModel.getPopularProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+            @Override
+            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                initSliderView(woocommerceBodies);
+                updateAdaptor(woocommerceBodies,1);
+            }
+        });
+        mMainViewModel.getNewestProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+            @Override
+            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                updateAdaptor(woocommerceBodies,0);
+            }
+        });
+        mMainViewModel.getRatedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+            @Override
+            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                updateAdaptor(woocommerceBodies,2);
+            }
+        });
+
+
 
 
         return view;
     }
 
-    private void initSliderView() {
-        mSliderAdaptor = new SliderAdaptor(Repository.getInstance().getPopularProducts(), getActivity());
+    private void initSliderView(List<WoocommerceBody> woocommerceBodies) {
+        mSliderAdaptor = new SliderAdaptor(woocommerceBodies, getActivity());
         mSliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
         mSliderView.setSliderAdapter(mSliderAdaptor);
     }
 
     private void init(View view) {
-        mSliderView=view.findViewById(R.id.imageSlider);
+        mSliderView = view.findViewById(R.id.imageSlider);
         mCategoryRecyclerView = view.findViewById(R.id.fragment_main_recycler);
         mRecentRecyclerView = view.findViewById(R.id.fragment_main_newest_product_recycler);
         mPopularRecyclerView = view.findViewById(R.id.fragment_main_popular_product_recycler);
@@ -117,10 +144,18 @@ public class MainFragment extends Fragment {
     }
 
 
-    public void updateAdaptor() {
-        mNewestProductAdaptor = new ProductsRecyclerView(Repository.getInstance().getNewestProducts(), getActivity());
-        mPopularProductAdaptor = new ProductsRecyclerView(Repository.getInstance().getPopularProducts(), getActivity());
-        mRatedRecyclerAdaptor = new ProductsRecyclerView(Repository.getInstance().getRatedProducts(), getActivity());
+    public void updateAdaptor(List<WoocommerceBody> woocommerceBodies,int state) {
+
+        switch (state)
+        {
+            case 0:
+                mNewestProductAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
+            case 1:
+                mPopularProductAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
+            case 2:
+                mRatedRecyclerAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
+        }
+
 //        mProductAdaptor = new ProductAdaptor(Repository.getInstance().getFilteredCategoriesItems());
         mCategoryRecyclerView.setAdapter(mProductAdaptor);
         mRecentRecyclerView.setAdapter(mNewestProductAdaptor);

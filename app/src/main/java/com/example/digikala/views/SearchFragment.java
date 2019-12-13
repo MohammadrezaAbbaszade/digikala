@@ -1,4 +1,4 @@
-package com.example.digikala.fragments;
+package com.example.digikala.views;
 
 
 import android.content.Context;
@@ -8,10 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,7 +26,6 @@ import android.widget.Toast;
 
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
-import com.example.digikala.activities.ListProductsActivity;
 import com.example.digikala.network.WooCommerce;
 
 import java.io.IOException;

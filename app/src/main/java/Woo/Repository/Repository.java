@@ -2,6 +2,8 @@ package Woo.Repository;
 
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.digikala.model.DaoSession;
 import com.example.digikala.model.ShoppingBag;
 import com.example.digikala.model.ShoppingBagDao;
@@ -13,13 +15,13 @@ import java.util.List;
 
 public class Repository {
     private static Repository repository;
-    private List<WoocommerceBody> mNewestProducts;
-    private List<WoocommerceBody> mPopularProducts;
-    private List<WoocommerceBody> mRatedProducts;
-    private List<WoocommerceBody> mSearchedProducts;
-    private List<WoocommerceBody> mAllProducts;
-    private List<WoocommerceBody> mRelatedProducts;
-    private WoocommerceBody mProductById;
+    private MutableLiveData<List<WoocommerceBody>> mNewestProducts;
+    private MutableLiveData<List<WoocommerceBody>> mPopularProducts;
+    private MutableLiveData<List<WoocommerceBody>> mRatedProducts;
+    private MutableLiveData<List<WoocommerceBody>> mSearchedProducts;
+    private MutableLiveData<List<WoocommerceBody>> mAllProducts;
+    private MutableLiveData<List<WoocommerceBody>> mRelatedProducts;
+    private MutableLiveData<WoocommerceBody> mProductById;
     private List<CategoriesBody> mCategoriesItems;
     private List<CategoriesBody> mFilteredCategoriesItems;
     private List<CategoriesBody> mSubCategoriesItems;
@@ -28,6 +30,13 @@ public class Repository {
     private ShoppingBagDao mShoppingBagDao;
 
     private Repository() {
+        mNewestProducts=new MutableLiveData<>();
+        mPopularProducts=new MutableLiveData<>();
+        mRatedProducts=new MutableLiveData<>();
+        mSearchedProducts=new MutableLiveData<>();
+        mAllProducts=new MutableLiveData<>();
+        mRelatedProducts=new MutableLiveData<>();
+        mProductById=new MutableLiveData<>();
         daoSession = DBApplication.getInstance().getDaoSession();
         mShoppingBagDao = daoSession.getShoppingBagDao();
     }
@@ -40,6 +49,62 @@ public class Repository {
         return repository;
     }
 
+    public MutableLiveData<List<WoocommerceBody>> getNewestProducts() {
+        return mNewestProducts;
+    }
+
+    public void setNewestProducts(MutableLiveData<List<WoocommerceBody>> newestProducts) {
+        mNewestProducts = newestProducts;
+    }
+
+    public MutableLiveData<List<WoocommerceBody>> getPopularProducts() {
+        return mPopularProducts;
+    }
+
+    public void setPopularProducts(MutableLiveData<List<WoocommerceBody>> popularProducts) {
+        mPopularProducts = popularProducts;
+    }
+
+    public MutableLiveData<List<WoocommerceBody>> getRatedProducts() {
+        return mRatedProducts;
+    }
+
+    public void setRatedProducts(MutableLiveData<List<WoocommerceBody>> ratedProducts) {
+        mRatedProducts = ratedProducts;
+    }
+
+    public MutableLiveData<List<WoocommerceBody>> getSearchedProducts() {
+        return mSearchedProducts;
+    }
+
+    public void setSearchedProducts(MutableLiveData<List<WoocommerceBody>> searchedProducts) {
+        mSearchedProducts = searchedProducts;
+    }
+
+    public MutableLiveData<List<WoocommerceBody>> getAllProducts() {
+        return mAllProducts;
+    }
+
+    public void setAllProducts(MutableLiveData<List<WoocommerceBody>> allProducts) {
+        mAllProducts = allProducts;
+    }
+
+    public MutableLiveData<List<WoocommerceBody>> getRelatedProducts() {
+        return mRelatedProducts;
+    }
+
+    public void setRelatedProducts(MutableLiveData<List<WoocommerceBody>> relatedProducts) {
+        mRelatedProducts = relatedProducts;
+    }
+
+    public MutableLiveData<WoocommerceBody> getProductById() {
+        return mProductById;
+    }
+
+    public void setProductById(MutableLiveData<WoocommerceBody> productById) {
+        mProductById = productById;
+    }
+
     public List<CategoriesBody> getFilteredCategoriesItems() {
         mFilteredCategoriesItems=new ArrayList<>();
         for(CategoriesBody categoriesBody:mCategoriesItems)
@@ -48,14 +113,6 @@ public class Repository {
                 mFilteredCategoriesItems.add(categoriesBody);
         }
         return mFilteredCategoriesItems;
-    }
-
-    public List<WoocommerceBody> getSearchedProducts() {
-        return mSearchedProducts;
-    }
-
-    public void setSearchedProducts(List<WoocommerceBody> searchedProducts) {
-        mSearchedProducts = searchedProducts;
     }
 
     public List<ShoppingBag> getShoppingBags() {
@@ -101,73 +158,6 @@ public class Repository {
         }
         return mIds;
     }
-
-    public List<WoocommerceBody> getRelatedProducts() {
-        return mRelatedProducts;
-    }
-
-    public void setRelatedProducts(List<WoocommerceBody> relatedProducts) {
-        mRelatedProducts = null;
-        mRelatedProducts = relatedProducts;
-    }
-
-    public List<WoocommerceBody> getAllProducts() {
-        return mAllProducts;
-    }
-
-    public void setAllProducts(List<WoocommerceBody> allProducts) {
-        mAllProducts = allProducts;
-    }
-
-    public WoocommerceBody getProductById() {
-        return mProductById;
-    }
-
-    public void setProductById(WoocommerceBody productById) {
-        mProductById = null;
-        mProductById = productById;
-
-    }
-
-    public List<CategoriesBody> getCategoriesItems() {
-        return mCategoriesItems;
-    }
-
-    public void setCategoriesItems(List<CategoriesBody> categoriesItems) {
-        mCategoriesItems = null;
-        mCategoriesItems = categoriesItems;
-    }
-
-    public List<WoocommerceBody> getNewestProducts() {
-        return mNewestProducts;
-    }
-
-    public void setNewestProducts(List<WoocommerceBody> newestProducts) {
-        mNewestProducts = null;
-        mNewestProducts = newestProducts;
-
-    }
-
-    public List<WoocommerceBody> getPopularProducts() {
-        return mPopularProducts;
-    }
-
-    public void setPopularProducts(List<WoocommerceBody> popularProducts) {
-        mPopularProducts = null;
-        mPopularProducts = popularProducts;
-
-    }
-
-    public List<WoocommerceBody> getRatedProducts() {
-        return mRatedProducts;
-    }
-
-    public void setRatedProducts(List<WoocommerceBody> ratedProducts) {
-        mRatedProducts = null;
-        mRatedProducts = ratedProducts;
-
-    }
-
     public boolean isRepositoryNull() {
         if (mRatedProducts == null && mPopularProducts == null && mNewestProducts == null && mCategoriesItems == null)
             return true;

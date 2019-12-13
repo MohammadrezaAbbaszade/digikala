@@ -10,7 +10,7 @@
         android:id="@+id/detal_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.ProductDetailFragment">
+        tools:context=".views.ProductDetailFragment">
 
         <!-- TODO: Update blank fragment layout -->
         <ProgressBar

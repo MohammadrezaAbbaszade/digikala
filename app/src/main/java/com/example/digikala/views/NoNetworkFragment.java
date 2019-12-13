@@ -1,4 +1,4 @@
-package com.example.digikala.fragments;
+package com.example.digikala.views;
 
 
 import android.content.Context;
@@ -17,9 +17,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.digikala.R;
-import com.example.digikala.activities.SplashActivity;
-
-import Woo.Repository.Repository;
 
 
 /**

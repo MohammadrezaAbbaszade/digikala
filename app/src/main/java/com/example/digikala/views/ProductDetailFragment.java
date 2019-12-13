@@ -1,4 +1,4 @@
-package com.example.digikala.fragments;
+package com.example.digikala.views;
 
 
 import android.content.Context;
@@ -10,11 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,19 +21,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.SliderAdaptor;
-import com.example.digikala.activities.MainActivity;
-import com.example.digikala.activities.ProductDetailActivity;
-import com.example.digikala.activities.ShopBagFragmentActivity;
-import com.example.digikala.activities.SplashActivity;
-import com.example.digikala.model.CategoriesItem;
 import com.example.digikala.model.WoocommerceBody;
-import com.example.digikala.network.RetrofitInstance;
 import com.example.digikala.network.WooCommerce;
-import com.example.digikala.network.WoocommerceService;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderView;
 import com.squareup.picasso.Picasso;
@@ -45,7 +34,6 @@ import java.io.IOException;
 import java.util.List;
 
 import Woo.Repository.Repository;
-import me.relex.circleindicator.CircleIndicator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

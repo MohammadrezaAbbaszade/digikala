@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#FFFFFF"
-    tools:context=".fragments.NoNetworkFragment">
+    tools:context=".views.NoNetworkFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <ImageView

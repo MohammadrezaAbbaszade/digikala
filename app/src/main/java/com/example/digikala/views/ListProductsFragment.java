@@ -1,4 +1,4 @@
-package com.example.digikala.fragments;
+package com.example.digikala.views;
 
 
 import android.app.Activity;
@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
-import com.example.digikala.activities.ProductDetailActivity;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.network.WooCommerce;
 import com.squareup.picasso.Picasso;
