@@ -106,6 +106,7 @@ public class MainFragment extends Fragment {
         mMainViewModel.getPopularProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+
                 initSliderView();
                 updateAdaptor(woocommerceBodies,1);
             }

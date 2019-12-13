@@ -76,6 +76,7 @@ public class SliderAdaptor extends SliderViewAdapter<SliderAdaptor.SliderProduct
         void bind(WoocommerceBody woocommerceBody,int position) {
             Log.d("pos",String.valueOf(position));
             mWoocommerceBody=woocommerceBody;
+            if(woocommerceBody.getImages().get(position)!=null)
             Picasso.with(mContext).load(woocommerceBody.getImages().get(position).getSrc()).placeholder(R.drawable.digikala)
                     .into(imageViewBackground);
         }

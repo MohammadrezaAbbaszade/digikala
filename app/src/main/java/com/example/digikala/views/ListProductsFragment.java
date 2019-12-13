@@ -322,16 +322,14 @@ public class ListProductsFragment extends Fragment {
                 mQueries.put("order", "asc");
                 break;
         }
-        try {
-            mWooCommerce.getSortedBaseProducts(mQueries);
-        } catch (IOException e) {
-            Toast.makeText(getActivity(), "خطا در برقراری ارتباط", Toast.LENGTH_LONG);
-            e.printStackTrace();
-        }
+
+           mListProductViewModel.loadSortedProducts(mQueries);
+
         mListProductViewModel.getSortedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
                 if (woocommerceBodies != null) {
+
                     initAdaptor(woocommerceBodies);
                     mListProductsRecycler.setVisibility(View.VISIBLE);
                     mProgressBar.setVisibility(View.GONE);
