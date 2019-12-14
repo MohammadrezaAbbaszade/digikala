@@ -1,4 +1,4 @@
-package com.example.digikala.views;
+package com.example.digikala.views.fragments;
 
 
 import android.content.Context;
@@ -17,13 +17,15 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.digikala.R;
+import com.example.digikala.views.activities.SplashActivity;
+import com.example.digikala.views.changeFragment;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class NoNetworkFragment extends Fragment {
-    private  changeFragment mChangeFragment;
+    private changeFragment mChangeFragment;
     private Button mTryNetworkButton;
     public static NoNetworkFragment newInstance() {
         

@@ -1,4 +1,4 @@
-package com.example.digikala.views;
+package com.example.digikala.views.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.digikala.R;
+import com.example.digikala.views.fragments.ProductDetailFragment;
 
 import Woo.Repository.Repository;
 

@@ -1,4 +1,4 @@
-package com.example.digikala.views;
+package com.example.digikala.views.fragments;
 
 
 import android.app.Activity;
@@ -26,6 +26,8 @@ import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.viewmodels.ListProductsViewModel;
+import com.example.digikala.views.activities.ProductDetailActivity;
+import com.example.digikala.views.changeFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.example.digikala.views;
+package com.example.digikala.views.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -20,6 +20,9 @@ import android.widget.TextView;
 
 import com.example.digikala.R;
 import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.views.fragments.MainFragment;
+import com.example.digikala.views.fragments.NoNetworkFragment;
+import com.example.digikala.views.changeFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
    android:layout_margin="8dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".views.ShopBagFragment">
+    tools:context=".views.fragments.ShopBagFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <ProgressBar

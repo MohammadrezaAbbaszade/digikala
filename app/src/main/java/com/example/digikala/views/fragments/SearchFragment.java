@@ -1,4 +1,4 @@
-package com.example.digikala.views;
+package com.example.digikala.views.fragments;
 
 
 import android.content.Context;
@@ -7,8 +7,8 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.text.Editable;
@@ -23,22 +23,18 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
-import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.databinding.FragmentSearchBinding;
 import com.example.digikala.viewmodels.SearchViewModel;
-
-import java.util.List;
+import com.example.digikala.views.activities.ListProductsActivity;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SearchFragment extends Fragment {
-    private EditText searchEditText;
-    private ImageButton mArrowButton;
-    private ImageView mClearEditText;
+    private FragmentSearchBinding mFragmentSearchBinding;
     private SearchViewModel mSearchViewModel;
     public static SearchFragment newInstance() {
 
@@ -69,18 +65,15 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
-        searchEditText = view.findViewById(R.id.fragment_search_search_edit_text);
-        mArrowButton = view.findViewById(R.id.fragment_search_toolbar_arrow);
-        mClearEditText=view.findViewById(R.id.fragment_search_clear_text);
-        mArrowButton.setOnClickListener(new View.OnClickListener() {
+        mFragmentSearchBinding =
+                DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false);
+       mFragmentSearchBinding.fragmentSearchToolbarArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getActivity().finish();
             }
         });
-
-        searchEditText.addTextChangedListener(new TextWatcher() {
+        mFragmentSearchBinding.fragmentSearchSearchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -89,10 +82,10 @@ public class SearchFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length()>1){
-                    mClearEditText.setVisibility(View.VISIBLE);
+                    mFragmentSearchBinding.fragmentSearchClearText.setVisibility(View.VISIBLE);
 
                 }else {
-                    mClearEditText.setVisibility(View.GONE);
+                    mFragmentSearchBinding.fragmentSearchClearText.setVisibility(View.GONE);
                 }
             }
 
@@ -101,13 +94,13 @@ public class SearchFragment extends Fragment {
 
             }
         });
-        mClearEditText.setOnClickListener(new View.OnClickListener() {
+        mFragmentSearchBinding.fragmentSearchClearText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                searchEditText.setText("");
+                mFragmentSearchBinding.fragmentSearchSearchEditText.setText("");
             }
         });
-        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mFragmentSearchBinding.fragmentSearchSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_SEARCH) {
@@ -119,7 +112,7 @@ public class SearchFragment extends Fragment {
                 return false;
             }
         });
-        return view;
+        return mFragmentSearchBinding.getRoot();
     }
 
     private boolean isNetworkConnected() {

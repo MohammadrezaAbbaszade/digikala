@@ -1,4 +1,4 @@
-package com.example.digikala.views;
+package com.example.digikala.views.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.digikala.R;
+import com.example.digikala.views.fragments.CategoriesViewPagerFragment;
 import com.google.android.material.tabs.TabLayout;
 
 import Woo.Repository.Repository;

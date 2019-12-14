@@ -1,4 +1,4 @@
-package com.example.digikala.views;
+package com.example.digikala.views.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 

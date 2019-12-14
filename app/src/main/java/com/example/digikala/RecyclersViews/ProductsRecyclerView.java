@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.digikala.R;
-import com.example.digikala.views.ProductDetailActivity;
+import com.example.digikala.views.activities.ProductDetailActivity;
 import com.example.digikala.model.WoocommerceBody;
 import com.squareup.picasso.Picasso;
 

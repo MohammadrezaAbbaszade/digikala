@@ -1,4 +1,4 @@
-package com.example.digikala.views;
+package com.example.digikala.views.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
+import com.example.digikala.views.fragments.ListProductsFragment;
 
 import Woo.Repository.Repository;
 

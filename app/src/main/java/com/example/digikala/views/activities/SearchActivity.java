@@ -1,4 +1,4 @@
-package com.example.digikala.views;
+package com.example.digikala.views.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -9,9 +9,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.digikala.R;
+import com.example.digikala.databinding.ActivitySearchBinding;
+import com.example.digikala.views.fragments.SearchFragment;
 
 public class SearchActivity extends AppCompatActivity {
-
 
     public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, SearchActivity.class);
@@ -22,10 +23,9 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        FragmentManager fm=getSupportFragmentManager();
-        Fragment fragment=fm.findFragmentById(R.id.search_activity_container);
-        if(fragment==null)
-        {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.search_activity_container);
+        if (fragment == null) {
             fm.beginTransaction().replace(R.id.search_activity_container, SearchFragment.newInstance())
                     .commit();
         }

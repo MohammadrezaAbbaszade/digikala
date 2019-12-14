@@ -1,4 +1,4 @@
-package com.example.digikala.views;
+package com.example.digikala.views.fragments;
 
 
 import android.content.Context;
@@ -29,12 +29,12 @@ import com.example.digikala.RecyclersViews.SliderAdaptor;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.model.categoriesmodel.CategoriesBody;
 import com.example.digikala.viewmodels.MainViewModel;
+import com.example.digikala.views.activities.CategoriesViewPagerActivity;
+import com.example.digikala.views.changeFragment;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
 import java.util.List;
-
-import Woo.Repository.Repository;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.example.digikala.views;
+package com.example.digikala.views.fragments;
 
 
 import android.content.Context;
@@ -28,15 +28,13 @@ import android.widget.TextView;
 import com.example.digikala.R;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.viewmodels.ShopBagViewModel;
+import com.example.digikala.views.activities.ProductDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import Woo.Repository.Repository;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.

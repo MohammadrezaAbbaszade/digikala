@@ -1,4 +1,4 @@
-package com.example.digikala.views;
+package com.example.digikala.views.fragments;
 
 
 import android.content.Context;
@@ -27,6 +27,9 @@ import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.SliderAdaptor;
 import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.viewmodels.ProductDetailViewModel;
+import com.example.digikala.views.activities.ProductDetailActivity;
+import com.example.digikala.views.activities.ShopBagFragmentActivity;
+import com.example.digikala.views.changeFragment;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderView;
 import com.squareup.picasso.Picasso;

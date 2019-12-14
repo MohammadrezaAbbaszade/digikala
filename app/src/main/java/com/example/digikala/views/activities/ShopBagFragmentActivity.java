@@ -1,4 +1,4 @@
-package com.example.digikala.views;
+package com.example.digikala.views.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.digikala.R;
+import com.example.digikala.views.fragments.ShopBagFragment;
 
 public class ShopBagFragmentActivity extends AppCompatActivity {
     private static final String PRODUCT_ID = "id";

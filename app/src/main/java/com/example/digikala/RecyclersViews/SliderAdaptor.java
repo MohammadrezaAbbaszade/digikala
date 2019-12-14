@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.digikala.R;
-import com.example.digikala.views.ProductDetailActivity;
+import com.example.digikala.views.activities.ProductDetailActivity;
 import com.example.digikala.model.WoocommerceBody;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
