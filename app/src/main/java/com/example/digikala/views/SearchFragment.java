@@ -2,11 +2,13 @@ package com.example.digikala.views;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.text.Editable;
@@ -21,10 +23,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
+import com.example.digikala.model.WoocommerceBody;
 import com.example.digikala.viewmodels.SearchViewModel;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -95,19 +101,6 @@ public class SearchFragment extends Fragment {
 
             }
         });
-//        mSearchViewModel.getSearchedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
-//            @Override
-//            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-//                if(woocommerceBodies!=null)
-//                {
-//                    Intent intent = ListProductsActivity.newIntent(getActivity(), 4);
-//                    startActivity(intent);
-//                }else
-//                {
-//                    Toast.makeText(getActivity(), "موردی یافت نشد", Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        });
         mClearEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,7 +111,8 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_SEARCH) {
-                   mSearchViewModel.loadSearchedProducts(textView.toString());
+                    Intent intent = ListProductsActivity.newIntent(getActivity(), 4);
+                    startActivity(intent);
                     SharedPreferencesData.setQuery(getActivity(), textView.getText().toString());
                     return true;
                 }

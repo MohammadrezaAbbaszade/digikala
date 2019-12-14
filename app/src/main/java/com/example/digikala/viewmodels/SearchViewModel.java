@@ -26,13 +26,7 @@ public class SearchViewModel extends AndroidViewModel {
 
     }
 
-    public void loadSearchedProducts(String queries) {
-        try {
-            mRepository.searchInProducts(queries);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     public MutableLiveData<List<WoocommerceBody>> getSearchedProducts() {
         return mSearchedProducts;

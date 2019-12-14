@@ -303,7 +303,6 @@ Log.d("sub",mSubCategoriesItems.size()+"");
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
                 if(response.isSuccessful())
                 {
-                    response.body().remove(0);
                     Repository.getInstance().getSearchedProducts().setValue(response.body());
                 }else
                 {
