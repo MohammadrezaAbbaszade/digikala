@@ -20,6 +20,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.digikala.RecyclersViews.ProductsRecyclerView;
 import com.example.digikala.R;
@@ -43,6 +45,9 @@ public class MainFragment extends Fragment {
     private RecyclerView mRatedRecyclerView;
     private RecyclerView mPopularRecyclerView;
     private ProductAdaptor mProductAdaptor;
+    private TextView mNewProductsTextView;
+    private TextView mPopularProductsTextView;
+    private TextView mRatedProductsTextView;
     private RecyclerView mRecentRecyclerView;
     private ProductsRecyclerView mNewestProductAdaptor;
     private ProductsRecyclerView mPopularProductAdaptor;
@@ -51,6 +56,7 @@ public class MainFragment extends Fragment {
     private changeFragment mChangeFragment;
     private SliderAdaptor mSliderAdaptor;
     private MainViewModel mMainViewModel;
+    private ProgressBar mProgressBar;
 
     public static MainFragment newInstance() {
 
@@ -67,7 +73,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainViewModel= ViewModelProviders.of(this).get(MainViewModel.class);
+        mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         mMainViewModel.loadNewestProducts();
         mMainViewModel.loadPopularProducts();
         mMainViewModel.loadRatedProducts();
@@ -103,24 +109,34 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         init(view);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mPopularProductsTextView.setVisibility(View.GONE);
+        mRatedProductsTextView.setVisibility(View.GONE);
+        mNewProductsTextView.setVisibility(View.GONE);
+        mSliderView.setVisibility(View.GONE);
         mMainViewModel.getPopularProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
 
                 initSliderView();
-                updateAdaptor(woocommerceBodies,1);
+                updateAdaptor(woocommerceBodies, 1);
             }
         });
         mMainViewModel.getNewestProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-                updateAdaptor(woocommerceBodies,0);
+                updateAdaptor(woocommerceBodies, 0);
             }
         });
         mMainViewModel.getRatedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-                updateAdaptor(woocommerceBodies,2);
+                updateAdaptor(woocommerceBodies, 2);
+                mProgressBar.setVisibility(View.GONE);
+                mPopularProductsTextView.setVisibility(View.VISIBLE);
+                mRatedProductsTextView.setVisibility(View.VISIBLE);
+                mNewProductsTextView.setVisibility(View.VISIBLE);
+                mSliderView.setVisibility(View.VISIBLE);
             }
         });
         return view;
@@ -138,13 +154,16 @@ public class MainFragment extends Fragment {
         mRecentRecyclerView = view.findViewById(R.id.fragment_main_newest_product_recycler);
         mPopularRecyclerView = view.findViewById(R.id.fragment_main_popular_product_recycler);
         mRatedRecyclerView = view.findViewById(R.id.fragment_main_rated_product_recycler);
+        mNewProductsTextView = view.findViewById(R.id.new_product_textview);
+        mRatedProductsTextView = view.findViewById(R.id.rated_product_textview);
+        mPopularProductsTextView = view.findViewById(R.id.popular_product_textview);
+        mProgressBar = view.findViewById(R.id.main_fragment_progress_bar);
     }
 
 
-    public void updateAdaptor(List<WoocommerceBody> woocommerceBodies,int state) {
+    public void updateAdaptor(List<WoocommerceBody> woocommerceBodies, int state) {
 
-        switch (state)
-        {
+        switch (state) {
             case 0:
                 mNewestProductAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
             case 1:

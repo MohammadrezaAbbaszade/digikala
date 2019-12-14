@@ -8,7 +8,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.digikala.model.WoocommerceBody;
-import com.example.digikala.network.WooCommerce;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +19,7 @@ public class MainViewModel extends AndroidViewModel {
     private MutableLiveData<List<WoocommerceBody>> mPopularProducts;
     private MutableLiveData<List<WoocommerceBody>> mRatedProducts;
     private Repository mRepository;
-    private WooCommerce mWooCommerce;
+
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -28,13 +27,13 @@ public class MainViewModel extends AndroidViewModel {
         mNewestProducts = mRepository.getNewestProducts();
         mPopularProducts = mRepository.getPopularProducts();
         mRatedProducts = mRepository.getRatedProducts();
-        mWooCommerce = new WooCommerce();
+
         Log.d("mainviewmodel", "mainViewModel");
     }
 
     public void loadNewestProducts() {
         try {
-            mWooCommerce.productRecentPhotosSync();
+            mRepository.productRecentPhotosSync();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -45,7 +44,7 @@ public class MainViewModel extends AndroidViewModel {
     }
     public void loadPopularProducts() {
         try {
-            mWooCommerce.productPopularitySync();
+            mRepository.productPopularitySync();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,7 +54,7 @@ public class MainViewModel extends AndroidViewModel {
     }
     public void loadRatedProducts() {
         try {
-            mWooCommerce.productRatedSync();
+            mRepository.productRatedSync();
         } catch (IOException e) {
             e.printStackTrace();
         }

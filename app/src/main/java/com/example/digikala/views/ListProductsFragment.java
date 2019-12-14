@@ -21,24 +21,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
 import com.example.digikala.model.WoocommerceBody;
-import com.example.digikala.network.WooCommerce;
 import com.example.digikala.viewmodels.ListProductsViewModel;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import Woo.Repository.Repository;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,7 +54,6 @@ public class ListProductsFragment extends Fragment {
     private ProgressBar mProgressBar;
     private TextView mSubSortTextView;
     private TextView mFilterTextView;
-    private WooCommerce mWooCommerce = new WooCommerce();
     private int state;
     public static final int REQUEST_CODE_FOR_SORT_DIALOG_FRAGMENT = 0;
     public static final String SORT_DIALOG_FRAGMENT_TAG = "sortdialogfragmenttag";

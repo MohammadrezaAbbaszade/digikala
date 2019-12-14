@@ -4,7 +4,6 @@ package com.example.digikala.views;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,19 +26,12 @@ import android.widget.TextView;
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.SliderAdaptor;
 import com.example.digikala.model.WoocommerceBody;
-import com.example.digikala.network.WooCommerce;
 import com.example.digikala.viewmodels.ProductDetailViewModel;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderView;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.List;
-
-import Woo.Repository.Repository;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,7 +40,7 @@ public class ProductDetailFragment extends Fragment {
 
     private static final String ID = "id";
     private int id;
-    private WooCommerce mWooCommerce = new WooCommerce();
+
     private ProgressBar mProgressBar;
     private CardView mCardView;
     private TextView mTextView;
@@ -109,21 +101,13 @@ private ProductDetailViewModel mProductDetailViewModel;
         View view = inflater.inflate(R.layout.fragment_product_detail, container, false);
         init(view);
         mProgressBar.setVisibility(View.VISIBLE);
-
         mSliderView.setVisibility(View.GONE);
         mCardView.setVisibility(View.GONE);
-        mBuyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mProductDetailViewModel.addToBag(id);
-                Intent intent= ShopBagFragmentActivity.newIntent(getActivity());
-                startActivity(intent);
-
-            }
-        });
+        mRelatedProductRecycler.setVisibility(View.GONE);
         mProductDetailViewModel.getRelatedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                mRelatedProductRecycler.setVisibility(View.VISIBLE);
                 setUpAdaptor(woocommerceBodies);
             }
         });
@@ -136,6 +120,7 @@ private ProductDetailViewModel mProductDetailViewModel;
                     mCardView.setVisibility(View.VISIBLE);
                     PrepareViewPager(woocommerceBody);
                     PrepareRelatedProducts(woocommerceBody.getRelatedIds());
+                    addProductToBag(woocommerceBody);
                 }else
                 {
                     mProgressBar.setVisibility(View.GONE);
@@ -158,7 +143,19 @@ private ProductDetailViewModel mProductDetailViewModel;
         mBudgetPriceTextView.setText(woocommerceBody.getRegularPrice() + " " + "تومان");
     }
 
+    private void addProductToBag(final WoocommerceBody woocommerceBody) {
+        mBuyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mProductDetailViewModel.addToBag(woocommerceBody.getId());
+                Intent intent = ShopBagFragmentActivity.newIntent(getActivity());
+                startActivity(intent);
+            }
+        });
+    }
     private void PrepareRelatedProducts(List<Integer> integers) {
+        if(mProductAdaptor!=null)
+            mRelatedProductRecycler.setVisibility(View.GONE);
        mProductDetailViewModel.loadRelatedProducts(integers);
 
     }

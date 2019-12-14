@@ -2,14 +2,11 @@ package com.example.digikala.views;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.text.Editable;
@@ -24,24 +21,15 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
-import com.example.digikala.model.WoocommerceBody;
-import com.example.digikala.network.WooCommerce;
 import com.example.digikala.viewmodels.SearchViewModel;
-
-import java.io.IOException;
-import java.util.List;
-
-import Woo.Repository.Repository;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SearchFragment extends Fragment {
-    private WooCommerce mWooCommerce = new WooCommerce();
     private EditText searchEditText;
     private ImageButton mArrowButton;
     private ImageView mClearEditText;

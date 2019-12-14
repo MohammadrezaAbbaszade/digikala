@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,11 +22,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.digikala.R;
 import com.example.digikala.model.WoocommerceBody;
-import com.example.digikala.network.WooCommerce;
+import com.example.digikala.viewmodels.ShopBagViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -42,9 +45,10 @@ public class ShopBagFragment extends Fragment {
     private List<WoocommerceBody> mRelatedProducts = new ArrayList<>();
     private RecyclerView mRelatedProductRecycler;
     private ProductAdaptor mProductAdaptor;
-    private WooCommerce mWooCommerce = new WooCommerce();
     private TextView mShopFinalSumTextView;
-
+    private ProgressBar mProgressBar;
+    private ShopBagViewModel mShopBagViewModel;
+private Repository mRepository;
     public static ShopBagFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -63,6 +67,10 @@ public class ShopBagFragment extends Fragment {
         if (!isNetworkConnected()) {
             getActivity().finish();
             Log.d("tag", "finished");
+        }else
+        {
+            mRepository=Repository.getInstance();
+            mShopBagViewModel= ViewModelProviders.of(this).get(ShopBagViewModel.class);
         }
     }
 
@@ -73,7 +81,21 @@ public class ShopBagFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_shop_bag, container, false);
         mRelatedProductRecycler = view.findViewById(R.id.shop_bag_recycler_view);
         mShopFinalSumTextView = view.findViewById(R.id.shop_final_sum_text_view);
+        mProgressBar=view.findViewById(R.id.shop_bag_fragment_progress_bar);
+        mProgressBar.setVisibility(View.VISIBLE);
+        if(mProductAdaptor!=null)
+        mRelatedProductRecycler.setVisibility(View.GONE);
         mRelatedProductRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mShopBagViewModel.getRelatedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+            @Override
+            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+               mRelatedProducts=woocommerceBodies;
+               setUpAdaptor();
+                if(mProductAdaptor!=null)
+                    mRelatedProductRecycler.setVisibility(View.VISIBLE);
+               mProgressBar.setVisibility(View.GONE);
+            }
+        });
         PrepareRelatedProducts();
         Log.d("tag", "dialogOnCreatView");
         return view;
@@ -84,26 +106,7 @@ public class ShopBagFragment extends Fragment {
         ids.add("0");
         ids.addAll(Repository.getInstance().getBagsIds());
         Log.d("tag", "PrepareRelatedProducts" + " " + ids.toString());
-
-        mWooCommerce.getWoocommerceApi().getReleatedProducts(mWooCommerce.getQueries(),ids.toString()).enqueue(new Callback<List<WoocommerceBody>>() {
-            @Override
-            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
-                if (response.isSuccessful()) {
-                    mRelatedProducts = response.body();
-                    setUpAdaptor();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
-                Log.d("tag", "onFailure");
-//                Intent intent = MainActivity.newIntent(getActivity(), 0);
-//                startActivity(intent);
-//                getActivity().finish();
-
-            }
-        });
-
+        mShopBagViewModel.loadRelatedProducts(ids);
     }
 
     private void calculateProductsPrice() {
