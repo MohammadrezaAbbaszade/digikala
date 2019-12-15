@@ -20,6 +20,7 @@ import com.example.digikala.views.fragments.ListProductsFragment;
 import Woo.Repository.Repository;
 
 public class ListProductsActivity extends AppCompatActivity {
+    private static final String CATEGORY_ID = "categoryId";
     private ImageView mArrowButton;
     private TextView mToolbarTextView;
     private ImageButton mToolbarBag;
@@ -29,6 +30,12 @@ public class ListProductsActivity extends AppCompatActivity {
 
     public static Intent newIntent(Context context, int state) {
         Intent intent = new Intent(context, ListProductsActivity.class);
+        intent.putExtra(STATE, state);
+        return intent;
+    }
+    public static Intent newIntent(Context context, int state,int categoryId) {
+        Intent intent = new Intent(context, ListProductsActivity.class);
+        intent.putExtra(CATEGORY_ID, categoryId);
         intent.putExtra(STATE, state);
         return intent;
     }
@@ -44,6 +51,7 @@ public class ListProductsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_products);
         int state = getIntent().getIntExtra(STATE, 0);
+        int categoryId= getIntent().getIntExtra(CATEGORY_ID, 0);
         mArrowButton = findViewById(R.id.list_product_toolbar_arrow);
         mToolbarTextView = findViewById(R.id.list_product_toolbar_text_view);
         mToolbarBag=findViewById(R.id.list_products_toolbar_shop);
@@ -76,6 +84,7 @@ public class ListProductsActivity extends AppCompatActivity {
                 break;
             default:
                 mToolbarTextView.setText(SharedPreferencesData.getQuery(this));
+
         }
 
 
@@ -90,7 +99,7 @@ public class ListProductsActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.list_products_activity_container);
         if (fragment == null) {
-            fm.beginTransaction().replace(R.id.list_products_activity_container, ListProductsFragment.newInstance(state))
+            fm.beginTransaction().replace(R.id.list_products_activity_container, ListProductsFragment.newInstance(state,categoryId))
                     .commit();
         }
     }

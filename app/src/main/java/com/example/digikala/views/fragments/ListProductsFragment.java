@@ -40,7 +40,8 @@ import java.util.Map;
 public class ListProductsFragment extends Fragment {
     private ListProductsViewModel mListProductViewModel;
     private static final String STATE = "state";
-    public static final String CONSUMER_KEY = "%20ck_7c028a04c9faf616410b09e2ab90b1884c875d01";
+    private static final String CATEGORY_ID = "categoryId";
+    public static final String CONSUMER_KEY = "ck_7c028a04c9faf616410b09e2ab90b1884c875d01";
     public static final String CONSUMER_SECRET = "cs_8c39f626780f01d135719f64214fd092b848f4aa";
     private Map<String, String> mQueries = new HashMap<String, String>() {
         {
@@ -58,14 +59,17 @@ public class ListProductsFragment extends Fragment {
     private TextView mSubSortTextView;
     private TextView mFilterTextView;
     private int state;
+    private int categoryId;
     public static final int REQUEST_CODE_FOR_SORT_DIALOG_FRAGMENT = 0;
     public static final String SORT_DIALOG_FRAGMENT_TAG = "sortdialogfragmenttag";
     private changeFragment mChangeFragment;
 
-    public static ListProductsFragment newInstance(int state) {
+    public static ListProductsFragment newInstance(int state, int categoryId) {
 
         Bundle args = new Bundle();
         args.putInt(STATE, state);
+        if (state == 5)
+            args.putInt(CATEGORY_ID, categoryId);
         ListProductsFragment fragment = new ListProductsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -80,18 +84,22 @@ public class ListProductsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!isNetworkConnected()) {
-//            Intent intent = MainActivity.newIntent(getActivity(), 0);
-//            Log.d("tag", "checkNetwork" + "0");
-//            startActivity(intent);
             getActivity().finish();
             Log.d("tag", "finished");
         }
         mListProductViewModel = ViewModelProviders.of(this).get(ListProductsViewModel.class);
         state = getArguments().getInt(STATE);
-        if (state == 4) {
-            Log.d("getsearch", "loadSearch");
-            mListProductViewModel.loadSearchedProducts();
+        categoryId = getArguments().getInt(CATEGORY_ID);
+        switch (state) {
+            case 4:
+                mListProductViewModel.loadSearchedProducts();
+                break;
+            case 5:
+                Log.d("categoryId", String.valueOf(categoryId));
+                mListProductViewModel.loadSubCategoriesProducts(String.valueOf(categoryId));
+                break;
         }
+
     }
 
 
@@ -142,6 +150,23 @@ public class ListProductsFragment extends Fragment {
                     mTextView.setVisibility(View.VISIBLE);
                     mListProductsRecycler.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+        mListProductViewModel.getSubCategoriesProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+            @Override
+            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                if (woocommerceBodies != null && woocommerceBodies.size() > 0) {
+                    Log.d("categoryId", String.valueOf(woocommerceBodies.size()));
+                    initAdaptor(woocommerceBodies);
+                    mProgressBar.setVisibility(View.GONE);
+                    mListProductsRecycler.setVisibility(View.VISIBLE);
+                } else {
+                    Log.d("categoryId", String.valueOf(woocommerceBodies.size()));
+                    mProgressBar.setVisibility(View.GONE);
+                    mTextView.setVisibility(View.VISIBLE);
+                    mListProductsRecycler.setVisibility(View.VISIBLE);
+                }
+
             }
         });
         return view;
@@ -259,8 +284,10 @@ public class ListProductsFragment extends Fragment {
                 case 3:
                     mWoocommerceBodies = mListProductViewModel.getNewestProducts().getValue();
                     break;
-                default:
+                case 4:
                     mWoocommerceBodies = mListProductViewModel.getSearchedProducts().getValue();
+                    break;
+
             }
         }
 

@@ -21,7 +21,7 @@ public interface WoocommerceService {
     Call<List<WoocommerceBody>> getWooCommerceBody(@QueryMap Map<String, String> queries);
 
     @GET("products/categories")
-    Call<List<CategoriesBody>> getCategories();
+    Call<List<CategoriesBody>> getCategories(@QueryMap Map<String, String> queries);
 
     @GET("products/{id}")
     Call<WoocommerceBody> getProductById(@Path("id") String productId,@QueryMap Map<String, String> queries);

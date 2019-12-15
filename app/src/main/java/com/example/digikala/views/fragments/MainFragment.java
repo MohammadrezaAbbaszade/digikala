@@ -77,6 +77,7 @@ public class MainFragment extends Fragment {
         mMainViewModel.loadNewestProducts();
         mMainViewModel.loadPopularProducts();
         mMainViewModel.loadRatedProducts();
+
     }
 
     @Override
@@ -117,33 +118,46 @@ public class MainFragment extends Fragment {
         mMainViewModel.getPopularProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-
-                initSliderView();
-                updateAdaptor(woocommerceBodies, 1);
+                if(woocommerceBodies!=null) {
+                    initSliderView();
+                    updateAdaptor(woocommerceBodies, 1);
+                }else {
+                    getActivity().finish();
+                }
             }
         });
         mMainViewModel.getNewestProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-                updateAdaptor(woocommerceBodies, 0);
+                if(woocommerceBodies!=null) {
+                    mSliderView.setVisibility(View.VISIBLE);
+                    initSliderView();
+                    updateAdaptor(woocommerceBodies, 0);
+                }else {
+                    getActivity().finish();
+                }
             }
         });
         mMainViewModel.getRatedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-                updateAdaptor(woocommerceBodies, 2);
-                mProgressBar.setVisibility(View.GONE);
-                mPopularProductsTextView.setVisibility(View.VISIBLE);
-                mRatedProductsTextView.setVisibility(View.VISIBLE);
-                mNewProductsTextView.setVisibility(View.VISIBLE);
-                mSliderView.setVisibility(View.VISIBLE);
+                if(woocommerceBodies!=null) {
+                    updateAdaptor(woocommerceBodies, 2);
+                    mProgressBar.setVisibility(View.GONE);
+                    mPopularProductsTextView.setVisibility(View.VISIBLE);
+                    mRatedProductsTextView.setVisibility(View.VISIBLE);
+                    mNewProductsTextView.setVisibility(View.VISIBLE);
+                    mSliderView.setVisibility(View.VISIBLE);
+                }else {
+                    getActivity().finish();
+                }
             }
         });
         return view;
     }
 
     private void initSliderView() {
-        mSliderAdaptor = new SliderAdaptor(mMainViewModel.getPopularProducts().getValue(), getActivity());
+        mSliderAdaptor = new SliderAdaptor(mMainViewModel.getNewestProducts().getValue(), getActivity());
         mSliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
         mSliderView.setSliderAdapter(mSliderAdaptor);
     }
@@ -163,16 +177,20 @@ public class MainFragment extends Fragment {
 
     public void updateAdaptor(List<WoocommerceBody> woocommerceBodies, int state) {
 
-        switch (state) {
-            case 0:
-                mNewestProductAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
-            case 1:
-                mPopularProductAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
-            case 2:
-                mRatedRecyclerAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
+        if (state == 0) {
+            Log.d("recy", "0");
+            mNewestProductAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
+        } else if (state == 1) {
+
+            Log.d("recy", "1");
+            mPopularProductAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
+        } else {
+            Log.d("recy", "2");
+            mRatedRecyclerAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
         }
 
-//        mProductAdaptor = new ProductAdaptor(Repository.getInstance().getFilteredCategoriesItems());
+        Log.d("recy", "3");
+        mProductAdaptor = new ProductAdaptor(mMainViewModel.getFilteredCategoriesItems());
         mCategoryRecyclerView.setAdapter(mProductAdaptor);
         mRecentRecyclerView.setAdapter(mNewestProductAdaptor);
         mPopularRecyclerView.setAdapter(mPopularProductAdaptor);

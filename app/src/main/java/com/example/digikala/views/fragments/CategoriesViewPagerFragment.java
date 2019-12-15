@@ -2,6 +2,7 @@ package com.example.digikala.views.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 
@@ -19,7 +20,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.digikala.R;
+import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
 import com.example.digikala.model.categoriesmodel.CategoriesBody;
+import com.example.digikala.views.activities.ListProductsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -54,7 +57,7 @@ public class CategoriesViewPagerFragment extends Fragment {
         if (!isNetworkConnected()) {
             getActivity().finish();
             Log.d("tag", "finished");
-        }else {
+        } else {
             id = getArguments().getInt(ID);
             position = Repository.getInstance().getPosition(id);
         }
@@ -76,20 +79,29 @@ public class CategoriesViewPagerFragment extends Fragment {
     private class SubCategoriesHolder extends RecyclerView.ViewHolder {
         private ImageView mImageView;
         private TextView mTextView;
+        private CategoriesBody mCategoriesBody;
 
         public SubCategoriesHolder(@NonNull View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.sub_categories_image_view);
             mTextView = itemView.findViewById(R.id.sub_categories_text_view);
 
-
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SharedPreferencesData.setQuery(getActivity(),mCategoriesBody.getName());
+                    Intent intent = ListProductsActivity.newIntent(getActivity(), 5,mCategoriesBody.getId());
+                    startActivity(intent);
+                }
+            });
         }
 
         void bind(CategoriesBody categoriesItem) {
-
+            mCategoriesBody = categoriesItem;
             mTextView.setText(categoriesItem.getName());
-            Picasso.with(getActivity()).load(categoriesItem.getImage().getSrc()).placeholder(R.drawable.digikala)
-                    .into(mImageView);
+
+//            Picasso.with(getActivity()).load(categoriesItem.getImage().getSrc()).placeholder(R.drawable.digikala)
+//                    .into(mImageView);
         }
 
     }
@@ -99,7 +111,7 @@ public class CategoriesViewPagerFragment extends Fragment {
 
         public SubCategoriesAdaptor(List<CategoriesBody> categoriesItems) {
             mCategoriesItems = categoriesItems;
-            Log.d("sub",mCategoriesItems.size()+"");
+            Log.d("sub", mCategoriesItems.size() + "");
         }
 
         @NonNull
@@ -122,6 +134,7 @@ public class CategoriesViewPagerFragment extends Fragment {
             return mCategoriesItems.size();
         }
     }
+
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 

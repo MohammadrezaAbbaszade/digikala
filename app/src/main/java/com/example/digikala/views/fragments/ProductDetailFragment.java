@@ -48,6 +48,7 @@ public class ProductDetailFragment extends Fragment {
     private CardView mCardView;
     private TextView mTextView;
     private RecyclerView mRelatedProductRecycler;
+    private TextView mSimilarProductsTextView;
     private TextView mDiscriptionTextView;
     private TextView mRegularPriceTextView;
     private TextView mBudgetPriceTextView;
@@ -70,16 +71,15 @@ private ProductDetailViewModel mProductDetailViewModel;
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (isNetworkConnected()) {
+        if (!isNetworkConnected()) {
+            getActivity().finish();
+            Log.d("tag", "checkNetwork" + "0");
+            Log.d("tag", "finished");
+        } else {
             id = getArguments().getInt(ID);
             mProductDetailViewModel= ViewModelProviders.of(this).get(ProductDetailViewModel.class);
             mProductDetailViewModel.loadSingleProduct(id);
-        } else {
-//            Intent intent = MainActivity.newIntent(getActivity(), 0);
-//            Log.d("tag", "checkNetwork" + "0");
-//            startActivity(intent);
-            getActivity().finish();
-            Log.d("tag", "finished");
+
         }
 
     }
@@ -106,30 +106,35 @@ private ProductDetailViewModel mProductDetailViewModel;
         mProgressBar.setVisibility(View.VISIBLE);
         mSliderView.setVisibility(View.GONE);
         mCardView.setVisibility(View.GONE);
+        mSimilarProductsTextView.setVisibility(View.GONE);
         mRelatedProductRecycler.setVisibility(View.GONE);
-        mProductDetailViewModel.getRelatedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
-            @Override
-            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-                mRelatedProductRecycler.setVisibility(View.VISIBLE);
-                setUpAdaptor(woocommerceBodies);
-            }
-        });
-        mProductDetailViewModel.getProductById().observe(this, new Observer<WoocommerceBody>() {
-            @Override
-            public void onChanged(WoocommerceBody woocommerceBody) {
-                if(woocommerceBody!=null) {
-                    mProgressBar.setVisibility(View.GONE);
-                    mSliderView.setVisibility(View.VISIBLE);
-                    mCardView.setVisibility(View.VISIBLE);
-                    PrepareViewPager(woocommerceBody);
-                    PrepareRelatedProducts(woocommerceBody.getRelatedIds());
-                    addProductToBag(woocommerceBody);
-                }else
-                {
-                    mProgressBar.setVisibility(View.GONE);
+        if(isNetworkConnected()) {
+            mProductDetailViewModel.getRelatedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+                @Override
+                public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                    if (woocommerceBodies != null && woocommerceBodies.size() > 0) {
+                        mRelatedProductRecycler.setVisibility(View.VISIBLE);
+                        mSimilarProductsTextView.setVisibility(View.VISIBLE);
+                        setUpAdaptor(woocommerceBodies);
+                    }
                 }
-            }
-        });
+            });
+            mProductDetailViewModel.getProductById().observe(this, new Observer<WoocommerceBody>() {
+                @Override
+                public void onChanged(WoocommerceBody woocommerceBody) {
+                    if (woocommerceBody != null) {
+                        mProgressBar.setVisibility(View.GONE);
+                        mSliderView.setVisibility(View.VISIBLE);
+                        mCardView.setVisibility(View.VISIBLE);
+                        PrepareViewPager(woocommerceBody);
+                        PrepareRelatedProducts(woocommerceBody.getRelatedIds());
+                        addProductToBag(woocommerceBody);
+                    } else {
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
         return view;
     }
     private void PrepareViewPager(WoocommerceBody woocommerceBody) {
@@ -173,6 +178,7 @@ private ProductDetailViewModel mProductDetailViewModel;
         mBudgetPriceTextView = view.findViewById(R.id.detail_fragment_budget_price_textView);
         mRegularPriceTextView = view.findViewById(R.id.detail_fragment_regular_price_textView);
         mBuyButton = view.findViewById(R.id.detail_fragment_buy_button);
+        mSimilarProductsTextView=view.findViewById(R.id.detail_fragment_related_text_view);
     }
 
     private void setUpAdaptor(List<WoocommerceBody> woocommerceBodies) {

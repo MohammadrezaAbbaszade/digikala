@@ -36,8 +36,7 @@ public class WoocommerceBody{
 	@SerializedName("price")
 	private String price;
 
-	@SerializedName("meta_data")
-	private List<MetaDataItem> metaData;
+
 
 	@SerializedName("id")
 	private int id;
@@ -284,13 +283,7 @@ public class WoocommerceBody{
 		return price;
 	}
 
-	public void setMetaData(List<MetaDataItem> metaData){
-		this.metaData = metaData;
-	}
 
-	public List<MetaDataItem> getMetaData(){
-		return metaData;
-	}
 
 	public void setId(int id){
 		this.id = id;
@@ -745,8 +738,7 @@ public class WoocommerceBody{
 			",catalog_visibility = '" + catalogVisibility + '\'' + 
 			",type = '" + type + '\'' + 
 			",external_url = '" + externalUrl + '\'' + 
-			",price = '" + price + '\'' + 
-			",meta_data = '" + metaData + '\'' + 
+			",price = '" + price + '\'' +
 			",id = '" + id + '\'' + 
 			",sku = '" + sku + '\'' + 
 			",slug = '" + slug + '\'' + 

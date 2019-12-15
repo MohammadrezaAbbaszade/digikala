@@ -10,8 +10,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
 import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.network.RetrofitInstance;
+import com.example.digikala.network.WoocommerceService;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +23,22 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static Woo.Repository.Repository.FLICKR_REST_PATH;
+
 public class ListProductsViewModel extends AndroidViewModel {
+    final String CONSUMER_KEY = "ck_7c028a04c9faf616410b09e2ab90b1884c875d01";
+    final String CONSUMER_SECRET = "cs_8c39f626780f01d135719f64214fd092b848f4aa";
+    Map<String, String> mQueries = new HashMap<String, String>() {
+        {
+            put("consumer_key", CONSUMER_KEY);
+            put("consumer_secret", CONSUMER_SECRET);
+
+        }
+    };
+    WoocommerceService mWoocommerceApi = RetrofitInstance.getInstance(FLICKR_REST_PATH)
+            .getRetrofit()
+            .create(WoocommerceService.class);
+    private MutableLiveData<List<WoocommerceBody>> mSubCategoriesProducts;
     private MutableLiveData<List<WoocommerceBody>> mNewestProducts;
     private MutableLiveData<List<WoocommerceBody>> mPopularProducts;
     private MutableLiveData<List<WoocommerceBody>> mRatedProducts;
@@ -39,6 +57,7 @@ public class ListProductsViewModel extends AndroidViewModel {
         mRatedProducts = mRepository.getRatedProducts();
         mSortedProducts = mRepository.getSortedProducts();
         mSearchedProducts = mRepository.getSearchedProducts();
+        mSubCategoriesProducts=new MutableLiveData<>();
 
     }
 
@@ -126,5 +145,48 @@ public class ListProductsViewModel extends AndroidViewModel {
             }
         });
         return mSearchedProducts;
+    }
+    public void loadSubCategoriesProducts(String categoryId)
+    {
+
+        try {
+            getSubCategoriesProducts(categoryId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public MutableLiveData<List<WoocommerceBody>> getSubCategoriesProducts() {
+        return mSubCategoriesProducts;
+    }
+
+    public MutableLiveData<List<WoocommerceBody>>  getSubCategoriesProducts(String categoryId)throws IOException
+    {
+        mQueries.put("category","18");
+        Call<List<WoocommerceBody>> call =mWoocommerceApi.getWooCommerceBody(mQueries);
+
+        call.enqueue(new Callback<List<WoocommerceBody>>() {
+            @Override
+            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+                if(response.isSuccessful())
+                {
+                    Log.d("categoryId", String.valueOf(response.body().size()));
+                    mSubCategoriesProducts.setValue(response.body());
+
+                }else
+                {
+                    Log.d("categoryId", String.valueOf(response.body().size()));
+                    mSubCategoriesProducts=null;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+                Log.d("categoryId", t.getMessage());
+                mSubCategoriesProducts=null;
+            }
+        });
+
+
+        return mSubCategoriesProducts;
     }
 }
