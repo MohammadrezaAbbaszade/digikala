@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.SliderAdaptor;
-import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.model.productsModels.WoocommerceBody;
 import com.example.digikala.viewmodels.ProductDetailViewModel;
 import com.example.digikala.views.activities.ProductDetailActivity;
 import com.example.digikala.views.activities.ShopBagFragmentActivity;

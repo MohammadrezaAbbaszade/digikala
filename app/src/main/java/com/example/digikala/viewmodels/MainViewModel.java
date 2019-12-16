@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.model.productsModels.WoocommerceBody;
 import com.example.digikala.model.categoriesmodel.CategoriesBody;
 
 import java.io.IOException;

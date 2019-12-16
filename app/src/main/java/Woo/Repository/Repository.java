@@ -5,9 +5,9 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.digikala.model.DaoSession;
-import com.example.digikala.model.ShoppingBag;
+import com.example.digikala.model.productsModels.ShoppingBag;
 import com.example.digikala.model.ShoppingBagDao;
-import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.model.productsModels.WoocommerceBody;
 import com.example.digikala.model.categoriesmodel.CategoriesBody;
 import com.example.digikala.network.RetrofitInstance;
 import com.example.digikala.network.WoocommerceService;
@@ -26,8 +26,8 @@ public class Repository {
     private static Repository repository;
     public static final String TAG = "FlickrFetcher";
     public static final String FLICKR_REST_PATH = "https://woocommerce.maktabsharif.ir/wp-json/wc/v3/";
-    public static final String CONSUMER_KEY = "ck_7c028a04c9faf616410b09e2ab90b1884c875d01";
-    public static final String CONSUMER_SECRET = "cs_8c39f626780f01d135719f64214fd092b848f4aa";
+    public static final String CONSUMER_KEY = "ck_9fc06c2a7292f136b852aceda63740458feb20e1";
+    public static final String CONSUMER_SECRET = "cs_5608c8ad5f3ce5b02ac5c629fcad909da759f63a";
     private Map<String, String> mQueries = new HashMap<String, String>() {
         {
             put("consumer_key", CONSUMER_KEY);

@@ -1,10 +1,10 @@
-package com.example.digikala.model;
+package com.example.digikala.model.productsModels;
 
 
 import com.google.gson.annotations.SerializedName;
 
 
-public class CollectionItem{
+public class SelfItem{
 
 	@SerializedName("href")
 	private String href;
@@ -20,7 +20,7 @@ public class CollectionItem{
 	@Override
  	public String toString(){
 		return 
-			"CollectionItem{" + 
+			"SelfItem{" + 
 			"href = '" + href + '\'' + 
 			"}";
 		}

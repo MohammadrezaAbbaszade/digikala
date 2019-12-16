@@ -1,8 +1,9 @@
-package com.example.digikala.model;
+package com.example.digikala.model.ordersModels;
 
 import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
+
 
 public class Links{
 

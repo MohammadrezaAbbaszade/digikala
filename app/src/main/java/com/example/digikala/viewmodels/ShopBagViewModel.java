@@ -6,11 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.model.productsModels.WoocommerceBody;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import Woo.Repository.Repository;
 import retrofit2.Call;

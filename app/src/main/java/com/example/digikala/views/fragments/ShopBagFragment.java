@@ -26,7 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.digikala.R;
-import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.model.productsModels.WoocommerceBody;
 import com.example.digikala.viewmodels.ShopBagViewModel;
 import com.example.digikala.views.activities.ProductDetailActivity;
 import com.squareup.picasso.Picasso;

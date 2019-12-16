@@ -10,23 +10,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.digikala.views.activities.SearchActivity"></activity>
-        <activity android:name="com.example.digikala.views.activities.ShopBagFragmentActivity" />
-        <activity android:name="com.example.digikala.views.activities.CategoriesViewPagerActivity" />
-        <activity android:name="com.example.digikala.views.activities.ListProductsActivity" />
-        <activity android:name="com.example.digikala.views.activities.ProductDetailActivity" />
-        <activity android:name="com.example.digikala.views.activities.SplashActivity">
+        <activity android:name=".views.activities.LoginActivity"></activity>
+        <activity android:name=".views.activities.SearchActivity" />
+        <activity android:name=".views.activities.ShopBagFragmentActivity" />
+        <activity android:name=".views.activities.CategoriesViewPagerActivity" />
+        <activity android:name=".views.activities.ListProductsActivity" />
+        <activity android:name=".views.activities.ProductDetailActivity" />
+        <activity android:name=".views.activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.digikala.views.activities.MainActivity" />
+        <activity android:name=".views.activities.MainActivity" />
     </application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

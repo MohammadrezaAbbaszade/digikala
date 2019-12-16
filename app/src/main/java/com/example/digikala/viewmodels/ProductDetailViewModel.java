@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.model.productsModels.WoocommerceBody;
 import com.example.digikala.network.RetrofitInstance;
 import com.example.digikala.network.WoocommerceService;
 
@@ -50,8 +50,8 @@ public class ProductDetailViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<WoocommerceBody> getProductById(int id) throws IOException {
-        final String CONSUMER_KEY = " ck_7c028a04c9faf616410b09e2ab90b1884c875d01";
-        final String CONSUMER_SECRET = "cs_8c39f626780f01d135719f64214fd092b848f4aa";
+        final String CONSUMER_KEY = "ck_9fc06c2a7292f136b852aceda63740458feb20e1";
+        final String CONSUMER_SECRET = "cs_5608c8ad5f3ce5b02ac5c629fcad909da759f63a";
         Map<String, String> mQueries = new HashMap<String, String>() {
             {
                 put("consumer_key", CONSUMER_KEY);

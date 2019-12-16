@@ -1,7 +1,6 @@
 package com.example.digikala.views.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.example.digikala.R;
-import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.model.productsModels.WoocommerceBody;
 
 import java.io.IOException;
 import java.util.List;

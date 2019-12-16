@@ -19,7 +19,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.digikala.R;
-import com.example.digikala.model.WoocommerceBody;
+import com.example.digikala.model.productsModels.WoocommerceBody;
 import com.example.digikala.views.fragments.MainFragment;
 import com.example.digikala.views.fragments.NoNetworkFragment;
 import com.example.digikala.views.changeFragment;

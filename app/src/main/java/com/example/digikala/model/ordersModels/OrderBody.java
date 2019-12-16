@@ -1,11 +1,11 @@
-package model.ordersmodel;
+package com.example.digikala.model.ordersModels;
 
 import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
 
-public class OrdersBody{
+public class OrderBody{
 
 	@SerializedName("discount_total")
 	private String discountTotal;
@@ -472,7 +472,7 @@ public class OrdersBody{
 	@Override
  	public String toString(){
 		return 
-			"OrdersBody{" + 
+			"OrderBody{" + 
 			"discount_total = '" + discountTotal + '\'' + 
 			",order_key = '" + orderKey + '\'' + 
 			",prices_include_tax = '" + pricesIncludeTax + '\'' + 
