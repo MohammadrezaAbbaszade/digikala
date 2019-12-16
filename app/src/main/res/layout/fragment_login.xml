@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.fragments.LoginFragment">
+    tools:context=".views.fragments.SignUpFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -59,13 +59,35 @@
             android:drawableRight="@drawable/ic_lock"
             android:hint="کلمه عبور" />
     </LinearLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/fragment_login_register_button"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_gravity="bottom"
-        android:backgroundTint="@color/green"
+<FrameLayout
+    android:id="@+id/fragment_login_register_button"
+    android:layout_gravity="bottom"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@color/green">
+    <TextView
+        android:id="@+id/fragment_login_register_text_view"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="ثبت نام در دیجی کالا"
-        android:textSize="20sp" />
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
+    <ProgressBar
+        android:id="@+id/fragment_login_progress_bar"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+      android:indeterminateTint="@color/white"
+        />
+    <ImageView
+        android:id="@+id/fragment_login_image_view"
+        android:layout_gravity="center"
+        android:layout_marginRight="95dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_single_arrow"/>
+</FrameLayout>
+
 </FrameLayout>

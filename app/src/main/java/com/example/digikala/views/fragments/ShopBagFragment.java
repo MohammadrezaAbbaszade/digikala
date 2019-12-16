@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.example.digikala.R;
 import com.example.digikala.model.productsModels.WoocommerceBody;
 import com.example.digikala.viewmodels.ShopBagViewModel;
+import com.example.digikala.views.activities.LoginActivity;
 import com.example.digikala.views.activities.ProductDetailActivity;
 import com.squareup.picasso.Picasso;
 
@@ -45,6 +46,7 @@ public class ShopBagFragment extends Fragment {
     private ProductAdaptor mProductAdaptor;
     private TextView mShopFinalSumTextView;
     private ProgressBar mProgressBar;
+    private Button mSubmitProductsButton;
     private ShopBagViewModel mShopBagViewModel;
 private Repository mRepository;
     public static ShopBagFragment newInstance() {
@@ -79,8 +81,16 @@ private Repository mRepository;
         View view = inflater.inflate(R.layout.fragment_shop_bag, container, false);
         mRelatedProductRecycler = view.findViewById(R.id.shop_bag_recycler_view);
         mShopFinalSumTextView = view.findViewById(R.id.shop_final_sum_text_view);
+        mSubmitProductsButton=view.findViewById(R.id.submit_shop_bag_btn);
         mProgressBar=view.findViewById(R.id.shop_bag_fragment_progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
+        mSubmitProductsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= LoginActivity.newIntent(getActivity());
+                startActivity(intent);
+            }
+        });
         if(mProductAdaptor!=null)
         mRelatedProductRecycler.setVisibility(View.GONE);
         mRelatedProductRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));

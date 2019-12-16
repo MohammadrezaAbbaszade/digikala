@@ -34,5 +34,5 @@ public interface WoocommerceService {
     Call<List<WoocommerceBody>> searchProducts(@Query("search") String productName,@QueryMap Map<String, String> queries);
 
     @POST("orders")
-    Call<OrderBody> createCustomer(@Body OrderBody orderBody);
+     Call<OrderBody> setOrder(@Body OrderBody orderBody);
 }

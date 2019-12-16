@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.digikala.model.DaoSession;
+import com.example.digikala.model.ordersModels.OrderBody;
 import com.example.digikala.model.productsModels.ShoppingBag;
 import com.example.digikala.model.ShoppingBagDao;
 import com.example.digikala.model.productsModels.WoocommerceBody;
@@ -44,6 +45,7 @@ public class Repository {
     private MutableLiveData<List<WoocommerceBody>> mAllProducts;
     private MutableLiveData<List<WoocommerceBody>> mRelatedProducts;
     private MutableLiveData<List<WoocommerceBody>> mSubCategoriesProducts;
+    private MutableLiveData<OrderBody> mOrderBody;
     private MutableLiveData<WoocommerceBody> mProductById;
     private List<CategoriesBody> mCategoriesItems;
     private List<CategoriesBody> mFilteredCategoriesItems;
@@ -61,6 +63,7 @@ public class Repository {
         mRelatedProducts = new MutableLiveData<>();
         mProductById = new MutableLiveData<>();
         mSortedProducts = new MutableLiveData<>();
+        mOrderBody = new MutableLiveData<>();
         daoSession = DBApplication.getInstance().getDaoSession();
         mShoppingBagDao = daoSession.getShoppingBagDao();
     }
@@ -71,6 +74,14 @@ public class Repository {
             repository = new Repository();
         }
         return repository;
+    }
+
+    public MutableLiveData<OrderBody> getOrderBody() {
+        return mOrderBody;
+    }
+
+    public void setOrderBody(MutableLiveData<OrderBody> orderBody) {
+        mOrderBody = orderBody;
     }
 
     public MutableLiveData<List<WoocommerceBody>> getSubCategoriesProducts() {
@@ -146,7 +157,7 @@ public class Repository {
     }
 
     public List<CategoriesBody> getFilteredCategoriesItems() {
-        mFilteredCategoriesItems =new ArrayList<>();
+        mFilteredCategoriesItems = new ArrayList<>();
         for (CategoriesBody categoriesBody : mCategoriesItems) {
             if (categoriesBody.getParent() == 0) {
                 mFilteredCategoriesItems.add(categoriesBody);
@@ -363,26 +374,7 @@ public class Repository {
         return Repository.getInstance().getProductById();
     }
 
-    public MutableLiveData<List<WoocommerceBody>> getRelatedProducts(String... id) throws IOException {
-        Call<List<WoocommerceBody>> call = mWoocommerceApi.getReleatedProducts(mQueries, id);
-        call.enqueue(new Callback<List<WoocommerceBody>>() {
-            @Override
-            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
-                if (response.isSuccessful()) {
-                    Repository.getInstance().getRelatedProducts().setValue(response.body());
 
-                } else {
-                    Repository.getInstance().setRelatedProducts(null);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
-                Repository.getInstance().setRelatedProducts(null);
-            }
-        });
-        return Repository.getInstance().getRelatedProducts();
-    }
 
     public MutableLiveData<List<WoocommerceBody>> getSortedBaseProducts(Map<String, String> queries) throws IOException {
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getSortedBaseProducts(queries);
@@ -409,5 +401,30 @@ public class Repository {
         return Repository.getInstance().getSortedProducts();
     }
 
+    public MutableLiveData<OrderBody> getOrderResult(OrderBody orderBody) throws IOException {
+        Call<OrderBody> call = mWoocommerceApi.setOrder(orderBody);
+        call.enqueue(new Callback<OrderBody>() {
+            @Override
+            public void onResponse(Call<OrderBody> call, Response<OrderBody> response) {
+                if (response.code()==200||response.code()==201) {
+                    mOrderBody.setValue(response.body());
+                    Log.d("order",response.message());
+                } else {
+                    Log.d("order",response.message());
+                    OrderBody orderBody1 = new OrderBody();
+                    orderBody1.setStatus("400");
+                    Log.d("order",String.valueOf(response.code()));
+                    mOrderBody.setValue(orderBody1);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderBody> call, Throwable t) {
+                Log.d("order",t.getMessage());
+                mOrderBody.setValue(new OrderBody());
+            }
+        });
+        return mOrderBody;
+    }
 
 }

@@ -33,7 +33,7 @@ public class ProductDetailViewModel extends AndroidViewModel {
         super(application);
         mRepository = Repository.getInstance();
         mProductById  =new MutableLiveData<>();
-        mRelatedProducts = mRepository.getRelatedProducts();
+        mRelatedProducts =new MutableLiveData<>();
 
     }
 
@@ -88,8 +88,9 @@ public class ProductDetailViewModel extends AndroidViewModel {
     }
 
     public void loadRelatedProducts(List<Integer> integers) {
+
         try {
-            mRepository.getRelatedProducts(integers.toString());
+           getRelatedProducts(integers.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -98,4 +99,25 @@ public class ProductDetailViewModel extends AndroidViewModel {
     public MutableLiveData<List<WoocommerceBody>> getRelatedProducts() {
         return mRelatedProducts;
     }
+    public MutableLiveData<List<WoocommerceBody>> getRelatedProducts(String... id) throws IOException {
+        Call<List<WoocommerceBody>> call = mRepository.getWoocommerceApi().getReleatedProducts(mRepository.getQueries(), id);
+        call.enqueue(new Callback<List<WoocommerceBody>>() {
+            @Override
+            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+                if (response.isSuccessful()) {
+                    mRelatedProducts.setValue(response.body());
+
+                } else {
+                    mRelatedProducts=null;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+                mRelatedProducts=null;
+            }
+        });
+        return mRelatedProducts;
+    }
+
 }
