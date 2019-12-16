@@ -110,6 +110,7 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         init(view);
+
         mProgressBar.setVisibility(View.VISIBLE);
         mPopularProductsTextView.setVisibility(View.GONE);
         mRatedProductsTextView.setVisibility(View.GONE);

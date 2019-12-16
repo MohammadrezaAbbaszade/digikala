@@ -48,19 +48,19 @@ public class Repository {
     private List<CategoriesBody> mCategoriesItems;
     private List<CategoriesBody> mFilteredCategoriesItems;
     private List<CategoriesBody> mSubCategoriesItems;
-    private List<ShoppingBag> mShoppingBags=new ArrayList<>();
+    private List<ShoppingBag> mShoppingBags = new ArrayList<>();
     private DaoSession daoSession;
     private ShoppingBagDao mShoppingBagDao;
 
     private Repository() {
-        mNewestProducts=new MutableLiveData<>();
-        mPopularProducts=new MutableLiveData<>();
-        mRatedProducts=new MutableLiveData<>();
-        mSearchedProducts=new MutableLiveData<>();
-        mAllProducts=new MutableLiveData<>();
-        mRelatedProducts=new MutableLiveData<>();
-        mProductById=new MutableLiveData<>();
-        mSortedProducts=new MutableLiveData<>();
+        mNewestProducts = new MutableLiveData<>();
+        mPopularProducts = new MutableLiveData<>();
+        mRatedProducts = new MutableLiveData<>();
+        mSearchedProducts = new MutableLiveData<>();
+        mAllProducts = new MutableLiveData<>();
+        mRelatedProducts = new MutableLiveData<>();
+        mProductById = new MutableLiveData<>();
+        mSortedProducts = new MutableLiveData<>();
         daoSession = DBApplication.getInstance().getDaoSession();
         mShoppingBagDao = daoSession.getShoppingBagDao();
     }
@@ -146,14 +146,16 @@ public class Repository {
     }
 
     public List<CategoriesBody> getFilteredCategoriesItems() {
-        mFilteredCategoriesItems=new ArrayList<>();
-        for(CategoriesBody categoriesBody:mCategoriesItems)
-        {
-            if(categoriesBody.getParent()==0) {
-                if(categoriesBody.getName().equalsIgnoreCase("clothing")||categoriesBody.getName().equalsIgnoreCase("music"))
+        mFilteredCategoriesItems =new ArrayList<>();
+        for (CategoriesBody categoriesBody : mCategoriesItems) {
+            if (categoriesBody.getParent() == 0) {
                 mFilteredCategoriesItems.add(categoriesBody);
             }
         }
+        return mFilteredCategoriesItems;
+    }
+
+    public List<CategoriesBody> getFilteredCategories() {
         return mFilteredCategoriesItems;
     }
 
@@ -162,18 +164,18 @@ public class Repository {
     }
 
     public void addBag(int id) {
-        List<ShoppingBag> checkList=mShoppingBagDao
-        .queryBuilder()
+        List<ShoppingBag> checkList = mShoppingBagDao
+                .queryBuilder()
                 .where(ShoppingBagDao.Properties.MProductId.eq(Integer.toString(id)))
                 .list();
-        Log.d("tag",checkList.toString());
+        Log.d("tag", checkList.toString());
         if (checkList != null && checkList.size() > 0)
             return;
 
-            Log.d("tag","addbag"+"null");
-            ShoppingBag shoppingBag=new ShoppingBag();
-            shoppingBag.setMProductId(Integer.toString(id));
-            mShoppingBagDao.insert(shoppingBag);
+        Log.d("tag", "addbag" + "null");
+        ShoppingBag shoppingBag = new ShoppingBag();
+        shoppingBag.setMProductId(Integer.toString(id));
+        mShoppingBagDao.insert(shoppingBag);
 
     }
 
@@ -200,38 +202,42 @@ public class Repository {
     }
 
     public List<String> getBagsIds() {
-        List<ShoppingBag> checkList=mShoppingBagDao
-               .loadAll();
+        List<ShoppingBag> checkList = mShoppingBagDao
+                .loadAll();
         List<String> mIds = new ArrayList<>();
-        for (ShoppingBag shoppingBag :checkList) {
+        for (ShoppingBag shoppingBag : checkList) {
             mIds.add(shoppingBag.getMProductId());
         }
         return mIds;
     }
+
     public boolean isRepositoryNull() {
         if (mRatedProducts == null && mPopularProducts == null && mNewestProducts == null && mCategoriesItems == null)
             return true;
 
         return false;
     }
+
     public int getPosition(int id) {
         for (int i = 0; i < mFilteredCategoriesItems.size(); i++) {
-            if (mFilteredCategoriesItems.get(i).getId()==id)
+            if (mFilteredCategoriesItems.get(i).getId() == id)
                 return i;
         }
 
         return 0;
     }
+
     public List<CategoriesBody> getSubCategory(int id) {
-        mSubCategoriesItems=new ArrayList<>();
+        mSubCategoriesItems = new ArrayList<>();
         for (int i = 0; i < mCategoriesItems.size(); i++) {
             if (mCategoriesItems.get(i).getParent() == id) {
                 mSubCategoriesItems.add(mCategoriesItems.get(i));
             }
         }
-Log.d("sub",mSubCategoriesItems.size()+"");
+        Log.d("sub", mSubCategoriesItems.size() + "");
         return mSubCategoriesItems;
     }
+
     public Map<String, String> getQueries() {
         return mQueries;
     }
@@ -250,11 +256,9 @@ Log.d("sub",mSubCategoriesItems.size()+"");
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
-                if(response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
                     Repository.getInstance().getNewestProducts().postValue(response.body());
-                }else
-                {
+                } else {
                     Repository.getInstance().setNewestProducts(null);
                 }
             }
@@ -274,19 +278,17 @@ Log.d("sub",mSubCategoriesItems.size()+"");
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
-                if(response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
 
                     Repository.getInstance().getPopularProducts().postValue(response.body());
-                }else
-                {
+                } else {
                     Repository.getInstance().setPopularProducts(null);
                 }
             }
 
             @Override
             public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
-                Log.d("fail",t.getMessage());
+                Log.d("fail", t.getMessage());
                 Repository.getInstance().setPopularProducts(null);
             }
         });
@@ -299,34 +301,31 @@ Log.d("sub",mSubCategoriesItems.size()+"");
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
-                if(response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
 
                     Repository.getInstance().getRatedProducts().postValue(response.body());
-                }else
-                {
+                } else {
                     Repository.getInstance().setRatedProducts(null);
                 }
             }
 
             @Override
             public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
-                Log.d("fail",t.getMessage());
+                Log.d("fail", t.getMessage());
                 Repository.getInstance().setRatedProducts(null);
             }
         });
-        return  Repository.getInstance().getRatedProducts();
+        return Repository.getInstance().getRatedProducts();
     }
+
     public MutableLiveData<List<WoocommerceBody>> searchInProducts(String searchQuery) throws IOException {
-        Call<List<WoocommerceBody>> call = mWoocommerceApi.searchProducts(searchQuery,mQueries);
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.searchProducts(searchQuery, mQueries);
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
-                if(response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
                     Repository.getInstance().getSearchedProducts().setValue(response.body());
-                }else
-                {
+                } else {
                     Repository.getInstance().setSearchedProducts(null);
                 }
             }
@@ -336,23 +335,22 @@ Log.d("sub",mSubCategoriesItems.size()+"");
                 Repository.getInstance().setSearchedProducts(null);
             }
         });
-        return  Repository.getInstance().getSearchedProducts();
+        return Repository.getInstance().getSearchedProducts();
     }
 
     public List<CategoriesBody> productCategoriesSync() throws IOException {
         Call<List<CategoriesBody>> call = mWoocommerceApi.getCategories(mQueries);
         return call.execute().body();
     }
+
     public MutableLiveData<WoocommerceBody> getProductById(int id) throws IOException {
-        Call<WoocommerceBody> call = mWoocommerceApi.getProductById(String.valueOf(id),mQueries);
+        Call<WoocommerceBody> call = mWoocommerceApi.getProductById(String.valueOf(id), mQueries);
         call.enqueue(new Callback<WoocommerceBody>() {
             @Override
             public void onResponse(Call<WoocommerceBody> call, Response<WoocommerceBody> response) {
-                if(response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
                     Repository.getInstance().getProductById().setValue(response.body());
-                }else
-                {
+                } else {
                     Repository.getInstance().setProductById(null);
                 }
             }
@@ -364,17 +362,16 @@ Log.d("sub",mSubCategoriesItems.size()+"");
         });
         return Repository.getInstance().getProductById();
     }
-    public MutableLiveData<List<WoocommerceBody>> getRelatedProducts(String...id) throws IOException {
-        Call<List<WoocommerceBody>> call = mWoocommerceApi.getReleatedProducts(mQueries,id);
+
+    public MutableLiveData<List<WoocommerceBody>> getRelatedProducts(String... id) throws IOException {
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getReleatedProducts(mQueries, id);
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
-                if(response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
                     Repository.getInstance().getRelatedProducts().setValue(response.body());
 
-                }else
-                {
+                } else {
                     Repository.getInstance().setRelatedProducts(null);
                 }
             }
@@ -386,20 +383,18 @@ Log.d("sub",mSubCategoriesItems.size()+"");
         });
         return Repository.getInstance().getRelatedProducts();
     }
-    public MutableLiveData<List<WoocommerceBody>>  getSortedBaseProducts(Map<String, String> queries)throws IOException
-    {
+
+    public MutableLiveData<List<WoocommerceBody>> getSortedBaseProducts(Map<String, String> queries) throws IOException {
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getSortedBaseProducts(queries);
 
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
-                if(response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
                     response.body().remove(0);
                     Repository.getInstance().getSortedProducts().setValue(response.body());
 
-                }else
-                {
+                } else {
                     Repository.getInstance().setSortedProducts(null);
                 }
             }

@@ -53,20 +53,20 @@ public class CategoriesViewPagerActivity extends AppCompatActivity {
             @NonNull
             @Override
             public Fragment getItem(int position) {
-                return CategoriesViewPagerFragment.newInstance(Repository.getInstance().getFilteredCategoriesItems()
+                return CategoriesViewPagerFragment.newInstance(Repository.getInstance().getFilteredCategories()
                 .get(position).getId());
             }
 
             @Override
             public int getCount() {
-                return Repository.getInstance().getFilteredCategoriesItems().size();
+                return Repository.getInstance().getFilteredCategories().size();
             }
 
             @Nullable
             @Override
             public CharSequence getPageTitle(int position) {
 
-                  return Repository.getInstance().getFilteredCategoriesItems().get(position).getName();
+                  return Repository.getInstance().getFilteredCategories().get(position).getName();
             }
         });
         mViewPager.setCurrentItem(position);

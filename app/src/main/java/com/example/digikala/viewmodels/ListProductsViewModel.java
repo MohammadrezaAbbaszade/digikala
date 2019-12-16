@@ -14,6 +14,7 @@ import com.example.digikala.network.RetrofitInstance;
 import com.example.digikala.network.WoocommerceService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +58,7 @@ public class ListProductsViewModel extends AndroidViewModel {
         mRatedProducts = mRepository.getRatedProducts();
         mSortedProducts = mRepository.getSortedProducts();
         mSearchedProducts = mRepository.getSearchedProducts();
-        mSubCategoriesProducts=new MutableLiveData<>();
+
 
     }
 
@@ -135,20 +136,22 @@ public class ListProductsViewModel extends AndroidViewModel {
                 if (response.isSuccessful()) {
                     mSearchedProducts.setValue(response.body());
                 } else {
-                    mSearchedProducts = null;
+                    mSearchedProducts.setValue(new ArrayList<WoocommerceBody>());
                 }
+
             }
 
             @Override
             public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
-                mSearchedProducts = null;
+                mSearchedProducts.setValue(new ArrayList<WoocommerceBody>());
+
             }
         });
         return mSearchedProducts;
     }
     public void loadSubCategoriesProducts(String categoryId)
     {
-
+        mSubCategoriesProducts=new MutableLiveData<>();
         try {
             getSubCategoriesProducts(categoryId);
         } catch (IOException e) {
@@ -161,7 +164,7 @@ public class ListProductsViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<WoocommerceBody>>  getSubCategoriesProducts(String categoryId)throws IOException
     {
-        mQueries.put("category","18");
+        mQueries.put("category",categoryId);
         Call<List<WoocommerceBody>> call =mWoocommerceApi.getWooCommerceBody(mQueries);
 
         call.enqueue(new Callback<List<WoocommerceBody>>() {
@@ -169,23 +172,22 @@ public class ListProductsViewModel extends AndroidViewModel {
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
                 if(response.isSuccessful())
                 {
-                    Log.d("categoryId", String.valueOf(response.body().size()));
                     mSubCategoriesProducts.setValue(response.body());
 
                 }else
                 {
                     Log.d("categoryId", String.valueOf(response.body().size()));
-                    mSubCategoriesProducts=null;
+                    mSubCategoriesProducts.setValue(new ArrayList<WoocommerceBody>());
                 }
+                Log.e("TAG4" , "On response " + response.message() + "  "  + response.code());
             }
 
             @Override
             public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
-                Log.d("categoryId", t.getMessage());
-                mSubCategoriesProducts=null;
+                Log.e("TAG4" , "On fail " + t.getMessage());
+                mSubCategoriesProducts.setValue(new ArrayList<WoocommerceBody>());
             }
         });
-
 
         return mSubCategoriesProducts;
     }

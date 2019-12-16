@@ -29,7 +29,7 @@ public class MainViewModel extends AndroidViewModel {
         mNewestProducts = mRepository.getNewestProducts();
         mPopularProducts = mRepository.getPopularProducts();
         mRatedProducts = mRepository.getRatedProducts();
-        mFilteredCategoriesItems=mRepository.getFilteredCategoriesItems();
+
 
         Log.d("mainviewmodel", "mainViewModel");
     }
