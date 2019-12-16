@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape android:shape="line"  >
-            <size android:width="50dp" android:height="50dp"  />
-            <solid android:color="#FF0000" />
+        <shape android:shape="rectangle"  >
+            <size android:width="180dp" android:height="1dp"  />
+            <solid android:color="@color/green" />
 
         </shape>
 
