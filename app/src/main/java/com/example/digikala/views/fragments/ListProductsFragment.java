@@ -26,6 +26,7 @@ import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
 import com.example.digikala.model.productsModels.WoocommerceBody;
 import com.example.digikala.viewmodels.ListProductsViewModel;
+import com.example.digikala.views.activities.FilterActivity;
 import com.example.digikala.views.activities.ProductDetailActivity;
 import com.example.digikala.views.changeFragment;
 import com.squareup.picasso.Picasso;
@@ -125,6 +126,13 @@ public class ListProductsFragment extends Fragment {
             mSubSortTextView.setText(R.string.check_box_selles);
             SharedPreferencesData.setRadioGroupId(getActivity(), 0);
         }
+        mFilterTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= FilterActivity.newIntent(getActivity());
+                startActivity(intent);
+            }
+        });
         mSortTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -193,6 +201,7 @@ public class ListProductsFragment extends Fragment {
         mTextView = view.findViewById(R.id.list_products_fragment_text_view);
         mSortTextView = view.findViewById(R.id.list_product_fragment_sort_text_view);
         mSubSortTextView = view.findViewById(R.id.list_product_fragment_sub_sort_text_view);
+        mFilterTextView=view.findViewById(R.id.list_product_fragment_sub_filter_text_view);
     }
 
     private void setSortTextView() {

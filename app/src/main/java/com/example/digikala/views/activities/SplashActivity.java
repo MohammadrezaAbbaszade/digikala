@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import com.example.digikala.R;
 import com.example.digikala.model.productsModels.WoocommerceBody;
@@ -39,6 +40,7 @@ public class SplashActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             try {
                 Repository.getInstance().setCategoriesItems(Repository.getInstance().productCategoriesSync());
+                Log.d("splash","splash Entered");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -48,16 +50,19 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if(isNetworkConnected()){
-            if(Repository.getInstance().getCategoriesItems()!=null)
+            Log.d("splash","splashFinished2");
+
+            if(!Repository.getInstance().isCategoriesNull())
             {
                 Intent intent=MainActivity.newIntent(SplashActivity.this,1);
+                Log.d("splash","splashFinished1");
                 startActivity(intent);
                 finish();
             }
-            }else
+            else
             {
                 Intent intent=MainActivity.newIntent(SplashActivity.this,0);
+                Log.d("splash","splashFinished0");
                 startActivity(intent);
                 finish();
             }

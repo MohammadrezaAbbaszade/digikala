@@ -93,11 +93,11 @@ public class SignUpFragment extends Fragment {
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firstName = mFirstNameEditText.getText().toString();
-                lastName = mLastNameEditText.getText().toString();
-                phoneNumber = mPhoneNumberEditText.getText().toString();
-                email = mEmailEditText.getText().toString();
-                password = mPasswordEditText.getText().toString();
+                firstName = mFirstNameEditText.getText().toString().trim();
+                lastName = mLastNameEditText.getText().toString().trim();
+                phoneNumber = mPhoneNumberEditText.getText().toString().trim();
+                email = mEmailEditText.getText().toString().trim();
+                password = mPasswordEditText.getText().toString().trim();
                 if (!firstName.isEmpty() && !lastName.isEmpty() && !phoneNumber.isEmpty()
                         && !email.isEmpty() && !password.isEmpty()) {
                     mRegisterTextView.setVisibility(View.GONE);

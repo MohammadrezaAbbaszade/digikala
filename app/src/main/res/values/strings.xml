@@ -1,10 +1,5 @@
 <resources>
     <string name="app_name">digikala</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="open">Open</string>
-    <string name="close">Close</string>
     <string name="no_internet_connection">خطا در اتصال به اینترنت</string>
     <string name="problem_response">خطا در برقراری ارتباط</string>
 
@@ -32,7 +27,7 @@
     <string name="full_price">قیمت کل</string>
     <string name="final_price">قیمت نهایی</string>
     <string name="delete">حذف</string>
-    <string name="price_format">  %s تومان</string>
+    <string name="price_format">  %s ریال</string>
     <string name="dialog_bag_question">آیا مایل به حذف این محصول از سبد خرید هستید؟</string>
     <string name="like_dialog_question">آیا مایل به حذف این محصول از لیست علاقه مندی ها هستید؟</string>
     <string name="liked_products_list">لیست محصولات مورد علاقه</string>
@@ -42,11 +37,16 @@
     <string name="filter">فیلتر کردن</string>
     <string name="sort">مرتب سازی</string>
     <string name="check_box_newest">جدید ترین</string>
-    <string name="check_box_rated">پر فروش ترین</string>
+    <string name="check_box_rated">پر امتیاز ترین</string>
     <string name="check_box_selles">پر بازدید ترین</string>
     <string name="check_box_cost_low_high">قیمت از کم به زیاد</string>
     <string name="check_box_cost_high_low">قیمت از زیاد به کم</string>
     <string name="filter_action_bar">فیلتر کردن محصول</string>
 
     <string name="related_products">محصولات مشابه</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>

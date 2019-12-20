@@ -3,7 +3,8 @@ package Woo.Repository;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.digikala.model.DaoMaster;
+
+import com.example.digikala.model.productsModels.DaoMaster;
 
 import org.greenrobot.greendao.database.Database;
 

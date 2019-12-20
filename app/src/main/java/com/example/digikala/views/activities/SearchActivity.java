@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.digikala.R;
-import com.example.digikala.databinding.ActivitySearchBinding;
+
 import com.example.digikala.views.fragments.SearchFragment;
 
 public class SearchActivity extends AppCompatActivity {

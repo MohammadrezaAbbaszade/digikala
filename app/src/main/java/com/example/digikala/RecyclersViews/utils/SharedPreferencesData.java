@@ -7,15 +7,14 @@ public class SharedPreferencesData {
     private static final String PREF_NAME = "digikala";
 
     private static final String PREF_QUERY = "query";
-    private static final String RADIO_ID = "radioid";
+    private static final String ID = "id";
 
-
-    private static android.content.SharedPreferences getPhotoSharedPreferences(Context context) {
+    private static SharedPreferences getPproductsSharedPreferences(Context context) {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
     public static String getQuery(Context context) {
-        android.content.SharedPreferences prefs = getPhotoSharedPreferences(context);
+        SharedPreferences prefs = getPproductsSharedPreferences(context);
 
         if (prefs == null)
             return null;
@@ -24,25 +23,22 @@ public class SharedPreferencesData {
     }
 
     public static void setQuery(Context context, String query) {
-        android.content.SharedPreferences prefs = getPhotoSharedPreferences(context);
+        SharedPreferences prefs = getPproductsSharedPreferences(context);
 
-        android.content.SharedPreferences.Editor editor = prefs.edit();
+        SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PREF_QUERY, query);
         editor.apply();
     }
-    public static void setRadioGroupId(Context context, int id) {
-        android.content.SharedPreferences prefs = getPhotoSharedPreferences(context);
 
-        android.content.SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(RADIO_ID, id);
-        editor.apply();
-    }
+   public static void setRadioGroupId(Context context,int id)
+   {
+       SharedPreferences prefs = getPproductsSharedPreferences(context);
+       SharedPreferences.Editor editor = prefs.edit();
+       editor.putInt(ID, id);
+       editor.apply();
+   }
     public static int getRadioGroupId(Context context) {
-        android.content.SharedPreferences prefs = getPhotoSharedPreferences(context);
-
-        if (prefs == null)
-            return 0;
-
-        return prefs.getInt(RADIO_ID, 0);
+        SharedPreferences prefs = getPproductsSharedPreferences(context);
+        return prefs.getInt(ID, 0);
     }
 }

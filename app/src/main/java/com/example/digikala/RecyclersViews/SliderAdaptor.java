@@ -59,13 +59,7 @@ public class SliderAdaptor extends SliderViewAdapter<SliderAdaptor.SliderProduct
         public SliderProductViewHolder(View itemView) {
             super(itemView);
             imageViewBackground = itemView.findViewById(R.id.image);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent= ProductDetailActivity.newIntent(mContext,mWoocommerceBody.getId(),mWoocommerceBody.getName());
-                    mContext.startActivity(intent);
-                }
-            });
+
         }
 
         void bind(WoocommerceBody woocommerceBody) {

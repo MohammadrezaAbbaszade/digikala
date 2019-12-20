@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
+
 import com.example.digikala.databinding.FragmentSearchBinding;
 import com.example.digikala.viewmodels.SearchViewModel;
 import com.example.digikala.views.activities.ListProductsActivity;

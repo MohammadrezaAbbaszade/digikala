@@ -43,7 +43,6 @@ public class ProductDetailFragment extends Fragment {
 
     private static final String ID = "id";
     private int id;
-
     private ProgressBar mProgressBar;
     private CardView mCardView;
     private TextView mTextView;

@@ -4,12 +4,15 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.digikala.model.DaoSession;
+
 import com.example.digikala.model.ordersModels.OrderBody;
+import com.example.digikala.model.productsModels.DaoSession;
 import com.example.digikala.model.productsModels.ShoppingBag;
-import com.example.digikala.model.ShoppingBagDao;
+
+import com.example.digikala.model.productsModels.ShoppingBagDao;
 import com.example.digikala.model.productsModels.WoocommerceBody;
 import com.example.digikala.model.categoriesmodel.CategoriesBody;
+
 import com.example.digikala.network.RetrofitInstance;
 import com.example.digikala.network.WoocommerceService;
 
@@ -222,8 +225,8 @@ public class Repository {
         return mIds;
     }
 
-    public boolean isRepositoryNull() {
-        if (mRatedProducts == null && mPopularProducts == null && mNewestProducts == null && mCategoriesItems == null)
+    public boolean isCategoriesNull() {
+        if (mCategoriesItems == null)
             return true;
 
         return false;
@@ -374,8 +377,6 @@ public class Repository {
         return Repository.getInstance().getProductById();
     }
 
-
-
     public MutableLiveData<List<WoocommerceBody>> getSortedBaseProducts(Map<String, String> queries) throws IOException {
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getSortedBaseProducts(queries);
 
@@ -402,7 +403,7 @@ public class Repository {
     }
 
     public MutableLiveData<OrderBody> getOrderResult(OrderBody orderBody) throws IOException {
-        Call<OrderBody> call = mWoocommerceApi.setOrder(orderBody);
+        Call<OrderBody> call = mWoocommerceApi.setOrder(mQueries,orderBody);
         call.enqueue(new Callback<OrderBody>() {
             @Override
             public void onResponse(Call<OrderBody> call, Response<OrderBody> response) {

@@ -132,7 +132,7 @@ public class MainFragment extends Fragment {
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
                 if(woocommerceBodies!=null) {
                     mSliderView.setVisibility(View.VISIBLE);
-                    initSliderView();
+
                     updateAdaptor(woocommerceBodies, 0);
                 }else {
                     getActivity().finish();
@@ -158,7 +158,7 @@ public class MainFragment extends Fragment {
     }
 
     private void initSliderView() {
-        mSliderAdaptor = new SliderAdaptor(mMainViewModel.getNewestProducts().getValue(), getActivity());
+        mSliderAdaptor = new SliderAdaptor(mMainViewModel.getPopularProducts().getValue(), getActivity());
         mSliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
         mSliderView.setSliderAdapter(mSliderAdaptor);
     }

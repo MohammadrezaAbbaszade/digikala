@@ -4,22 +4,21 @@
     android:background="@color/colorPrimaryDark"
     android:id="@+id/header_of_navigation"
     android:layout_height="120dp">
-<ImageView
-    android:layout_marginTop="70dp"
-    android:layout_marginRight="15dp"
-    android:layout_gravity="bottom|right"
-    android:src="@drawable/ic_user"
-    android:layout_width="30dp"
-    android:layout_height="50dp"/>
-<TextView
-    android:layout_gravity="bottom|center"
-    android:layout_marginBottom="15dp"
-    android:layout_marginLeft="50dp"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="09396126208"
-    android:textColor="@color/white"
-    />
-
+  <ImageView
+      android:layout_marginTop="70dp"
+      android:layout_marginRight="15dp"
+      android:layout_gravity="bottom|right"
+      android:src="@drawable/ic_user"
+      android:layout_width="30dp"
+      android:layout_height="50dp"/>
+  <TextView
+      android:layout_gravity="bottom|center"
+      android:layout_marginBottom="15dp"
+      android:layout_marginLeft="50dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="09396126208"
+      android:textColor="@color/white"
+      />
 
 </FrameLayout>

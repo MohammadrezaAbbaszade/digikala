@@ -1,6 +1,8 @@
 package com.example.digikala.network;
 
 
+import com.example.digikala.model.attributesmodels.AttributeBody;
+import com.example.digikala.model.attributetermsmodels.AttributeTermsBody;
 import com.example.digikala.model.ordersModels.OrderBody;
 import com.example.digikala.model.productsModels.WoocommerceBody;
 import com.example.digikala.model.categoriesmodel.CategoriesBody;
@@ -34,5 +36,11 @@ public interface WoocommerceService {
     Call<List<WoocommerceBody>> searchProducts(@Query("search") String productName,@QueryMap Map<String, String> queries);
 
     @POST("orders")
-     Call<OrderBody> setOrder(@Body OrderBody orderBody);
+     Call<OrderBody> setOrder(@QueryMap Map<String, String> queries,@Body OrderBody orderBody);
+
+    @GET("products/attributes")
+    Call<List<AttributeBody>> getProductAttributes(@QueryMap Map<String, String> queries);
+
+    @GET("products/attributes/{id}/terms")
+    Call<List<AttributeTermsBody>> getAttributesTerms(@Path("id") int attrId,@QueryMap Map<String, String> queries);
 }
