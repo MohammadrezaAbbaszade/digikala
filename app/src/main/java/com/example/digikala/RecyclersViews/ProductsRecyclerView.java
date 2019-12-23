@@ -11,11 +11,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import com.example.digikala.R;
 import com.example.digikala.views.activities.ProductDetailActivity;
 import com.example.digikala.model.productsModels.WoocommerceBody;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductsRecyclerView extends RecyclerView.Adapter {
@@ -23,9 +25,13 @@ public class ProductsRecyclerView extends RecyclerView.Adapter {
     private Context mContext;
     private View view;
 
-    public ProductsRecyclerView(List<WoocommerceBody> toDoList, Context context) {
-        productList = toDoList;
+    public ProductsRecyclerView(List<WoocommerceBody> woocommerceBodies, Context context) {
+        productList=woocommerceBodies;
         mContext = context;
+    }
+
+    public void setProductList(List<WoocommerceBody> productList) {
+        this.productList.addAll(productList);
     }
 
     @NonNull

@@ -34,9 +34,9 @@ public class MainViewModel extends AndroidViewModel {
         Log.d("mainviewmodel", "mainViewModel");
     }
 
-    public void loadNewestProducts() {
+    public void loadNewestProducts(int page) {
         try {
-            mRepository.productRecentPhotosSync();
+            mRepository.productRecentPhotosSync(page);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,9 +49,9 @@ public class MainViewModel extends AndroidViewModel {
     public MutableLiveData<List<WoocommerceBody>> getNewestProducts() {
         return mNewestProducts;
     }
-    public void loadPopularProducts() {
+    public void loadPopularProducts(int page) {
         try {
-            mRepository.productPopularitySync();
+            mRepository.productPopularitySync(page);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -59,9 +59,9 @@ public class MainViewModel extends AndroidViewModel {
     public MutableLiveData<List<WoocommerceBody>> getPopularProducts() {
         return mPopularProducts;
     }
-    public void loadRatedProducts() {
+    public void loadRatedProducts(int page) {
         try {
-            mRepository.productRatedSync();
+            mRepository.productRatedSync(page);
         } catch (IOException e) {
             e.printStackTrace();
         }

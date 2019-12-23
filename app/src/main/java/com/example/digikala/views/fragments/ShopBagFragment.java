@@ -46,6 +46,7 @@ public class ShopBagFragment extends Fragment {
     private ProductAdaptor mProductAdaptor;
     private TextView mShopFinalSumTextView;
     private ProgressBar mProgressBar;
+    private TextView mNoBagTextView;
     private Button mSubmitProductsButton;
     private ShopBagViewModel mShopBagViewModel;
 private Repository mRepository;
@@ -83,6 +84,7 @@ private Repository mRepository;
         mShopFinalSumTextView = view.findViewById(R.id.shop_final_sum_text_view);
         mSubmitProductsButton=view.findViewById(R.id.submit_shop_bag_btn);
         mProgressBar=view.findViewById(R.id.shop_bag_fragment_progress_bar);
+        mNoBagTextView=view.findViewById(R.id.shob_bag_fragment_text_view);
         mProgressBar.setVisibility(View.VISIBLE);
         mSubmitProductsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,8 +101,13 @@ private Repository mRepository;
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
                mRelatedProducts=woocommerceBodies;
                setUpAdaptor();
-                if(mProductAdaptor!=null)
+                if(mProductAdaptor!=null&&woocommerceBodies.size()>0) {
                     mRelatedProductRecycler.setVisibility(View.VISIBLE);
+                }else
+                {
+                    mNoBagTextView.setVisibility(View.VISIBLE);
+                    mSubmitProductsButton.setVisibility(View.GONE);
+                }
                mProgressBar.setVisibility(View.GONE);
             }
         });
@@ -128,10 +135,17 @@ private Repository mRepository;
     }
 
     private void setUpAdaptor() {
-        Log.d("tag", "setUpAdaptor");
-        mProductAdaptor = new ProductAdaptor(mRelatedProducts);
-        mRelatedProductRecycler.setAdapter(mProductAdaptor);
-        calculateProductsPrice();
+        if(mRelatedProducts.size()==0)
+        {
+            mSubmitProductsButton.setVisibility(View.GONE);
+            mNoBagTextView.setVisibility(View.VISIBLE);
+            calculateProductsPrice();
+        }else {
+            Log.d("tag", "setUpAdaptor");
+            mProductAdaptor = new ProductAdaptor(mRelatedProducts);
+            mRelatedProductRecycler.setAdapter(mProductAdaptor);
+            calculateProductsPrice();
+        }
     }
 
     private class ProductHolder extends RecyclerView.ViewHolder {

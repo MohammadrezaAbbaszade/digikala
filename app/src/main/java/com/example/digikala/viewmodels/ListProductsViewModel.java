@@ -51,7 +51,7 @@ public class ListProductsViewModel extends AndroidViewModel {
 
     public ListProductsViewModel(@NonNull Application application) {
         super(application);
-        mContext = application;
+        mContext = application.getApplicationContext();
         mRepository = Repository.getInstance();
         mNewestProducts = mRepository.getNewestProducts();
         mPopularProducts = mRepository.getPopularProducts();
@@ -90,10 +90,10 @@ public class ListProductsViewModel extends AndroidViewModel {
         return mSortedProducts;
     }
 
-    public void loadSearchedProducts() {
+    public void loadSearchedProducts(Map<String, String> queries) {
         mSearchedProducts = new MutableLiveData<>();
         try {
-            searchInProducts(SharedPreferencesData.getQuery(mContext));
+            searchInProducts(queries);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -128,15 +128,17 @@ public class ListProductsViewModel extends AndroidViewModel {
         return mSortedProducts;
     }
 
-    public MutableLiveData<List<WoocommerceBody>> searchInProducts(String searchQuery) throws IOException {
-        Call<List<WoocommerceBody>> call = Repository.getInstance().getWoocommerceApi().searchProducts(searchQuery, Repository.getInstance().getQueries());
+    public MutableLiveData<List<WoocommerceBody>> searchInProducts(Map<String, String> queries) throws IOException {
+        Call<List<WoocommerceBody>> call = Repository.getInstance().getWoocommerceApi().searchProducts(queries);
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
                 if (response.isSuccessful()) {
                     mSearchedProducts.setValue(response.body());
+                    Log.e("n",response.message()+"successfull"+response.body().size());
                 } else {
                     mSearchedProducts.setValue(new ArrayList<WoocommerceBody>());
+                    Log.e("n",response.message()+"Notsuccessfull");
                 }
 
             }
@@ -144,7 +146,7 @@ public class ListProductsViewModel extends AndroidViewModel {
             @Override
             public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
                 mSearchedProducts.setValue(new ArrayList<WoocommerceBody>());
-
+                Log.e("n",t.getMessage()+"failed");
             }
         });
         return mSearchedProducts;
@@ -165,7 +167,7 @@ public class ListProductsViewModel extends AndroidViewModel {
     public MutableLiveData<List<WoocommerceBody>>  getSubCategoriesProducts(String categoryId)throws IOException
     {
         mQueries.put("category",categoryId);
-        Call<List<WoocommerceBody>> call =mWoocommerceApi.getWooCommerceBody(mQueries);
+        Call<List<WoocommerceBody>> call =mWoocommerceApi.getWooCommerceBody(mQueries,1);
 
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override

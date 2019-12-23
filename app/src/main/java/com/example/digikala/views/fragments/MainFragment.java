@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -22,7 +23,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.example.digikala.RecyclersViews.ProductsRecyclerView;
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.SliderAdaptor;
@@ -41,6 +41,9 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class MainFragment extends Fragment {
+    private int newestPage=1;
+    private int popularPage=1;
+    private int ratedPage=1;
     private RecyclerView mCategoryRecyclerView;
     private RecyclerView mRatedRecyclerView;
     private RecyclerView mPopularRecyclerView;
@@ -57,7 +60,10 @@ public class MainFragment extends Fragment {
     private SliderAdaptor mSliderAdaptor;
     private MainViewModel mMainViewModel;
     private ProgressBar mProgressBar;
-
+    private ProgressBar mNewestRecyclerProgressBar;
+    private ProgressBar mPopularRecyclerProgressBar;
+    private ProgressBar mRatedRecyclerProgressBar;
+    private List<WoocommerceBody> mPopularProductsForSlider;
     public static MainFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -74,9 +80,9 @@ public class MainFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        mMainViewModel.loadNewestProducts();
-        mMainViewModel.loadPopularProducts();
-        mMainViewModel.loadRatedProducts();
+        mMainViewModel.loadNewestProducts(newestPage);
+        mMainViewModel.loadPopularProducts(popularPage);
+        mMainViewModel.loadRatedProducts(ratedPage);
 
     }
 
@@ -110,7 +116,6 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         init(view);
-
         mProgressBar.setVisibility(View.VISIBLE);
         mPopularProductsTextView.setVisibility(View.GONE);
         mRatedProductsTextView.setVisibility(View.GONE);
@@ -120,9 +125,15 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
                 if(woocommerceBodies!=null) {
-                    initSliderView();
-                    updateAdaptor(woocommerceBodies, 1);
-                }else {
+                    Log.d("pop","first");
+                    mPopularRecyclerProgressBar.setVisibility(View.GONE);
+                    if(mSliderAdaptor==null) {
+                        mPopularProductsForSlider=woocommerceBodies;
+                        initSliderView(mPopularProductsForSlider);
+                    }
+                    updatePopularProductsAdaptor(woocommerceBodies);
+                }
+                else {
                     getActivity().finish();
                 }
             }
@@ -132,9 +143,10 @@ public class MainFragment extends Fragment {
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
                 if(woocommerceBodies!=null) {
                     mSliderView.setVisibility(View.VISIBLE);
-
-                    updateAdaptor(woocommerceBodies, 0);
-                }else {
+                    mNewestRecyclerProgressBar.setVisibility(View.GONE);
+                    updateNewestProductsAdaptor(woocommerceBodies);
+                }
+                else {
                     getActivity().finish();
                 }
             }
@@ -143,13 +155,15 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
                 if(woocommerceBodies!=null) {
-                    updateAdaptor(woocommerceBodies, 2);
+                    updateRatedProductsAdaptor(woocommerceBodies);
                     mProgressBar.setVisibility(View.GONE);
                     mPopularProductsTextView.setVisibility(View.VISIBLE);
                     mRatedProductsTextView.setVisibility(View.VISIBLE);
                     mNewProductsTextView.setVisibility(View.VISIBLE);
                     mSliderView.setVisibility(View.VISIBLE);
-                }else {
+                    mRatedRecyclerProgressBar.setVisibility(View.GONE);
+                }
+                else {
                     getActivity().finish();
                 }
             }
@@ -157,10 +171,16 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-    private void initSliderView() {
-        mSliderAdaptor = new SliderAdaptor(mMainViewModel.getPopularProducts().getValue(), getActivity());
-        mSliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
-        mSliderView.setSliderAdapter(mSliderAdaptor);
+    private void initSliderView(List<WoocommerceBody> woocommerceBodyLis) {
+        if(mSliderAdaptor==null) {
+            mSliderAdaptor = new SliderAdaptor(woocommerceBodyLis, getActivity());
+            mSliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
+            mSliderView.setSliderAdapter(mSliderAdaptor);
+        }else
+        {
+            mSliderAdaptor.setProductList(woocommerceBodyLis);
+            mSliderAdaptor.notifyDataSetChanged();
+        }
     }
 
     private void init(View view) {
@@ -173,31 +193,96 @@ public class MainFragment extends Fragment {
         mRatedProductsTextView = view.findViewById(R.id.rated_product_textview);
         mPopularProductsTextView = view.findViewById(R.id.popular_product_textview);
         mProgressBar = view.findViewById(R.id.main_fragment_progress_bar);
+        mNewestRecyclerProgressBar=view.findViewById(R.id.main_fragment_newest_progress_bar);
+        mPopularRecyclerProgressBar=view.findViewById(R.id.main_fragment_popular_progress_bar);
+        mRatedRecyclerProgressBar=view.findViewById(R.id.main_fragment_rated_progress_bar);
     }
 
 
-    public void updateAdaptor(List<WoocommerceBody> woocommerceBodies, int state) {
+    public void updateNewestProductsAdaptor(final List<WoocommerceBody> woocommerceBodies) {
+            if(mNewestProductAdaptor==null) {
+                mNewestProductAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
+                mRecentRecyclerView.setAdapter(mNewestProductAdaptor);
+                mRecentRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                    }
 
-        if (state == 0) {
-            Log.d("recy", "0");
-            mNewestProductAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
-        } else if (state == 1) {
+                    @Override
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
 
-            Log.d("recy", "1");
-            mPopularProductAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
-        } else {
-            Log.d("recy", "2");
-            mRatedRecyclerAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
-        }
-
-        Log.d("recy", "3");
+                        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                        if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == woocommerceBodies.size() - 1) {
+                            mNewestRecyclerProgressBar.setVisibility(View.VISIBLE);
+                            mMainViewModel.loadNewestProducts(++newestPage);
+                        }
+                    }
+                });
+            }else
+            {
+                mNewestProductAdaptor.setProductList(woocommerceBodies);
+                mNewestProductAdaptor.notifyDataSetChanged();
+            }
         mProductAdaptor = new ProductAdaptor(mMainViewModel.getFilteredCategoriesItems());
         mCategoryRecyclerView.setAdapter(mProductAdaptor);
-        mRecentRecyclerView.setAdapter(mNewestProductAdaptor);
-        mPopularRecyclerView.setAdapter(mPopularProductAdaptor);
-        mRatedRecyclerView.setAdapter(mRatedRecyclerAdaptor);
     }
+    public void updatePopularProductsAdaptor(final List<WoocommerceBody> woocommerceBodies) {
+            if(mPopularProductAdaptor==null) {
+                mPopularProductAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
+                mPopularRecyclerView.setAdapter(mPopularProductAdaptor);
+                mPopularRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                    }
 
+                    @Override
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+
+                        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                        if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == woocommerceBodies.size() - 1) {
+                            mPopularRecyclerProgressBar.setVisibility(View.VISIBLE);
+                            mMainViewModel.loadPopularProducts(++popularPage);
+                        }
+                    }
+                });
+            }else
+            {
+                mPopularProductAdaptor.setProductList(woocommerceBodies);
+                mPopularProductAdaptor.notifyDataSetChanged();
+            }
+    }
+    public void updateRatedProductsAdaptor(final List<WoocommerceBody> woocommerceBodies) {
+
+        if(mRatedRecyclerAdaptor==null) {
+            mRatedRecyclerAdaptor = new ProductsRecyclerView(woocommerceBodies, getActivity());
+            mRatedRecyclerView.setAdapter(mRatedRecyclerAdaptor);
+            mRatedRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+
+                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == woocommerceBodies.size() - 1) {
+                        mRatedRecyclerProgressBar.setVisibility(View.VISIBLE);
+                        mMainViewModel.loadRatedProducts(++ratedPage);
+                    }
+                }
+            });
+        }else
+        {
+            mRatedRecyclerAdaptor.setProductList(woocommerceBodies);
+            mRatedRecyclerAdaptor.notifyDataSetChanged();
+        }
+    }
     private class ProductHolder extends RecyclerView.ViewHolder {
         private Button mButton;
         private CategoriesBody mCategoriesBody;

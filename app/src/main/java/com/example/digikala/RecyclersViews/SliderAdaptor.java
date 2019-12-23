@@ -31,6 +31,14 @@ public class SliderAdaptor extends SliderViewAdapter<SliderAdaptor.SliderProduct
         mContext = context;
     }
 
+    public void setProductList(List<WoocommerceBody> productList) {
+        this.productList=productList;
+    }
+
+    public void setSingleProduct(WoocommerceBody singleProduct) {
+        this.singleProduct = singleProduct;
+    }
+
     @Override
     public SliderProductViewHolder onCreateViewHolder(ViewGroup parent) {
         return new SliderProductViewHolder(LayoutInflater.from(mContext).inflate(R.layout.image_view,

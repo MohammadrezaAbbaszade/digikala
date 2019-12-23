@@ -93,7 +93,8 @@ public class ListProductsFragment extends Fragment {
         categoryId = getArguments().getInt(CATEGORY_ID);
         switch (state) {
             case 4:
-                mListProductViewModel.loadSearchedProducts();
+                mQueries.put("search",SharedPreferencesData.getQuery(getActivity()));
+                mListProductViewModel.loadSearchedProducts(mQueries);
                 break;
             case 5:
                 Log.d("categoryId", String.valueOf(categoryId));
@@ -129,7 +130,7 @@ public class ListProductsFragment extends Fragment {
         mFilterTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= FilterActivity.newIntent(getActivity());
+                Intent intent = FilterActivity.newIntent(getActivity());
                 startActivity(intent);
             }
         });
@@ -142,32 +143,37 @@ public class ListProductsFragment extends Fragment {
             }
         });
         Log.d("tag", "onCreateViewL");
-        if (state != 4&& state!=5) {
-            Log.d("state",String.valueOf(state));
+        if (state != 4 && state != 5) {
+            Log.d("state", String.valueOf(state));
             mProgressBar.setVisibility(View.GONE);
             initAdaptor(state);
         }
+
         mListProductViewModel.getSearchedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-                if (woocommerceBodies != null && woocommerceBodies.size() > 0) {
+                if (woocommerceBodies.size()>0) {
+                   Log.e("n","enteredSearched");
                     initAdaptor(4);
                     mProgressBar.setVisibility(View.GONE);
                     mListProductsRecycler.setVisibility(View.VISIBLE);
+                    mTextView.setVisibility(View.GONE);
                 } else {
+                    Log.e("n","NotenteredSearched");
                     mProgressBar.setVisibility(View.GONE);
                     mTextView.setVisibility(View.VISIBLE);
                     mListProductsRecycler.setVisibility(View.VISIBLE);
                 }
             }
         });
-        if(state==5) {
+        if (state == 5) {
             mListProductViewModel.getSubCategoriesProducts().observe(this, new Observer<List<WoocommerceBody>>() {
                 @Override
                 public void onChanged(List<WoocommerceBody> woocommerceBodies) {
                     if (!woocommerceBodies.isEmpty()) {
                         Log.d("categoryId", String.valueOf(woocommerceBodies.size()));
                         initAdaptor(5);
+                        mTextView.setVisibility(View.GONE);
                         mProgressBar.setVisibility(View.GONE);
                         mListProductsRecycler.setVisibility(View.VISIBLE);
                     } else {
@@ -185,8 +191,9 @@ public class ListProductsFragment extends Fragment {
 
     private void initAdaptor(int state) {
         mListProductsRecycler.setVisibility(View.VISIBLE);
-        ProductAdaptor productAdaptor = new ProductAdaptor(state);
-        mListProductsRecycler.setAdapter(productAdaptor);
+        mProductAdaptor = new ProductAdaptor(state);
+        mListProductsRecycler.setAdapter(mProductAdaptor);
+
     }
 
     private void initAdaptor(List<WoocommerceBody> woocommerceBodies) {
@@ -201,7 +208,7 @@ public class ListProductsFragment extends Fragment {
         mTextView = view.findViewById(R.id.list_products_fragment_text_view);
         mSortTextView = view.findViewById(R.id.list_product_fragment_sort_text_view);
         mSubSortTextView = view.findViewById(R.id.list_product_fragment_sub_sort_text_view);
-        mFilterTextView=view.findViewById(R.id.list_product_fragment_sub_filter_text_view);
+        mFilterTextView = view.findViewById(R.id.list_product_fragment_sub_filter_text_view);
     }
 
     private void setSortTextView() {
@@ -308,6 +315,10 @@ public class ListProductsFragment extends Fragment {
             mWoocommerceBodies = woocommerceBodies;
         }
 
+        public void setWoocommerceBodies(List<WoocommerceBody> woocommerceBodies) {
+            mWoocommerceBodies.addAll(woocommerceBodies);
+        }
+
         @NonNull
         @Override
         public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -344,10 +355,9 @@ public class ListProductsFragment extends Fragment {
             mListProductsRecycler.setVisibility(View.GONE);
             mProgressBar.setVisibility(View.VISIBLE);
             setSortTextView();
-            if(state==5)
-            {
+            if (state == 5) {
                 requestForNewCategoriesProductsSort();
-            }else {
+            } else {
                 requestForNewSort();
             }
         }
@@ -359,27 +369,27 @@ public class ListProductsFragment extends Fragment {
             case 1:
                 mQueries.put("orderby", "date");
                 mQueries.put("order", "desc");
-                mQueries.put("category",String.valueOf(categoryId));
+                mQueries.put("category", String.valueOf(categoryId));
                 break;
             case 2:
                 mQueries.put("orderby", "popularity");
                 mQueries.put("order", "desc");
-                mQueries.put("category",String.valueOf(categoryId));
+                mQueries.put("category", String.valueOf(categoryId));
                 break;
             case 3:
                 mQueries.put("orderby", "rating");
                 mQueries.put("order", "desc");
-                mQueries.put("category",String.valueOf(categoryId));
+                mQueries.put("category", String.valueOf(categoryId));
                 break;
             case 4:
                 mQueries.put("orderby", "price");
                 mQueries.put("order", "desc");
-                mQueries.put("category",String.valueOf(categoryId));
+                mQueries.put("category", String.valueOf(categoryId));
                 break;
             case 5:
                 mQueries.put("orderby", "price");
                 mQueries.put("order", "asc");
-                mQueries.put("category",String.valueOf(categoryId));
+                mQueries.put("category", String.valueOf(categoryId));
                 break;
         }
 
@@ -397,6 +407,7 @@ public class ListProductsFragment extends Fragment {
             }
         });
     }
+
     private void requestForNewSort() {
         switch (SharedPreferencesData.getRadioGroupId(getActivity())) {
             case 1:
@@ -420,18 +431,41 @@ public class ListProductsFragment extends Fragment {
                 mQueries.put("order", "asc");
                 break;
         }
-
-        mListProductViewModel.loadSortedProducts(mQueries);
-
-        mListProductViewModel.getSortedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
-            @Override
-            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-                if (woocommerceBodies != null) {
-                    initAdaptor(woocommerceBodies);
-                    mListProductsRecycler.setVisibility(View.VISIBLE);
-                    mProgressBar.setVisibility(View.GONE);
+        if (state == 4) {
+            Log.d("n","state4");
+            mQueries.put("search",SharedPreferencesData.getQuery(getActivity()));
+            mTextView.setVisibility(View.GONE);
+            mListProductViewModel.loadSearchedProducts(mQueries);
+            mListProductViewModel.getSearchedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+                @Override
+                public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                    if (woocommerceBodies.size()>0) {
+                        Log.e("n","enteredSearched");
+                        initAdaptor(4);
+                        mProgressBar.setVisibility(View.GONE);
+                        mListProductsRecycler.setVisibility(View.VISIBLE);
+                        mTextView.setVisibility(View.GONE);
+                    } else {
+                        Log.e("n","NotenteredSearched");
+                        mProgressBar.setVisibility(View.GONE);
+                        mTextView.setVisibility(View.VISIBLE);
+                        mListProductsRecycler.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            Log.d("n","stateNot4");
+            mListProductViewModel.loadSortedProducts(mQueries);
+            mListProductViewModel.getSortedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+                @Override
+                public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                    if (woocommerceBodies != null) {
+                        initAdaptor(woocommerceBodies);
+                        mListProductsRecycler.setVisibility(View.VISIBLE);
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
     }
 }

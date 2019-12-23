@@ -18,9 +18,6 @@ public class WoocommerceBody{
 	@SerializedName("grouped_products")
 	private List<Object> groupedProducts;
 
-	@SerializedName("_links")
-	private Links links;
-
 	@SerializedName("tax_status")
 	private String taxStatus;
 
@@ -233,14 +230,6 @@ public class WoocommerceBody{
 
 	public List<Object> getGroupedProducts(){
 		return groupedProducts;
-	}
-
-	public void setLinks(Links links){
-		this.links = links;
-	}
-
-	public Links getLinks(){
-		return links;
 	}
 
 	public void setTaxStatus(String taxStatus){
@@ -732,8 +721,7 @@ public class WoocommerceBody{
 			"upsell_ids = '" + upsellIds + '\'' + 
 			",featured = '" + featured + '\'' + 
 			",purchasable = '" + purchasable + '\'' + 
-			",grouped_products = '" + groupedProducts + '\'' + 
-			",_links = '" + links + '\'' + 
+			",grouped_products = '" + groupedProducts + '\'' +
 			",tax_status = '" + taxStatus + '\'' + 
 			",catalog_visibility = '" + catalogVisibility + '\'' + 
 			",type = '" + type + '\'' + 

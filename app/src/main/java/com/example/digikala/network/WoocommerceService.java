@@ -19,7 +19,7 @@ import retrofit2.http.QueryMap;
 public interface WoocommerceService {
 
     @GET("products")
-    Call<List<WoocommerceBody>> getWooCommerceBody(@QueryMap Map<String, String> queries);
+    Call<List<WoocommerceBody>> getWooCommerceBody(@QueryMap Map<String, String> queries,@Query("page") int page);
 
     @GET("products/categories")
     Call<List<CategoriesBody>> getCategories(@QueryMap Map<String, String> queries);
@@ -33,7 +33,7 @@ public interface WoocommerceService {
     Call<List<WoocommerceBody>> getSortedBaseProducts(@QueryMap Map<String, String> queries);
 
     @GET("products")
-    Call<List<WoocommerceBody>> searchProducts(@Query("search") String productName,@QueryMap Map<String, String> queries);
+    Call<List<WoocommerceBody>> searchProducts(@QueryMap Map<String, String> queries);
 
     @POST("orders")
      Call<OrderBody> setOrder(@QueryMap Map<String, String> queries,@Body OrderBody orderBody);

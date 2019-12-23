@@ -39,7 +39,6 @@ public class Repository {
 
         }
     };
-
     private MutableLiveData<List<WoocommerceBody>> mNewestProducts;
     private MutableLiveData<List<WoocommerceBody>> mPopularProducts;
     private MutableLiveData<List<WoocommerceBody>> mRatedProducts;
@@ -264,31 +263,31 @@ public class Repository {
         return mWoocommerceApi;
     }
 
-    public MutableLiveData<List<WoocommerceBody>> productRecentPhotosSync() throws IOException {
+    public MutableLiveData<List<WoocommerceBody>> productRecentPhotosSync(int page) throws IOException {
         mQueries.put("orderby", "date");
-        Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries,page);
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
                 if (response.isSuccessful()) {
-                    Repository.getInstance().getNewestProducts().postValue(response.body());
+                    mNewestProducts.setValue(response.body());
                 } else {
-                    Repository.getInstance().setNewestProducts(null);
+                    mNewestProducts=null;
                 }
             }
 
             @Override
             public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
 
-                Repository.getInstance().setNewestProducts(null);
+                mNewestProducts=null;
             }
         });
-        return Repository.getInstance().getNewestProducts();
+        return mNewestProducts;
     }
 
-    public MutableLiveData<List<WoocommerceBody>> productPopularitySync() throws IOException {
+    public MutableLiveData<List<WoocommerceBody>> productPopularitySync(int page) throws IOException {
         mQueries.put("orderby", "popularity");
-        Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries,page);
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
@@ -309,9 +308,9 @@ public class Repository {
         return Repository.getInstance().getPopularProducts();
     }
 
-    public MutableLiveData<List<WoocommerceBody>> productRatedSync() throws IOException {
+    public MutableLiveData<List<WoocommerceBody>> productRatedSync(int page) throws IOException {
         mQueries.put("orderby", "rating");
-        Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries);
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries,page);
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
@@ -332,25 +331,25 @@ public class Repository {
         return Repository.getInstance().getRatedProducts();
     }
 
-    public MutableLiveData<List<WoocommerceBody>> searchInProducts(String searchQuery) throws IOException {
-        Call<List<WoocommerceBody>> call = mWoocommerceApi.searchProducts(searchQuery, mQueries);
-        call.enqueue(new Callback<List<WoocommerceBody>>() {
-            @Override
-            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
-                if (response.isSuccessful()) {
-                    Repository.getInstance().getSearchedProducts().setValue(response.body());
-                } else {
-                    Repository.getInstance().setSearchedProducts(null);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
-                Repository.getInstance().setSearchedProducts(null);
-            }
-        });
-        return Repository.getInstance().getSearchedProducts();
-    }
+//    public MutableLiveData<List<WoocommerceBody>> searchInProducts(String searchQuery) throws IOException {
+//        Call<List<WoocommerceBody>> call = mWoocommerceApi.searchProducts(searchQuery, mQueries);
+//        call.enqueue(new Callback<List<WoocommerceBody>>() {
+//            @Override
+//            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+//                if (response.isSuccessful()) {
+//                    Repository.getInstance().getSearchedProducts().setValue(response.body());
+//                } else {
+//                    Repository.getInstance().setSearchedProducts(null);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+//                Repository.getInstance().setSearchedProducts(null);
+//            }
+//        });
+//        return Repository.getInstance().getSearchedProducts();
+//    }
 
     public List<CategoriesBody> productCategoriesSync() throws IOException {
         Call<List<CategoriesBody>> call = mWoocommerceApi.getCategories(mQueries);
