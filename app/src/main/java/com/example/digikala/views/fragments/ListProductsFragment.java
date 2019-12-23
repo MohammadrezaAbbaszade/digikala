@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -39,6 +40,9 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class ListProductsFragment extends Fragment {
+    private int newestPage = 1;
+    private int popularPage = 1;
+    private int ratedPage = 1;
     private ListProductsViewModel mListProductViewModel;
     private static final String STATE = "state";
     private static final String CATEGORY_ID = "categoryId";
@@ -57,10 +61,12 @@ public class ListProductsFragment extends Fragment {
     private TextView mTextView;
     private TextView mSortTextView;
     private ProgressBar mProgressBar;
+    private ProgressBar mSecondProgressBar;
     private TextView mSubSortTextView;
     private TextView mFilterTextView;
     private int state;
     private int categoryId;
+    private List<WoocommerceBody> mAllProducts;
     public static final int REQUEST_CODE_FOR_SORT_DIALOG_FRAGMENT = 0;
     public static final String SORT_DIALOG_FRAGMENT_TAG = "sortdialogfragmenttag";
     private changeFragment mChangeFragment;
@@ -92,8 +98,17 @@ public class ListProductsFragment extends Fragment {
         state = getArguments().getInt(STATE);
         categoryId = getArguments().getInt(CATEGORY_ID);
         switch (state) {
+            case 1:
+                mListProductViewModel.loadPopularProducts(popularPage);
+                break;
+            case 2:
+                mListProductViewModel.loadRatedProducts(ratedPage);
+                break;
+            case 3:
+                mListProductViewModel.loadNewestProducts(newestPage);
+                break;
             case 4:
-                mQueries.put("search",SharedPreferencesData.getQuery(getActivity()));
+                mQueries.put("search", SharedPreferencesData.getQuery(getActivity()));
                 mListProductViewModel.loadSearchedProducts(mQueries);
                 break;
             case 5:
@@ -143,23 +158,54 @@ public class ListProductsFragment extends Fragment {
             }
         });
         Log.d("tag", "onCreateViewL");
-        if (state != 4 && state != 5) {
-            Log.d("state", String.valueOf(state));
-            mProgressBar.setVisibility(View.GONE);
-            initAdaptor(state);
-        }
-
+        mListProductViewModel.getPopularProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+            @Override
+            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                if (woocommerceBodies != null) {
+                    Log.d("pop", "first");
+                    mProgressBar.setVisibility(View.GONE);
+                    mSecondProgressBar.setVisibility(View.GONE);
+                    initAdaptor(woocommerceBodies);
+                } else {
+                    getActivity().finish();
+                }
+            }
+        });
+        mListProductViewModel.getNewestProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+            @Override
+            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                if (woocommerceBodies != null) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mSecondProgressBar.setVisibility(View.GONE);
+                    initAdaptor(woocommerceBodies);
+                } else {
+                    getActivity().finish();
+                }
+            }
+        });
+        mListProductViewModel.getRatedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+            @Override
+            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                if (woocommerceBodies != null) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mSecondProgressBar.setVisibility(View.GONE);
+                    initAdaptor(woocommerceBodies);
+                } else {
+                    getActivity().finish();
+                }
+            }
+        });
         mListProductViewModel.getSearchedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-                if (woocommerceBodies.size()>0) {
-                   Log.e("n","enteredSearched");
-                    initAdaptor(4);
+                if (woocommerceBodies.size() > 0) {
+                    Log.e("n", "enteredSearched");
+                    initAdaptor(woocommerceBodies);
                     mProgressBar.setVisibility(View.GONE);
                     mListProductsRecycler.setVisibility(View.VISIBLE);
                     mTextView.setVisibility(View.GONE);
                 } else {
-                    Log.e("n","NotenteredSearched");
+                    Log.e("n", "NotenteredSearched");
                     mProgressBar.setVisibility(View.GONE);
                     mTextView.setVisibility(View.VISIBLE);
                     mListProductsRecycler.setVisibility(View.VISIBLE);
@@ -172,7 +218,7 @@ public class ListProductsFragment extends Fragment {
                 public void onChanged(List<WoocommerceBody> woocommerceBodies) {
                     if (!woocommerceBodies.isEmpty()) {
                         Log.d("categoryId", String.valueOf(woocommerceBodies.size()));
-                        initAdaptor(5);
+                        initAdaptor(woocommerceBodies);
                         mTextView.setVisibility(View.GONE);
                         mProgressBar.setVisibility(View.GONE);
                         mListProductsRecycler.setVisibility(View.VISIBLE);
@@ -189,17 +235,42 @@ public class ListProductsFragment extends Fragment {
         return view;
     }
 
-    private void initAdaptor(int state) {
+    private void initAdaptor(final List<WoocommerceBody> woocommerceBodies) {
         mListProductsRecycler.setVisibility(View.VISIBLE);
-        mProductAdaptor = new ProductAdaptor(state);
-        mListProductsRecycler.setAdapter(mProductAdaptor);
+        if (mProductAdaptor == null) {
+            mProductAdaptor = new ProductAdaptor(woocommerceBodies);
+            mListProductsRecycler.setAdapter(mProductAdaptor);
+            mListProductsRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
 
-    }
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == mAllProducts.size() - 1) {
+                        mSecondProgressBar.setVisibility(View.VISIBLE);
+                        switch (state) {
+                            case 1:
+                                mListProductViewModel.loadPopularProducts(++newestPage);
+                                break;
+                            case 2:
+                                mListProductViewModel.loadRatedProducts(++newestPage);
+                                break;
+                            case 3:
+                                mListProductViewModel.loadNewestProducts(++newestPage);
+                                break;
+                        }
+                    }
+                }
+            });
+        } else {
+            mProductAdaptor.setWoocommerceBodies(woocommerceBodies);
+            mProductAdaptor.notifyDataSetChanged();
+        }
 
-    private void initAdaptor(List<WoocommerceBody> woocommerceBodies) {
-        mListProductsRecycler.setVisibility(View.VISIBLE);
-        mProductAdaptor = new ProductAdaptor(woocommerceBodies);
-        mListProductsRecycler.setAdapter(mProductAdaptor);
     }
 
     private void init(View view) {
@@ -209,6 +280,7 @@ public class ListProductsFragment extends Fragment {
         mSortTextView = view.findViewById(R.id.list_product_fragment_sort_text_view);
         mSubSortTextView = view.findViewById(R.id.list_product_fragment_sub_sort_text_view);
         mFilterTextView = view.findViewById(R.id.list_product_fragment_sub_filter_text_view);
+        mSecondProgressBar = view.findViewById(R.id.list_products_fragment_second_progress_bar);
     }
 
     private void setSortTextView() {
@@ -280,6 +352,7 @@ public class ListProductsFragment extends Fragment {
                 mNameTextView.setText(woocommerceBody.getName());
             mRegularPriceTextView.setText(woocommerceBody.getPrice() + "" + "تومان");
             mBudgetTextView.setText(woocommerceBody.getRegularPrice() + "تومان");
+            if(woocommerceBody.getImages().size()>0)
             Picasso.with(getActivity()).load(woocommerceBody.getImages().get(0).getSrc()).placeholder(R.drawable.digikala)
                     .into(mImageView);
         }
@@ -289,34 +362,14 @@ public class ListProductsFragment extends Fragment {
     private class ProductAdaptor extends RecyclerView.Adapter<ProductHolder> {
         private List<WoocommerceBody> mWoocommerceBodies;
 
-        public ProductAdaptor(int state) {
-            switch (state) {
-                case 0:
-                    break;
-                case 1:
-                    mWoocommerceBodies = mListProductViewModel.getPopularProducts().getValue();
-                    break;
-                case 2:
-                    mWoocommerceBodies = mListProductViewModel.getRatedProducts().getValue();
-                    break;
-                case 3:
-                    mWoocommerceBodies = mListProductViewModel.getNewestProducts().getValue();
-                    break;
-                case 4:
-                    mWoocommerceBodies = mListProductViewModel.getSearchedProducts().getValue();
-                    break;
-                case 5:
-                    mWoocommerceBodies = mListProductViewModel.getSubCategoriesProducts().getValue();
-                    break;
-            }
-        }
-
         public ProductAdaptor(List<WoocommerceBody> woocommerceBodies) {
             mWoocommerceBodies = woocommerceBodies;
+            mAllProducts=woocommerceBodies;
         }
 
         public void setWoocommerceBodies(List<WoocommerceBody> woocommerceBodies) {
             mWoocommerceBodies.addAll(woocommerceBodies);
+            mAllProducts.addAll(woocommerceBodies);
         }
 
         @NonNull
@@ -365,6 +418,7 @@ public class ListProductsFragment extends Fragment {
     }
 
     private void requestForNewCategoriesProductsSort() {
+        mProductAdaptor = null;
         switch (SharedPreferencesData.getRadioGroupId(getActivity())) {
             case 1:
                 mQueries.put("orderby", "date");
@@ -409,6 +463,7 @@ public class ListProductsFragment extends Fragment {
     }
 
     private void requestForNewSort() {
+        mProductAdaptor = null;
         switch (SharedPreferencesData.getRadioGroupId(getActivity())) {
             case 1:
                 mQueries.put("orderby", "date");
@@ -432,21 +487,22 @@ public class ListProductsFragment extends Fragment {
                 break;
         }
         if (state == 4) {
-            Log.d("n","state4");
-            mQueries.put("search",SharedPreferencesData.getQuery(getActivity()));
+
+            Log.d("n", "state4");
+            mQueries.put("search", SharedPreferencesData.getQuery(getActivity()));
             mTextView.setVisibility(View.GONE);
             mListProductViewModel.loadSearchedProducts(mQueries);
             mListProductViewModel.getSearchedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
                 @Override
                 public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-                    if (woocommerceBodies.size()>0) {
-                        Log.e("n","enteredSearched");
-                        initAdaptor(4);
+                    if (woocommerceBodies.size() > 0) {
+                        Log.e("n", "enteredSearched");
+                        initAdaptor(woocommerceBodies);
                         mProgressBar.setVisibility(View.GONE);
                         mListProductsRecycler.setVisibility(View.VISIBLE);
                         mTextView.setVisibility(View.GONE);
                     } else {
-                        Log.e("n","NotenteredSearched");
+                        Log.e("n", "NotenteredSearched");
                         mProgressBar.setVisibility(View.GONE);
                         mTextView.setVisibility(View.VISIBLE);
                         mListProductsRecycler.setVisibility(View.VISIBLE);
@@ -454,7 +510,7 @@ public class ListProductsFragment extends Fragment {
                 }
             });
         } else {
-            Log.d("n","stateNot4");
+            Log.d("n", "stateNot4");
             mListProductViewModel.loadSortedProducts(mQueries);
             mListProductViewModel.getSortedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
                 @Override

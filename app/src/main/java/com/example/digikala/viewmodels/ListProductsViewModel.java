@@ -53,25 +53,44 @@ public class ListProductsViewModel extends AndroidViewModel {
         super(application);
         mContext = application.getApplicationContext();
         mRepository = Repository.getInstance();
-        mNewestProducts = mRepository.getNewestProducts();
-        mPopularProducts = mRepository.getPopularProducts();
-        mRatedProducts = mRepository.getRatedProducts();
+        mNewestProducts = new MutableLiveData<>();
+        mPopularProducts =new MutableLiveData<>();
+        mRatedProducts = new MutableLiveData<>();
         mSortedProducts = mRepository.getSortedProducts();
         mSearchedProducts = mRepository.getSearchedProducts();
 
 
     }
 
+    public void loadNewestProducts(int page) {
+        try {
+          productRecentPhotosSync(page);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public MutableLiveData<List<WoocommerceBody>> getNewestProducts() {
         return mNewestProducts;
     }
 
-
+    public void loadPopularProducts(int page) {
+        try {
+           productPopularitySync(page);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public MutableLiveData<List<WoocommerceBody>> getPopularProducts() {
         return mPopularProducts;
     }
-
+    public void loadRatedProducts(int page) {
+        try {
+           productRatedSync(page);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public MutableLiveData<List<WoocommerceBody>> getRatedProducts() {
         return mRatedProducts;
@@ -192,5 +211,72 @@ public class ListProductsViewModel extends AndroidViewModel {
         });
 
         return mSubCategoriesProducts;
+    }
+    public MutableLiveData<List<WoocommerceBody>> productRecentPhotosSync(int page) throws IOException {
+        mQueries.put("orderby", "date");
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries,page);
+        call.enqueue(new Callback<List<WoocommerceBody>>() {
+            @Override
+            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+                if (response.isSuccessful()) {
+                    mNewestProducts.setValue(response.body());
+                } else {
+                    mNewestProducts=null;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+
+                mNewestProducts=null;
+            }
+        });
+        return mNewestProducts;
+    }
+
+    public MutableLiveData<List<WoocommerceBody>> productPopularitySync(int page) throws IOException {
+        mQueries.put("orderby", "popularity");
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries,page);
+        call.enqueue(new Callback<List<WoocommerceBody>>() {
+            @Override
+            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+                if (response.isSuccessful()) {
+
+                   mPopularProducts.setValue(response.body());
+                } else {
+                    mPopularProducts=null;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+                Log.d("fail", t.getMessage());
+                mPopularProducts=null;
+            }
+        });
+        return mPopularProducts;
+    }
+
+    public MutableLiveData<List<WoocommerceBody>> productRatedSync(int page) throws IOException {
+        mQueries.put("orderby", "rating");
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries,page);
+        call.enqueue(new Callback<List<WoocommerceBody>>() {
+            @Override
+            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+                if (response.isSuccessful()) {
+
+                   mRatedProducts.setValue(response.body());
+                } else {
+                    mRatedProducts=null;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+                Log.d("fail", t.getMessage());
+                mRatedProducts=null;
+            }
+        });
+        return mRatedProducts;
     }
 }
