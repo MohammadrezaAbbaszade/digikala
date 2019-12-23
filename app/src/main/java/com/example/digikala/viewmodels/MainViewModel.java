@@ -19,6 +19,7 @@ public class MainViewModel extends AndroidViewModel {
     private MutableLiveData<List<WoocommerceBody>> mNewestProducts;
     private MutableLiveData<List<WoocommerceBody>> mPopularProducts;
     private MutableLiveData<List<WoocommerceBody>> mRatedProducts;
+    private MutableLiveData<List<WoocommerceBody>> mSpecialProducts;
     private List<CategoriesBody>  mFilteredCategoriesItems;
     private Repository mRepository;
 
@@ -29,7 +30,7 @@ public class MainViewModel extends AndroidViewModel {
         mNewestProducts = mRepository.getNewestProducts();
         mPopularProducts = mRepository.getPopularProducts();
         mRatedProducts = mRepository.getRatedProducts();
-
+        mSpecialProducts=mRepository.getSpecialProducts();
 
         Log.d("mainviewmodel", "mainViewModel");
     }
@@ -69,5 +70,16 @@ public class MainViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<WoocommerceBody>> getRatedProducts() {
         return mRatedProducts;
+    }
+    public void loadSpecialProducts() {
+        try {
+            mRepository.getSpecialProductsAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public MutableLiveData<List<WoocommerceBody>> getSpecialProducts() {
+        return mSpecialProducts;
     }
 }

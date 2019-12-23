@@ -20,7 +20,8 @@ public interface WoocommerceService {
 
     @GET("products")
     Call<List<WoocommerceBody>> getWooCommerceBody(@QueryMap Map<String, String> queries,@Query("page") int page);
-
+    @GET("products")
+    Call<List<WoocommerceBody>> getSpecialProducts(@QueryMap Map<String, String> queries,@Query("tags") int especialTag);
     @GET("products/categories")
     Call<List<CategoriesBody>> getCategories(@QueryMap Map<String, String> queries);
 

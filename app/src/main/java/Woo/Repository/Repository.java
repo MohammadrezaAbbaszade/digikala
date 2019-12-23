@@ -44,6 +44,7 @@ public class Repository {
     private MutableLiveData<List<WoocommerceBody>> mRatedProducts;
     private MutableLiveData<List<WoocommerceBody>> mSearchedProducts;
     private MutableLiveData<List<WoocommerceBody>> mSortedProducts;
+    private MutableLiveData<List<WoocommerceBody>> mSpecialProducts;
     private MutableLiveData<List<WoocommerceBody>> mAllProducts;
     private MutableLiveData<List<WoocommerceBody>> mRelatedProducts;
     private MutableLiveData<List<WoocommerceBody>> mSubCategoriesProducts;
@@ -66,6 +67,7 @@ public class Repository {
         mProductById = new MutableLiveData<>();
         mSortedProducts = new MutableLiveData<>();
         mOrderBody = new MutableLiveData<>();
+        mSpecialProducts=new MutableLiveData<>();
         daoSession = DBApplication.getInstance().getDaoSession();
         mShoppingBagDao = daoSession.getShoppingBagDao();
     }
@@ -76,6 +78,14 @@ public class Repository {
             repository = new Repository();
         }
         return repository;
+    }
+
+    public MutableLiveData<List<WoocommerceBody>> getSpecialProducts() {
+        return mSpecialProducts;
+    }
+
+    public void setSpecialProducts(MutableLiveData<List<WoocommerceBody>> specialProducts) {
+        mSpecialProducts = specialProducts;
     }
 
     public MutableLiveData<OrderBody> getOrderBody() {
@@ -330,7 +340,27 @@ public class Repository {
         });
         return Repository.getInstance().getRatedProducts();
     }
+    public MutableLiveData<List<WoocommerceBody>> getSpecialProductsAsync() throws IOException {
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getSpecialProducts(mQueries,496);
+        call.enqueue(new Callback<List<WoocommerceBody>>() {
+            @Override
+            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
+                if (response.isSuccessful()) {
 
+                    mSpecialProducts.setValue(response.body());
+                } else {
+                    mSpecialProducts=null;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
+                Log.d("fail", t.getMessage());
+                mSpecialProducts=null;
+            }
+        });
+        return mSpecialProducts;
+    }
 //    public MutableLiveData<List<WoocommerceBody>> searchInProducts(String searchQuery) throws IOException {
 //        Call<List<WoocommerceBody>> call = mWoocommerceApi.searchProducts(searchQuery, mQueries);
 //        call.enqueue(new Callback<List<WoocommerceBody>>() {

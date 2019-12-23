@@ -83,6 +83,7 @@ public class MainFragment extends Fragment {
         mMainViewModel.loadNewestProducts(newestPage);
         mMainViewModel.loadPopularProducts(popularPage);
         mMainViewModel.loadRatedProducts(ratedPage);
+        mMainViewModel.loadSpecialProducts();
 
     }
 
@@ -121,16 +122,24 @@ public class MainFragment extends Fragment {
         mRatedProductsTextView.setVisibility(View.GONE);
         mNewProductsTextView.setVisibility(View.GONE);
         mSliderView.setVisibility(View.GONE);
+        mMainViewModel.getSpecialProducts().observe(this, new Observer<List<WoocommerceBody>>() {
+            @Override
+            public void onChanged(List<WoocommerceBody> woocommerceBodies) {
+                if(woocommerceBodies!=null) {
+                    Log.d("tag","first");
+                    initSliderView(woocommerceBodies);
+                }
+                else {
+                    getActivity().finish();
+                }
+            }
+        });
         mMainViewModel.getPopularProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
                 if(woocommerceBodies!=null) {
                     Log.d("pop","first");
                     mPopularRecyclerProgressBar.setVisibility(View.GONE);
-                    if(mSliderAdaptor==null) {
-                        mPopularProductsForSlider=woocommerceBodies;
-                        initSliderView(mPopularProductsForSlider);
-                    }
                     updatePopularProductsAdaptor(woocommerceBodies);
                 }
                 else {
@@ -172,15 +181,10 @@ public class MainFragment extends Fragment {
     }
 
     private void initSliderView(List<WoocommerceBody> woocommerceBodyLis) {
-        if(mSliderAdaptor==null) {
             mSliderAdaptor = new SliderAdaptor(woocommerceBodyLis, getActivity());
             mSliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
             mSliderView.setSliderAdapter(mSliderAdaptor);
-        }else
-        {
-            mSliderAdaptor.setProductList(woocommerceBodyLis);
-            mSliderAdaptor.notifyDataSetChanged();
-        }
+
     }
 
     private void init(View view) {
