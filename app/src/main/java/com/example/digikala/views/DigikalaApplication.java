@@ -1,39 +1,18 @@
-package Woo.Repository;
+package com.example.digikala.views;
 
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.example.digikala.R;
-import com.example.digikala.model.productsModels.DaoMaster;
-import com.example.digikala.model.productsModels.DaoSession;
 
-public class DBApplication extends Application {
-
-
-    private static DBApplication application;
-    private DaoSession daoSession;
+public class DigikalaApplication extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
-        OpenHelper daoOpenHelper = new OpenHelper(this, "digikala.db");
-        SQLiteDatabase database = daoOpenHelper.getWritableDatabase();
-        daoSession = new DaoMaster(database).newSession();
-
-        application = this;
     }
-
-    public static DBApplication getInstance() {
-        return application;
-    }
-
-    public DaoSession getDaoSession() {
-        return daoSession;
-    }
-
     private void createNotificationChannel() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             String id = getString(R.string.channel_id);

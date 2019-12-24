@@ -238,6 +238,7 @@ public class ListProductsFragment extends Fragment {
     private void initAdaptor(final List<WoocommerceBody> woocommerceBodies) {
         mListProductsRecycler.setVisibility(View.VISIBLE);
         if (mProductAdaptor == null) {
+            Log.e("recycler","null");
             mProductAdaptor = new ProductAdaptor(woocommerceBodies);
             mListProductsRecycler.setAdapter(mProductAdaptor);
             mListProductsRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -250,14 +251,14 @@ public class ListProductsFragment extends Fragment {
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == mAllProducts.size() - 1) {
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == woocommerceBodies.size() - 1) {
                         mSecondProgressBar.setVisibility(View.VISIBLE);
                         switch (state) {
                             case 1:
-                                mListProductViewModel.loadPopularProducts(++newestPage);
+                                mListProductViewModel.loadPopularProducts(++popularPage);
                                 break;
                             case 2:
-                                mListProductViewModel.loadRatedProducts(++newestPage);
+                                mListProductViewModel.loadRatedProducts(++ratedPage);
                                 break;
                             case 3:
                                 mListProductViewModel.loadNewestProducts(++newestPage);
@@ -267,6 +268,7 @@ public class ListProductsFragment extends Fragment {
                 }
             });
         } else {
+            Log.e("recycler","Notnull");
             mProductAdaptor.setWoocommerceBodies(woocommerceBodies);
             mProductAdaptor.notifyDataSetChanged();
         }
@@ -352,9 +354,9 @@ public class ListProductsFragment extends Fragment {
                 mNameTextView.setText(woocommerceBody.getName());
             mRegularPriceTextView.setText(woocommerceBody.getPrice() + "" + "تومان");
             mBudgetTextView.setText(woocommerceBody.getRegularPrice() + "تومان");
-            if(woocommerceBody.getImages().size()>0)
-            Picasso.with(getActivity()).load(woocommerceBody.getImages().get(0).getSrc()).placeholder(R.drawable.digikala)
-                    .into(mImageView);
+            if (woocommerceBody.getImages().size() > 0)
+                Picasso.with(getActivity()).load(woocommerceBody.getImages().get(0).getSrc()).placeholder(R.drawable.digikala)
+                        .into(mImageView);
         }
 
     }
@@ -363,11 +365,13 @@ public class ListProductsFragment extends Fragment {
         private List<WoocommerceBody> mWoocommerceBodies;
 
         public ProductAdaptor(List<WoocommerceBody> woocommerceBodies) {
+            Log.e("recycler","null");
             mWoocommerceBodies = woocommerceBodies;
-            mAllProducts=woocommerceBodies;
+            mAllProducts = woocommerceBodies;
         }
 
         public void setWoocommerceBodies(List<WoocommerceBody> woocommerceBodies) {
+            Log.e("recycler","Notnull");
             mWoocommerceBodies.addAll(woocommerceBodies);
             mAllProducts.addAll(woocommerceBodies);
         }
@@ -510,6 +514,9 @@ public class ListProductsFragment extends Fragment {
                 }
             });
         } else {
+            newestPage = 1;
+            popularPage = 1;
+            ratedPage = 1;
             Log.d("n", "stateNot4");
             mListProductViewModel.loadSortedProducts(mQueries);
             mListProductViewModel.getSortedProducts().observe(this, new Observer<List<WoocommerceBody>>() {

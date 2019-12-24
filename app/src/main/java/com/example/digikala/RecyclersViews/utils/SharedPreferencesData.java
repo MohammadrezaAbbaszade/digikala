@@ -8,6 +8,7 @@ public class SharedPreferencesData {
 
     private static final String PREF_QUERY = "query";
     private static final String ID = "id";
+    public static final String PREF_LAST_PRODUCT_ID = "lastProductId";
 
     private static SharedPreferences getPproductsSharedPreferences(Context context) {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -30,15 +31,30 @@ public class SharedPreferencesData {
         editor.apply();
     }
 
-   public static void setRadioGroupId(Context context,int id)
-   {
-       SharedPreferences prefs = getPproductsSharedPreferences(context);
-       SharedPreferences.Editor editor = prefs.edit();
-       editor.putInt(ID, id);
-       editor.apply();
-   }
+    public static void setRadioGroupId(Context context, int id) {
+        SharedPreferences prefs = getPproductsSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(ID, id);
+        editor.apply();
+    }
+
     public static int getRadioGroupId(Context context) {
         SharedPreferences prefs = getPproductsSharedPreferences(context);
         return prefs.getInt(ID, 0);
     }
+
+    public static int getLastProductsId(Context context) {
+        SharedPreferences prefs = getPproductsSharedPreferences(context);
+
+        return prefs.getInt(PREF_LAST_PRODUCT_ID, 0);
+    }
+
+    public static void setLastProductId(Context context, int productId) {
+        getPproductsSharedPreferences(context)
+                .edit()
+                .putInt(PREF_LAST_PRODUCT_ID, productId)
+                .apply();
+    }
+
+
 }
