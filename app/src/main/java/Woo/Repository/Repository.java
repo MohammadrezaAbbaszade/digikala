@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 
+import com.example.digikala.model.ProductAttributeData;
 import com.example.digikala.model.ordersModels.OrderBody;
 import com.example.digikala.model.productsModels.DaoSession;
 import com.example.digikala.model.productsModels.ShoppingBag;
@@ -47,6 +48,7 @@ public class Repository {
     private MutableLiveData<List<WoocommerceBody>> mSpecialProducts;
     private MutableLiveData<List<WoocommerceBody>> mAllProducts;
     private MutableLiveData<List<WoocommerceBody>> mRelatedProducts;
+    private MutableLiveData<List<WoocommerceBody>> mFilteredSortedProducts;
     private MutableLiveData<List<WoocommerceBody>> mSubCategoriesProducts;
     private MutableLiveData<OrderBody> mOrderBody;
     private MutableLiveData<WoocommerceBody> mProductById;
@@ -68,6 +70,7 @@ public class Repository {
         mSortedProducts = new MutableLiveData<>();
         mOrderBody = new MutableLiveData<>();
         mSpecialProducts=new MutableLiveData<>();
+        mFilteredSortedProducts=new MutableLiveData<>();
         daoSession = DBApplication.getInstance().getDaoSession();
         mShoppingBagDao = daoSession.getShoppingBagDao();
     }
@@ -361,25 +364,6 @@ public class Repository {
         });
         return mSpecialProducts;
     }
-//    public MutableLiveData<List<WoocommerceBody>> searchInProducts(String searchQuery) throws IOException {
-//        Call<List<WoocommerceBody>> call = mWoocommerceApi.searchProducts(searchQuery, mQueries);
-//        call.enqueue(new Callback<List<WoocommerceBody>>() {
-//            @Override
-//            public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
-//                if (response.isSuccessful()) {
-//                    Repository.getInstance().getSearchedProducts().setValue(response.body());
-//                } else {
-//                    Repository.getInstance().setSearchedProducts(null);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<WoocommerceBody>> call, Throwable t) {
-//                Repository.getInstance().setSearchedProducts(null);
-//            }
-//        });
-//        return Repository.getInstance().getSearchedProducts();
-//    }
 
     public List<CategoriesBody> productCategoriesSync() throws IOException {
         Call<List<CategoriesBody>> call = mWoocommerceApi.getCategories(mQueries);

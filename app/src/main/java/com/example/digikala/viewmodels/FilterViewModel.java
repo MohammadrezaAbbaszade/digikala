@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.digikala.model.ProductAttributeData;
 import com.example.digikala.model.attributesmodels.AttributeBody;
 import com.example.digikala.model.attributetermsmodels.AttributeTermsBody;
 
@@ -36,6 +37,7 @@ public class FilterViewModel extends AndroidViewModel {
     private MutableLiveData<List<AttributeBody>> mAttributes;
     private MutableLiveData<List<AttributeTermsBody>> mColorsAttributeTerms;
     private MutableLiveData<List<AttributeTermsBody>> mSizessAttributeTerms;
+
     public FilterViewModel(@NonNull Application application) {
         super(application);
         mAttributes = new MutableLiveData<>();
@@ -51,22 +53,11 @@ public class FilterViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
-//public List<AttributeTermsBody> getAttributeTermsFilter()
-//{
-//    for (AttributeBody attributeBody : mAttributes.getValue()) {
-//        try {
-//            getAttributeTermsAsync(attributeBody.getId());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    return null;
-//}
 
     public MutableLiveData<List<AttributeBody>> getAttributes() {
         return mAttributes;
     }
+
     public void loadColorsAttributeTerms(int id) {
         try {
             getColorAttributeTermsAsync(id);
@@ -74,6 +65,7 @@ public class FilterViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
     public void loadSizessAttributeTerms(int id) {
         try {
             getSizesAttributeTermsAsync(id);
@@ -81,6 +73,7 @@ public class FilterViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
     public MutableLiveData<List<AttributeTermsBody>> getColorsAttributeTerms() {
         return mColorsAttributeTerms;
     }
@@ -96,59 +89,61 @@ public class FilterViewModel extends AndroidViewModel {
             public void onResponse(Call<List<AttributeBody>> call, Response<List<AttributeBody>> response) {
                 if (response.isSuccessful()) {
                     mAttributes.setValue(response.body());
-                    Log.d("attribute",response.message()+"Suc");
-                }else {
+                    Log.d("attribute", response.message() + "Suc");
+                } else {
                     mAttributes.setValue(new ArrayList<AttributeBody>());
                 }
             }
 
             @Override
             public void onFailure(Call<List<AttributeBody>> call, Throwable t) {
-                Log.d("attribute",t.getMessage()+"notS");
+                Log.d("attribute", t.getMessage() + "notS");
                 mAttributes.setValue(new ArrayList<AttributeBody>());
             }
         });
         return mAttributes;
     }
+
     public MutableLiveData<List<AttributeTermsBody>> getColorAttributeTermsAsync(int id) throws IOException {
-        Call<List<AttributeTermsBody>> call = mRepository.getWoocommerceApi().getAttributesTerms(id,mQueries);
+        Call<List<AttributeTermsBody>> call = mRepository.getWoocommerceApi().getAttributesTerms(id, mQueries);
         call.enqueue(new Callback<List<AttributeTermsBody>>() {
             @Override
             public void onResponse(Call<List<AttributeTermsBody>> call, Response<List<AttributeTermsBody>> response) {
                 if (response.isSuccessful()) {
                     mColorsAttributeTerms.postValue(response.body());
-                    Log.d("attribute",response.message());
-                }else {
+                    Log.d("attribute", response.message());
+                } else {
                     mColorsAttributeTerms.setValue(new ArrayList<AttributeTermsBody>());
-                    Log.d("attribute",response.message());
+                    Log.d("attribute", response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<AttributeTermsBody>> call, Throwable t) {
-                Log.d("attribute",t.getMessage().toString());
+                Log.d("attribute", t.getMessage().toString());
                 mColorsAttributeTerms.setValue(new ArrayList<AttributeTermsBody>());
             }
         });
         return mColorsAttributeTerms;
     }
+
     public MutableLiveData<List<AttributeTermsBody>> getSizesAttributeTermsAsync(int id) throws IOException {
-        Call<List<AttributeTermsBody>> call = mRepository.getWoocommerceApi().getAttributesTerms(id,mQueries);
+        Call<List<AttributeTermsBody>> call = mRepository.getWoocommerceApi().getAttributesTerms(id, mQueries);
         call.enqueue(new Callback<List<AttributeTermsBody>>() {
             @Override
             public void onResponse(Call<List<AttributeTermsBody>> call, Response<List<AttributeTermsBody>> response) {
                 if (response.isSuccessful()) {
                     mSizessAttributeTerms.postValue(response.body());
-                    Log.d("attribute",response.message());
-                }else {
+                    Log.d("attribute", response.message());
+                } else {
                     mSizessAttributeTerms.setValue(new ArrayList<AttributeTermsBody>());
-                    Log.d("attribute",response.message());
+                    Log.d("attribute", response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<AttributeTermsBody>> call, Throwable t) {
-                Log.d("attribute",t.getMessage().toString());
+                Log.d("attribute", t.getMessage().toString());
                 mSizessAttributeTerms.setValue(new ArrayList<AttributeTermsBody>());
             }
         });

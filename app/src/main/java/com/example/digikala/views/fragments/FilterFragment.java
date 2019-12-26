@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,10 +21,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.digikala.R;
+import com.example.digikala.model.ProductAttributeData;
 import com.example.digikala.model.attributesmodels.AttributeBody;
 import com.example.digikala.model.attributetermsmodels.AttributeTermsBody;
 import com.example.digikala.viewmodels.FilterViewModel;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import Woo.Repository.Repository;
@@ -31,6 +37,7 @@ import Woo.Repository.Repository;
  * A simple {@link Fragment} subclass.
  */
 public class FilterFragment extends Fragment {
+    private int index;
     private AttributeAdaptor mAttributeAdaptor;
     private AttributTermseAdaptor mAttributTermseAdaptor;
     private RecyclerView mAttributeRecycler;
@@ -39,7 +46,9 @@ public class FilterFragment extends Fragment {
     private List<AttributeBody> mAttributeBodies;
     private List<AttributeTermsBody> mColorsAttributeTermsBodies;
     private List<AttributeTermsBody> mSizessAttributeTermsBodies;
-
+    private Button mFilterButton;
+    private ProductAttributeData mProductAttributeData;
+    private List<Integer> mAttributesTermsIds = new ArrayList<>();
 
     public static FilterFragment newInstance() {
 
@@ -70,6 +79,18 @@ public class FilterFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_filte, container, false);
         init(view);
+        mFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("event", "eventSended");
+                if (index == 0) {
+                    EventBus.getDefault().postSticky(new ProductAttributeData(mAttributeBodies.get(0).getSlug(), mAttributesTermsIds));
+                } else {
+                    EventBus.getDefault().postSticky(new ProductAttributeData(mAttributeBodies.get(1).getSlug(), mAttributesTermsIds));
+                }
+                getActivity().finish();
+            }
+        });
         mAttributeTermsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAttributeRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mFilterViewModel.getAttributes().observe(this, new Observer<List<AttributeBody>>() {
@@ -100,6 +121,7 @@ public class FilterFragment extends Fragment {
     private void init(View view) {
         mAttributeRecycler = view.findViewById(R.id.fragment_filter_attribute_recycler_view);
         mAttributeTermsRecycler = view.findViewById(R.id.fragment_filter_attributeterms_recycler_view);
+        mFilterButton = view.findViewById(R.id.fragment_filter_btn);
     }
 
     private void initAttributeAdapter(List<AttributeBody> attributeBodies) {
@@ -123,14 +145,12 @@ public class FilterFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int index=getIndex(mAttributeBody.getId());
+                    index = getIndex(mAttributeBody.getId());
                     mTextView.setBackgroundColor(getResources().getColor(R.color.white));
                     mTextView.setTextColor(getResources().getColor(R.color.black));
-                    if(index==0)
-                    {
+                    if (index == 0) {
                         initAttributeTermsAdapter(mColorsAttributeTermsBodies);
-                    }else
-                    {
+                    } else {
                         initAttributeTermsAdapter(mSizessAttributeTermsBodies);
                     }
 
@@ -181,6 +201,18 @@ public class FilterFragment extends Fragment {
         public AttributTermseHolder(@NonNull View itemView) {
             super(itemView);
             mCheckBox = itemView.findViewById(R.id.attribute_term_item_check_box);
+            mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        mAttributesTermsIds.add(mAttributeTermsBody.getId());
+                    } else {
+                        if (mAttributesTermsIds.contains(mAttributeTermsBody.getId()))
+                            mAttributesTermsIds.remove(mAttributeTermsBody.getId());
+                    }
+
+                }
+            });
         }
 
         void bind(AttributeTermsBody attributeTermsBody) {

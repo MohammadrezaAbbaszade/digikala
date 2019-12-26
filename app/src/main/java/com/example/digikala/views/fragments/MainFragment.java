@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
@@ -192,19 +193,21 @@ public class MainFragment extends Fragment {
     }
 
     private void initWorkManager() {
-        Log.d("work", "enteredInitMethod");
+        Log.d("work2565", "enteredInitMethod");
         Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.UNMETERED)
+                .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
         PeriodicWorkRequest request =
                 new PeriodicWorkRequest.Builder(NotificationWorker.class, 15, TimeUnit.MINUTES)
                         .setConstraints(constraints)
                         .build();
-        WorkManager.getInstance(getContext()).enqueue(request);
+        WorkManager.getInstance(getContext()).enqueueUniquePeriodicWork("uniqWork",
+                ExistingPeriodicWorkPolicy.REPLACE
+                ,request);
         WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(request.getId()).observe(this, new Observer<WorkInfo>() {
             @Override
             public void onChanged(WorkInfo workInfo) {
-                Log.d("work", workInfo.getState().name());
+                Log.d("work2565", workInfo.getState().name());
             }
         });
     }

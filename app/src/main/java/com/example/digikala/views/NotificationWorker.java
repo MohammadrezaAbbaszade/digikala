@@ -29,7 +29,6 @@ import Woo.Repository.Repository;
 import retrofit2.Call;
 
 public class NotificationWorker extends Worker {
-    private Context mContext;
     public static final int REQUEST_CODE_NOTIFICATION = 1;
     public static final String FLICKR_REST_PATH = "https://woocommerce.maktabsharif.ir/wp-json/wc/v3/";
     public static final String CONSUMER_KEY = "ck_9fc06c2a7292f136b852aceda63740458feb20e1";
@@ -50,33 +49,32 @@ public class NotificationWorker extends Worker {
 
     public NotificationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
-        mContext=context;
     }
 
     @NonNull
     @Override
     public Result doWork() {
 
-        int lastId = SharedPreferencesData.getLastProductsId(mContext);
+        Log.d("work2565", "enteredReq");
+        int lastId = SharedPreferencesData.getLastProductsId(getApplicationContext());
         try {
-            Log.d("work", "enteredReq");
             mNewestProducts = checkNewestProducts();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("work2565", e.getMessage());
         }
         if (mNewestProducts.get(0).getId() == lastId) {
-            Log.d("work", "enteredFirstIf");
+            Log.d("work2565", "enteredFirstIf");
             SendNotification();
         } else {
-            Log.d("work", "enteredElse");
-            SharedPreferencesData.setLastProductId(mContext, mNewestProducts.get(0).getId());
+            Log.d("work2565", "enteredElse");
+            SharedPreferencesData.setLastProductId(getApplicationContext(), mNewestProducts.get(0).getId());
         }
         return Result.success();
     }
 
     public void SendNotification(){
         {
-            Intent activityIntent = ProductDetailActivity.newIntent(mContext, mNewestProducts.get(0).getId(),
+            Intent activityIntent = ProductDetailActivity.newIntent(getApplicationContext(), mNewestProducts.get(0).getId(),
                     mNewestProducts.get(0).getName());
             PendingIntent pi = PendingIntent.getActivity(
                     getApplicationContext(),
@@ -93,7 +91,7 @@ public class NotificationWorker extends Worker {
                     .setAutoCancel(true)
                     .build();
 
-            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(mContext);
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getApplicationContext());
             managerCompat.notify(NOTOFICATION_ID, notification);
         }
 

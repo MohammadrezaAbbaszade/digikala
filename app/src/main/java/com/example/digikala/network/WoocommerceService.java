@@ -44,4 +44,9 @@ public interface WoocommerceService {
 
     @GET("products/attributes/{id}/terms")
     Call<List<AttributeTermsBody>> getAttributesTerms(@Path("id") int attrId,@QueryMap Map<String, String> queries);
+    @GET("products")
+    Call<List<WoocommerceBody>> getsortedAndFilteredProductsList
+            (@QueryMap Map<String, String> queries,@Query("order") String order ,
+             @Query("orderby") String orderBy , @Query("page") int page
+                    , @Query("search") String search , @Query("attribute") String attribute , @Query("attribute_term") List<Integer> attributeTerm);
 }
