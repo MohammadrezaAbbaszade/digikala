@@ -62,7 +62,7 @@ public class NotificationWorker extends Worker {
         } catch (IOException e) {
             Log.e("work2565", e.getMessage());
         }
-        if (mNewestProducts.get(0).getId() == lastId) {
+        if (mNewestProducts.get(0).getId() != lastId) {
             Log.d("work2565", "enteredFirstIf");
             SendNotification();
         } else {

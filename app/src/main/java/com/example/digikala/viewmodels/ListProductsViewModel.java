@@ -126,10 +126,10 @@ public class ListProductsViewModel extends AndroidViewModel {
         return mSortedProducts;
     }
 
-    public void loadSearchedProducts(Map<String, String> queries) {
+    public void loadSearchedProducts(Map<String, String> queries,int page) {
         mSearchedProducts = new MutableLiveData<>();
         try {
-            searchInProducts(queries);
+            searchInProducts(queries,page);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -164,8 +164,8 @@ public class ListProductsViewModel extends AndroidViewModel {
         return mSortedProducts;
     }
 
-    public MutableLiveData<List<WoocommerceBody>> searchInProducts(Map<String, String> queries) throws IOException {
-        Call<List<WoocommerceBody>> call = Repository.getInstance().getWoocommerceApi().searchProducts(queries);
+    public MutableLiveData<List<WoocommerceBody>> searchInProducts(Map<String, String> queries,int page) throws IOException {
+        Call<List<WoocommerceBody>> call = Repository.getInstance().getWoocommerceApi().searchProducts(queries,page);
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
@@ -308,7 +308,7 @@ public class ListProductsViewModel extends AndroidViewModel {
                     Log.e("eventaa", response.body().size()+"");
                     mFilteredAndSortedProducts.setValue(response.body());
                 } else {
-                    Log.e("eventaa", response.body().size()+"second");
+                    Log.e("eventaa", response.message()+"second");
                     mFilteredAndSortedProducts = null;
                 }
             }

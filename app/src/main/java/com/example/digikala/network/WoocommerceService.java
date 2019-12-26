@@ -34,7 +34,7 @@ public interface WoocommerceService {
     Call<List<WoocommerceBody>> getSortedBaseProducts(@QueryMap Map<String, String> queries);
 
     @GET("products")
-    Call<List<WoocommerceBody>> searchProducts(@QueryMap Map<String, String> queries);
+    Call<List<WoocommerceBody>> searchProducts(@QueryMap Map<String, String> queries, @Query("page") int page);
 
     @POST("orders")
      Call<OrderBody> setOrder(@QueryMap Map<String, String> queries,@Body OrderBody orderBody);

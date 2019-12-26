@@ -10,6 +10,10 @@ public class ProductAttributeData {
     private String  attribute;
     private List<Integer> attributeTerm;
 
+    public ProductAttributeData() {
+
+    }
+
     public ProductAttributeData(String attribute, List<Integer> attributeTerm) {
         this.attribute = attribute;
         this.attributeTerm = attributeTerm;
