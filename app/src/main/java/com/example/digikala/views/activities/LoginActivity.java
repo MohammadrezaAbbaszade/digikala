@@ -14,18 +14,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.digikala.R;
+import com.example.digikala.views.fragments.LoginFragment;
 import com.example.digikala.views.fragments.SignUpFragment;
+
 
 import Woo.Repository.Repository;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements LoginFragment.changeFragment {
+    private static final String STATE = "state";
     private ImageView mArrowButton;
     private TextView mToolbarTextView;
     private ImageButton mToolbarBag;
     private TextView mCartBadge;
     private ImageButton mSearchImageButton;
-    public static Intent newIntent(Context context) {
+    private FragmentManager fm;
+    private int state;
+
+    public static Intent newIntent(Context context,int state) {
         Intent intent = new Intent(context, LoginActivity.class);
+        intent.putExtra(STATE,state);
         return intent;
     }
     @Override
@@ -45,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         mSearchImageButton = findViewById(R.id.login_toolbar_search_view);
         mCartBadge=findViewById(R.id.login_toolbar_cart_badge);
         mCartBadge.setText(Repository.getInstance().getBagsIds().size() + "");
+        state=getIntent().getIntExtra(STATE,0);
         mToolbarBag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,13 +73,21 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
-        FragmentManager fm=getSupportFragmentManager();
+        fm=getSupportFragmentManager();
         Fragment fragment=fm.findFragmentById(R.id.login_activity_container);
         if(fragment==null)
         {
-            fm.beginTransaction().replace(R.id.login_activity_container, SignUpFragment.newInstance())
+            fm.beginTransaction().replace(R.id.login_activity_container, LoginFragment.newInstance())
                     .commit();
         }
 
+    }
+
+    @Override
+    public void changeFragment(boolean check) {
+        if(check==true) {
+            fm.beginTransaction().replace(R.id.login_activity_container, SignUpFragment.newInstance())
+                    .commit();
+        }
     }
 }

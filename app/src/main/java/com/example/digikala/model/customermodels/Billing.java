@@ -1,4 +1,4 @@
-package com.example.digikala.model.ordersModels;
+package com.example.digikala.model.customermodels;
 
 
 import com.google.gson.annotations.SerializedName;

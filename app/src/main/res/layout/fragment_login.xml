@@ -3,34 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.fragments.SignUpFragment">
+    tools:context=".views.fragments.LoginFragment">
 
     <!-- TODO: Update blank fragment layout -->
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_gravity="top|center"
+        android:layout_marginTop="10dp"
 
         android:gravity="center"
         android:orientation="vertical">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/fragment_login_first_name_edit_text"
-            android:layout_width="350dp"
-            android:layout_height="50dp"
-
-            android:backgroundTint="#CA8BD6"
-            android:drawableRight="@drawable/ic_user_info"
-            android:hint="نام" />
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/fragment_last_name_edit_text"
-            android:layout_width="350dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="25dp"
-            android:backgroundTint="#CA8BD6"
-            android:drawableRight="@drawable/ic_user_info"
-            android:hint="نام خانوادگی" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/fragment_login_email_edit_text"
@@ -38,17 +21,8 @@
             android:layout_height="50dp"
             android:layout_marginTop="25dp"
             android:backgroundTint="#CA8BD6"
-            android:drawableRight="@drawable/ic_message"
-            android:hint="ایمیل" />
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/fragment_login_phone_number_edit_text"
-            android:layout_width="350dp"
-            android:layout_height="50dp"
-            android:backgroundTint="#CA8BD6"
-            android:layout_marginTop="25dp"
             android:drawableRight="@drawable/ic_phone_number"
-            android:hint="شماره موبایل" />
+            android:hint="شماره موبایل یا ایمیل" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/fragment_login_password_edit_text"
@@ -59,35 +33,30 @@
             android:drawableRight="@drawable/ic_lock"
             android:hint="کلمه عبور" />
     </LinearLayout>
-<FrameLayout
-    android:id="@+id/fragment_login_register_button"
-    android:layout_gravity="bottom"
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:background="@color/green">
+
     <TextView
         android:id="@+id/fragment_login_register_text_view"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="70dp"
         android:text="ثبت نام در دیجی کالا"
-        android:textColor="@color/white"
-        android:textSize="20sp"/>
-    <ProgressBar
-        android:id="@+id/fragment_login_progress_bar"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-      android:indeterminateTint="@color/white"
-        />
+        android:textColor="@color/green"
+        android:textSize="20sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/fragment_login_button"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="bottom"
+        android:backgroundTint="#084D83"
+        android:text="ورود به دیجی کالا"
+        android:textSize="20sp" />
     <ImageView
-        android:id="@+id/fragment_login_image_view"
+        android:layout_marginBottom="53dp"
         android:layout_gravity="center"
-        android:layout_marginRight="95dp"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_single_arrow"/>
-</FrameLayout>
+        android:src="@drawable/shape3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </FrameLayout>

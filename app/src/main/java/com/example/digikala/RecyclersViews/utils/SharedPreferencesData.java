@@ -7,6 +7,8 @@ public class SharedPreferencesData {
     private static final String PREF_NAME = "digikala";
 
     private static final String PREF_QUERY = "query";
+    private static final String PREF_CHECK_LOGIN = "checklogin";
+    private static final String PREF_EMAIL = "email";
     private static final String ID = "id";
     public static final String PREF_LAST_PRODUCT_ID = "lastProductId";
 
@@ -30,7 +32,21 @@ public class SharedPreferencesData {
         editor.putString(PREF_QUERY, query);
         editor.apply();
     }
+    public static String getCustomerEmail(Context context) {
+        SharedPreferences prefs = getPproductsSharedPreferences(context);
 
+        if (prefs == null)
+            return null;
+
+        return prefs.getString(PREF_EMAIL, null);
+    }
+
+    public static void setCustomerEmail(Context context, String query) {
+        SharedPreferences prefs = getPproductsSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PREF_EMAIL, query);
+        editor.apply();
+    }
     public static void setRadioGroupId(Context context, int id) {
         SharedPreferences prefs = getPproductsSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
@@ -55,6 +71,16 @@ public class SharedPreferencesData {
                 .putInt(PREF_LAST_PRODUCT_ID, productId)
                 .apply();
     }
+    public static boolean checkCustomerLogedIn(Context context) {
 
+        SharedPreferences prefs = getPproductsSharedPreferences(context);
+        return prefs.getBoolean(PREF_CHECK_LOGIN, false);
+    }
+    public static void setCustomerLogedIn(Context context, boolean check) {
+        SharedPreferences prefs = getPproductsSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_CHECK_LOGIN, check);
+        editor.apply();
+    }
 
 }

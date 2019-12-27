@@ -20,11 +20,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.digikala.R;
-import com.example.digikala.model.ordersModels.Billing;
+import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
+import com.example.digikala.model.customermodels.Billing;
+import com.example.digikala.model.customermodels.CustomerBody;
+import com.example.digikala.model.customermodels.Shipping;
 import com.example.digikala.model.ordersModels.OrderBody;
-import com.example.digikala.model.ordersModels.Shipping;
 import com.example.digikala.viewmodels.LoginViewModel;
+import com.example.digikala.views.activities.MainActivity;
 import com.google.gson.Gson;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,27 +75,8 @@ public class SignUpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         init(view);
-
-        mLoginViewModel.getOrderBodyies().observe(this, new Observer<OrderBody>() {
-            @Override
-            public void onChanged(OrderBody orderBody) {
-                if (orderBody.getStatus().equals("400")) {
-                    mProgressBar.setVisibility(View.GONE);
-                    mRegisterTextView.setVisibility(View.VISIBLE);
-                    mSingleArrowImageView.setVisibility(View.VISIBLE);
-                    Toast.makeText(getActivity(), "شما قبلا ثبت نام کرده اید!", Toast.LENGTH_SHORT).show();
-
-                }else {
-                    mProgressBar.setVisibility(View.GONE);
-                    mRegisterTextView.setVisibility(View.VISIBLE);
-                    mSingleArrowImageView.setVisibility(View.VISIBLE);
-                    mRegisterButton.setEnabled(false);
-                    Toast.makeText(getActivity(), "خرید شما با موفقیت ثبت شد!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,15 +85,23 @@ public class SignUpFragment extends Fragment {
                 phoneNumber = mPhoneNumberEditText.getText().toString().trim();
                 email = mEmailEditText.getText().toString().trim();
                 password = mPasswordEditText.getText().toString().trim();
-                if (!firstName.isEmpty() && !lastName.isEmpty() && !phoneNumber.isEmpty()
-                        && !email.isEmpty() && !password.isEmpty()) {
+                if (!EMailValidation(email)){
+                    Toast.makeText(getActivity() , getString(R.string.wrong_email) , Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (password.length() < 6) {
+                    Toast.makeText(getActivity(), getString(R.string.wrong_password), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (email.isEmpty() && lastName.isEmpty() && password.isEmpty() && firstName.isEmpty()
+                        && lastName.isEmpty()){
+                    Toast.makeText(getActivity(), getString(R.string.fill_all_field), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                     mRegisterTextView.setVisibility(View.GONE);
                     mSingleArrowImageView.setVisibility(View.GONE);
                     mProgressBar.setVisibility(View.VISIBLE);
                     initOrderBodyForServer();
-                }else {
-                    Toast.makeText(getActivity(),"لطفا تمامی فیلدهارا پر کنید!",Toast.LENGTH_SHORT).show();
-                }
             }
         });
 
@@ -116,30 +111,52 @@ public class SignUpFragment extends Fragment {
 
     private void init(View view) {
         mEmailEditText = view.findViewById(R.id.fragment_login_email_edit_text);
-        mFirstNameEditText = view.findViewById(R.id.fragment_login_first_name_edit_text);
-        mLastNameEditText = view.findViewById(R.id.fragment_last_name_edit_text);
-        mPhoneNumberEditText = view.findViewById(R.id.fragment_login_phone_number_edit_text);
+        mFirstNameEditText = view.findViewById(R.id.fragment_sign_up_first_name_edit_text);
+        mLastNameEditText = view.findViewById(R.id.fragment_sign_up_last_name_edit_text);
+        mPhoneNumberEditText = view.findViewById(R.id.fragment_sign_up_phone_number_edit_text);
         mPasswordEditText = view.findViewById(R.id.fragment_login_password_edit_text);
-        mRegisterButton = view.findViewById(R.id.fragment_login_register_button);
-        mProgressBar = view.findViewById(R.id.fragment_login_progress_bar);
+        mRegisterButton = view.findViewById(R.id.fragment_sign_up_register_button);
+        mProgressBar = view.findViewById(R.id.fragment_sign_up_progress_bar);
         mRegisterTextView = view.findViewById(R.id.fragment_login_register_text_view);
-        mSingleArrowImageView = view.findViewById(R.id.fragment_login_image_view);
+        mSingleArrowImageView = view.findViewById(R.id.fragment_sign_up_image_view);
     }
 
     private void initOrderBodyForServer() {
-        Gson gson=new Gson();
-        Shipping shipping = new Shipping();
-        Billing billing = new Billing();
-        OrderBody orderBody = new OrderBody();
-        shipping.setFirstName(firstName);
-        shipping.setLastName(lastName);
-        billing.setFirstName(firstName);
-        billing.setLastName(lastName);
-        billing.setEmail(email);
-        orderBody.setBilling(billing);
-        orderBody.setShipping(shipping);
-        Log.d("gson",gson.toJson(orderBody));
-        mLoginViewModel.setOrder(orderBody);
+        CustomerBody customerBody = new CustomerBody();
+        customerBody.setEmail(email);
+        customerBody.setUsername(firstName);
+        customerBody.setFirstName(firstName);
+        customerBody.setLastName(lastName);
+        customerBody.setBilling(new Billing(firstName,lastName,email));
+        customerBody.setShipping(new Shipping(firstName , lastName));
+        mLoginViewModel.registerCustomer(customerBody).observe(this, new Observer<CustomerBody>() {
+            @Override
+            public void onChanged(CustomerBody customerBody) {
+                if (customerBody.getUsername()!=null){
+                    SharedPreferencesData.setCustomerEmail(getContext(), customerBody.getEmail());
+                    SharedPreferencesData.setCustomerLogedIn(getContext(), true);
+                    Toast.makeText(getActivity() , getString(R.string.register_successfull)  ,
+                            Toast.LENGTH_SHORT).show();
+                    startActivity(MainActivity.newIntent(getActivity(),1));
+                    getActivity().finish();
+                }else if (customerBody.getError() !=null){
+                    Toast.makeText(getActivity() , getString(R.string.problem_occur) + customerBody
+                            .getError().getMessage() , Toast.LENGTH_SHORT).show();
+                }else if (customerBody.getCode()==400){
+                    Toast.makeText(getActivity() , getString(R.string.repeat_email) ,
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
-
+    public boolean EMailValidation(String emailstring) {
+        if (null == emailstring || emailstring.length() == 0) {
+            return false;
+        }
+        Pattern emailPattern = Pattern
+                .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+        Matcher emailMatcher = emailPattern.matcher(emailstring);
+        return emailMatcher.matches();
+    }
 }

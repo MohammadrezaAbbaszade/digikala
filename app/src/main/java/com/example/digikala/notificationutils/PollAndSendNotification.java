@@ -1,4 +1,4 @@
-package com.example.digikala.views;
+package com.example.digikala.notificationutils;
 
 import android.app.Notification;
 import android.app.PendingIntent;

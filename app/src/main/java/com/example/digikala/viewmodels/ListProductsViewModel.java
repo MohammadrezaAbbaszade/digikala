@@ -65,7 +65,7 @@ public class ListProductsViewModel extends AndroidViewModel {
     }
 
     public void loadFilteredAndSortedProducts(ProductAttributeData event) {
-        mFilteredAndSortedProducts=new MutableLiveData<>();
+        mFilteredAndSortedProducts = new MutableLiveData<>();
         try {
             getFilteredAndSortedProducts(event);
         } catch (IOException e) {
@@ -126,10 +126,10 @@ public class ListProductsViewModel extends AndroidViewModel {
         return mSortedProducts;
     }
 
-    public void loadSearchedProducts(Map<String, String> queries,int page) {
+    public void loadSearchedProducts(Map<String, String> queries, int page) {
         mSearchedProducts = new MutableLiveData<>();
         try {
-            searchInProducts(queries,page);
+            searchInProducts(queries, page);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -164,8 +164,8 @@ public class ListProductsViewModel extends AndroidViewModel {
         return mSortedProducts;
     }
 
-    public MutableLiveData<List<WoocommerceBody>> searchInProducts(Map<String, String> queries,int page) throws IOException {
-        Call<List<WoocommerceBody>> call = Repository.getInstance().getWoocommerceApi().searchProducts(queries,page);
+    public MutableLiveData<List<WoocommerceBody>> searchInProducts(Map<String, String> queries, int page) throws IOException {
+        Call<List<WoocommerceBody>> call = Repository.getInstance().getWoocommerceApi().searchProducts(queries, page);
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
@@ -188,10 +188,10 @@ public class ListProductsViewModel extends AndroidViewModel {
         return mSearchedProducts;
     }
 
-    public void loadSubCategoriesProducts(String categoryId,int page) {
+    public void loadSubCategoriesProducts(String categoryId, int page) {
         mSubCategoriesProducts = new MutableLiveData<>();
         try {
-            getSubCategoriesProducts(categoryId,page);
+            getSubCategoriesProducts(categoryId, page);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -201,7 +201,7 @@ public class ListProductsViewModel extends AndroidViewModel {
         return mSubCategoriesProducts;
     }
 
-    public MutableLiveData<List<WoocommerceBody>> getSubCategoriesProducts(String categoryId,int page) throws IOException {
+    public MutableLiveData<List<WoocommerceBody>> getSubCategoriesProducts(String categoryId, int page) throws IOException {
         mQueries.put("category", categoryId);
         Call<List<WoocommerceBody>> call = mWoocommerceApi.getWooCommerceBody(mQueries, page);
 
@@ -210,7 +210,7 @@ public class ListProductsViewModel extends AndroidViewModel {
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
                 if (response.isSuccessful()) {
                     mSubCategoriesProducts.setValue(response.body());
-                    Log.d("categoryreqAga", response.body().size()+"succed");
+                    Log.d("categoryreqAga", response.body().size() + "succed");
                 } else {
                     Log.d("categoryreqAga", String.valueOf(response.body().size()));
                     mSubCategoriesProducts.setValue(new ArrayList<WoocommerceBody>());
@@ -297,18 +297,37 @@ public class ListProductsViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<List<WoocommerceBody>> getFilteredAndSortedProducts(ProductAttributeData productAttributeData) throws IOException {
-
-        Call<List<WoocommerceBody>> call = mWoocommerceApi.getsortedAndFilteredProductsList(mQueries, productAttributeData.getOrder()
-                , productAttributeData.getOrderby(), productAttributeData.getPage(), productAttributeData.getSearch()
-                , productAttributeData.getAttribute(), productAttributeData.getAttributeTerm());
+        if (productAttributeData.getOrderby() == null || productAttributeData.getOrderby().equals("")) {
+            Log.e("eventaa", "firstIfLoad" + "");
+            mQueries.put("order", "desc");
+            mQueries.put("search", productAttributeData.getSearch());
+            mQueries.put("attribute", productAttributeData.getAttribute());
+            mQueries.put("attribute_term", productAttributeData.getAttributeTerm().toString());
+        }else
+        {
+            Log.e("eventaa", "secondIfLoad" + "");
+            mQueries.put("orderby",productAttributeData.getOrderby());
+            Log.e("eventaaa", productAttributeData.getOrderby() + "");
+            mQueries.put("order", productAttributeData.getOrder());
+            Log.e("eventaaa", productAttributeData.getOrder() + "");
+//            mQueries.put("search", productAttributeData.getSearch());
+//            Log.e("eventaaa",  productAttributeData.getSearch() + "");
+            if(productAttributeData.getAttribute()!=null&&productAttributeData.getAttributeTerm()!=null) {
+                mQueries.put("attribute", productAttributeData.getAttribute());
+                Log.e("eventaaa", productAttributeData.getAttribute() + "");
+                mQueries.put("attribute_term", productAttributeData.getAttributeTerm().toString());
+                Log.e("eventaaa", productAttributeData.getAttributeTerm().toString() + "");
+            }
+        }
+        Call<List<WoocommerceBody>> call = mWoocommerceApi.getsortedAndFilteredProductsList(mQueries,productAttributeData.getPage());
         call.enqueue(new Callback<List<WoocommerceBody>>() {
             @Override
             public void onResponse(Call<List<WoocommerceBody>> call, Response<List<WoocommerceBody>> response) {
                 if (response.isSuccessful()) {
-                    Log.e("eventaa", response.body().size()+"");
+                    Log.e("eventaa", response.body().size() + "");
                     mFilteredAndSortedProducts.setValue(response.body());
                 } else {
-                    Log.e("eventaa", response.message()+"second");
+                    Log.e("eventaa", response.message().toString() + "second");
                     mFilteredAndSortedProducts = null;
                 }
             }

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 
 import com.example.digikala.model.ProductAttributeData;
+import com.example.digikala.model.customermodels.CustomerBody;
 import com.example.digikala.model.ordersModels.OrderBody;
 import com.example.digikala.model.productsModels.DaoSession;
 import com.example.digikala.model.productsModels.ShoppingBag;
@@ -49,6 +50,8 @@ public class Repository {
     private MutableLiveData<List<WoocommerceBody>> mAllProducts;
     private MutableLiveData<List<WoocommerceBody>> mRelatedProducts;
     private MutableLiveData<List<WoocommerceBody>> mFilteredSortedProducts;
+    private MutableLiveData<List<CustomerBody>> mCustomerResult;
+    private MutableLiveData<CustomerBody> mRegisterCustomerResult;
     private MutableLiveData<List<WoocommerceBody>> mSubCategoriesProducts;
     private MutableLiveData<OrderBody> mOrderBody;
     private MutableLiveData<WoocommerceBody> mProductById;
@@ -153,6 +156,14 @@ public class Repository {
 
     public void setAllProducts(MutableLiveData<List<WoocommerceBody>> allProducts) {
         mAllProducts = allProducts;
+    }
+
+    public MutableLiveData<List<CustomerBody>> getCustomerResult() {
+        return mCustomerResult;
+    }
+
+    public void setCustomerResult(MutableLiveData<List<CustomerBody>> customerResult) {
+        mCustomerResult = customerResult;
     }
 
     public MutableLiveData<List<WoocommerceBody>> getRelatedProducts() {
@@ -440,5 +451,48 @@ public class Repository {
         });
         return mOrderBody;
     }
+    public MutableLiveData<List<CustomerBody>> getCustomer(String email){
+        mCustomerResult = new MutableLiveData<>();
+        Call<List<CustomerBody>> call = mWoocommerceApi.getCustomer(mQueries,email);
+        call.enqueue(new Callback<List<CustomerBody>>() {
+            @Override
+            public void onResponse(Call<List<CustomerBody>> call, Response<List<CustomerBody>> response) {
+                if (response.isSuccessful()){
+                    mCustomerResult.setValue(response.body());
+                }else if (response.code()==400){
+                    List<CustomerBody> customerModelList = new ArrayList<>();
+                    customerModelList.add(new CustomerBody(400));
+                    mCustomerResult.setValue(customerModelList);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<List<CustomerBody>> call, Throwable t) {
+                List<CustomerBody> customerModelList = new ArrayList<>();
+                customerModelList.add(new CustomerBody(t));
+                mCustomerResult.setValue(customerModelList);
+            }
+        });
+        return mCustomerResult;
+    }
+    public MutableLiveData<CustomerBody> registerCustomer (CustomerBody customerBody){
+        mRegisterCustomerResult = new MutableLiveData<>();
+        Call<CustomerBody> call = mWoocommerceApi.registerCustomer(mQueries,customerBody);
+        call.enqueue(new Callback<CustomerBody>() {
+            @Override
+            public void onResponse(Call<CustomerBody> call, Response<CustomerBody> response) {
+                if (response.isSuccessful()){
+                    mRegisterCustomerResult.setValue(response.body());
+                }else if (response.code()==400){
+                    mRegisterCustomerResult.setValue(new CustomerBody(400));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CustomerBody> call, Throwable t) {
+                mRegisterCustomerResult.setValue(new CustomerBody(t));
+            }
+        });
+        return mRegisterCustomerResult;
+    }
 }

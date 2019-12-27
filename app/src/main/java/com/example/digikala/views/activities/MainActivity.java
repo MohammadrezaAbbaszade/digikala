@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.digikala.R;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
     private ImageButton mImageButton;
     private ImageButton mSearchImageButton;
     private ImageButton mToolbarBag;
+    private ImageView mLoginHeaderImageView;
     int state;
     List<WoocommerceBody> woocommerceBodies;
     FragmentManager fm = getSupportFragmentManager();
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
         mcart_badge = findViewById(R.id.cart_badge);
         mToolbarBag = findViewById(R.id.toolbar_shop);
         mSearchImageButton = findViewById(R.id.search_view_button);
+        mLoginHeaderImageView = findViewById(R.id.main_toolbal_login_image_view);
 //        setSupportActionBar(mToolbar);
 
         initBagTextview();
@@ -100,8 +103,15 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
                 }
             }
         });
-
-//        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+        View header = mNavigationView.getHeaderView(0);
+        mLoginHeaderImageView = header.findViewById(R.id.main_toolbal_login_image_view);
+        mLoginHeaderImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = LoginActivity.newIntent(MainActivity.this,1);
+                startActivity(intent);
+            }
+        });
         if (state == 1) {
             fm.beginTransaction().replace(R.id.fragment_container, MainFragment.newInstance())
                     .commit();

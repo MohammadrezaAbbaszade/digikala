@@ -89,7 +89,7 @@ private Repository mRepository;
         mSubmitProductsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= LoginActivity.newIntent(getActivity());
+                Intent intent= LoginActivity.newIntent(getActivity(),1);
                 startActivity(intent);
             }
         });

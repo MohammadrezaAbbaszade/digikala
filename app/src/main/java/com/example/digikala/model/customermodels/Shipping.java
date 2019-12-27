@@ -1,19 +1,16 @@
-package com.example.digikala.model.ordersModels;
+package com.example.digikala.model.customermodels;
 
 
 import com.google.gson.annotations.SerializedName;
 
 
-public class Billing{
+public class Shipping{
 
 	@SerializedName("country")
 	private String country;
 
 	@SerializedName("city")
 	private String city;
-
-	@SerializedName("phone")
-	private String phone;
 
 	@SerializedName("address_1")
 	private String address1;
@@ -36,13 +33,9 @@ public class Billing{
 	@SerializedName("first_name")
 	private String firstName;
 
-	@SerializedName("email")
-	private String email;
-
-	public Billing(String lastName, String firstName, String email) {
+	public Shipping(String lastName, String firstName) {
 		this.lastName = lastName;
 		this.firstName = firstName;
-		this.email = email;
 	}
 
 	public void setCountry(String country){
@@ -59,14 +52,6 @@ public class Billing{
 
 	public String getCity(){
 		return city;
-	}
-
-	public void setPhone(String phone){
-		this.phone = phone;
-	}
-
-	public String getPhone(){
-		return phone;
 	}
 
 	public void setAddress1(String address1){
@@ -125,21 +110,12 @@ public class Billing{
 		return firstName;
 	}
 
-	public void setEmail(String email){
-		this.email = email;
-	}
-
-	public String getEmail(){
-		return email;
-	}
-
 	@Override
  	public String toString(){
 		return 
-			"Billing{" + 
+			"Shipping{" + 
 			"country = '" + country + '\'' + 
 			",city = '" + city + '\'' + 
-			",phone = '" + phone + '\'' + 
 			",address_1 = '" + address1 + '\'' + 
 			",address_2 = '" + address2 + '\'' + 
 			",postcode = '" + postcode + '\'' + 
@@ -147,7 +123,6 @@ public class Billing{
 			",company = '" + company + '\'' + 
 			",state = '" + state + '\'' + 
 			",first_name = '" + firstName + '\'' + 
-			",email = '" + email + '\'' + 
 			"}";
 		}
 }

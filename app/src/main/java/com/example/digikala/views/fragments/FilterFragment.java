@@ -85,6 +85,7 @@ public class FilterFragment extends Fragment {
                 Log.e("event", "eventSended");
                 if (index == 0) {
                     EventBus.getDefault().postSticky(new ProductAttributeData(mAttributeBodies.get(0).getSlug(), mAttributesTermsIds));
+                    Log.e("event", mAttributeBodies.get(0).getSlug()+""+mAttributesTermsIds.toString());
                 } else {
                     EventBus.getDefault().postSticky(new ProductAttributeData(mAttributeBodies.get(1).getSlug(), mAttributesTermsIds));
                 }

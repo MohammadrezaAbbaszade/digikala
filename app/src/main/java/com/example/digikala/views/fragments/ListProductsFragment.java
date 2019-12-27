@@ -89,6 +89,8 @@ public class ListProductsFragment extends Fragment {
         mListProductsRecycler.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
         mTextView.setVisibility(View.GONE);
+
+
         switch (SharedPreferencesData.getRadioGroupId(getActivity())) {
             case 1:
                 event.setOrderby("date");
@@ -122,16 +124,26 @@ public class ListProductsFragment extends Fragment {
                 break;
         }
         mProductAttributeData = event;
-        if(state==4)
+        Log.e("eventaa", mProductAttributeData.getOrderby()+""+ mProductAttributeData.getOrder() + "");
+        if(state==4&&SharedPreferencesData.getRadioGroupId(getActivity())==0)
         {
-            event.setSearch( SharedPreferencesData.getQuery(getActivity()));
+            event.setOrder("desc");
+            event.setPage(1);
+            event.setSearch(SharedPreferencesData.getQuery(getActivity()));
             Log.e("eventaa", "new model" + mProductAttributeData.getSearch() + "");
             mListProductViewModel.loadFilteredAndSortedProducts(event);
             initSortedAndFIlteredObserver();
         }else {
-            Log.e("eventaa", "new model" + mProductAttributeData.getOrder() + "");
-            mListProductViewModel.loadFilteredAndSortedProducts(event);
-            initSortedAndFIlteredObserver();
+            if (state == 4) {
+                event.setSearch(SharedPreferencesData.getQuery(getActivity()));
+                Log.e("eventaa", "new model" + mProductAttributeData.getSearch() + "");
+                mListProductViewModel.loadFilteredAndSortedProducts(event);
+                initSortedAndFIlteredObserver();
+            } else {
+                Log.e("eventaa", "new model" + mProductAttributeData.getOrder() + "");
+                mListProductViewModel.loadFilteredAndSortedProducts(event);
+                initSortedAndFIlteredObserver();
+            }
         }
     }
 
@@ -527,7 +539,9 @@ public class ListProductsFragment extends Fragment {
                 } else if (state == 3) {
                     mSubSortTextView.setText(R.string.check_box_newest);
                     SharedPreferencesData.setRadioGroupId(getActivity(), 1);
-                } else {
+                } else if (state == 4) {
+                    SharedPreferencesData.setRadioGroupId(getActivity(), 4);
+                }else {
                     mSubSortTextView.setText(R.string.check_box_selles);
                     SharedPreferencesData.setRadioGroupId(getActivity(), 0);
                 }

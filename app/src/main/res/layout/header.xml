@@ -5,13 +5,15 @@
     android:id="@+id/header_of_navigation"
     android:layout_height="120dp">
   <ImageView
+      android:id="@+id/main_toolbal_login_image_view"
       android:layout_marginTop="70dp"
-      android:layout_marginRight="15dp"
       android:layout_gravity="bottom|right"
-      android:src="@drawable/ic_user"
-      android:layout_width="30dp"
+      android:src="@drawable/login_register_label"
+      android:layout_width="150dp"
       android:layout_height="50dp"/>
   <TextView
+      android:id="@+id/main_toolbal_number_text_view"
+      android:visibility="gone"
       android:layout_gravity="bottom|center"
       android:layout_marginBottom="15dp"
       android:layout_marginLeft="50dp"
@@ -20,5 +22,13 @@
       android:text="09396126208"
       android:textColor="@color/white"
       />
-
+  <ImageView
+      android:id="@+id/main_toolbal_user_image_view"
+      android:visibility="gone"
+      android:layout_marginTop="70dp"
+      android:layout_marginRight="30dp"
+      android:layout_gravity="bottom|right"
+      android:src="@drawable/ic_user"
+      android:layout_width="30dp"
+      android:layout_height="50dp"/>
 </FrameLayout>

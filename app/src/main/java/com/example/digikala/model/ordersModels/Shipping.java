@@ -33,6 +33,11 @@ public class Shipping{
 	@SerializedName("first_name")
 	private String firstName;
 
+	public Shipping(String lastName, String firstName) {
+		this.lastName = lastName;
+		this.firstName = firstName;
+	}
+
 	public void setCountry(String country){
 		this.country = country;
 	}

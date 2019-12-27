@@ -48,6 +48,14 @@
     <string name="related_products">محصولات مشابه</string>
     <string name="new_products_title">محصول جدید</string>
     <string name="new_products_text">%s اضافه شد</string>
+    <string name="wrong_email">لطفا ایمیل خود را به صورت صحیح وارد کنید</string>
+    <string name="wrong_password">طول رمز عبور باید بیشتر از 6 کاراکتر باشد</string>
+    <string name="fill_all_field">لطفا تمامی فیلد ها را پر کنید</string>
+    <string name="register_successfull">ثبت نام با موفقیت انجام شد</string>
+    <string name="repeat_email">ایمیل یا نام کاربری تکراری است!</string>
+    <string name="problem_occur">خطایی پیش آمده</string>
+    <string name="fix_email">ایمیل خود را به درستی وارد کنید!</string>
+    <string name="login_successfull">با موفقیت وارد شدید</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
