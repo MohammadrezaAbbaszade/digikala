@@ -127,22 +127,25 @@ public class SignUpFragment extends Fragment {
         customerBody.setUsername(firstName);
         customerBody.setFirstName(firstName);
         customerBody.setLastName(lastName);
-        customerBody.setBilling(new Billing(firstName,lastName,email));
+        customerBody.setBilling(new Billing(firstName,lastName,email,phoneNumber));
         customerBody.setShipping(new Shipping(firstName , lastName));
         mLoginViewModel.registerCustomer(customerBody).observe(this, new Observer<CustomerBody>() {
             @Override
             public void onChanged(CustomerBody customerBody) {
                 if (customerBody.getUsername()!=null){
                     SharedPreferencesData.setCustomerEmail(getContext(), customerBody.getEmail());
+                    SharedPreferencesData.setCustomerName(getContext(), customerBody.getFirstName());
                     SharedPreferencesData.setCustomerLogedIn(getContext(), true);
                     Toast.makeText(getActivity() , getString(R.string.register_successfull)  ,
                             Toast.LENGTH_SHORT).show();
                     startActivity(MainActivity.newIntent(getActivity(),1));
                     getActivity().finish();
                 }else if (customerBody.getError() !=null){
+                    SharedPreferencesData.setCustomerLogedIn(getContext(), false);
                     Toast.makeText(getActivity() , getString(R.string.problem_occur) + customerBody
                             .getError().getMessage() , Toast.LENGTH_SHORT).show();
                 }else if (customerBody.getCode()==400){
+                    SharedPreferencesData.setCustomerLogedIn(getContext(), false);
                     Toast.makeText(getActivity() , getString(R.string.repeat_email) ,
                             Toast.LENGTH_SHORT).show();
                 }

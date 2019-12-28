@@ -39,10 +39,11 @@ public class Billing{
 	@SerializedName("email")
 	private String email;
 
-	public Billing(String lastName, String firstName, String email) {
+	public Billing(String lastName, String firstName, String email,String phone) {
 		this.lastName = lastName;
 		this.firstName = firstName;
 		this.email = email;
+		this.phone=phone;
 	}
 
 	public void setCountry(String country){

@@ -105,20 +105,24 @@ public class LoginFragment extends Fragment {
                     public void onChanged(List<CustomerBody> customerBodies) {
                         if (!customerBodies.isEmpty()) {
                             if (customerBodies.get(0).getCode() == 400) {
+                                SharedPreferencesData.setCustomerLogedIn(getContext(), false);
                                 Toast.makeText(getActivity(), getString(R.string.fix_email), Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             if (customerBodies.get(0).getError() != null) {
+                                SharedPreferencesData.setCustomerLogedIn(getContext(), false);
                                 Toast.makeText(getActivity(), "خطای اتصال به اینترنت", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             SharedPreferencesData.setCustomerEmail(getContext(), customerBodies.get(0).getEmail());
+                            SharedPreferencesData.setCustomerName(getContext(), customerBodies.get(0).getFirstName());
                             SharedPreferencesData.setCustomerLogedIn(getContext(), true);
                             Toast.makeText(getActivity(), getString(R.string.login_successfull),
                                     Toast.LENGTH_SHORT).show();
                             startActivity(MainActivity.newIntent(getActivity(), 1));
                             getActivity().finish();
                         } else {
+                            SharedPreferencesData.setCustomerLogedIn(getContext(), false);
                             Toast.makeText(getActivity(), getString(R.string.fix_email), Toast.LENGTH_SHORT).show();
                         }
                     }

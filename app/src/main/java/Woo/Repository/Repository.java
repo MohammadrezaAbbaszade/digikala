@@ -451,9 +451,9 @@ public class Repository {
         });
         return mOrderBody;
     }
-    public MutableLiveData<List<CustomerBody>> getCustomer(String email){
+    public MutableLiveData<List<CustomerBody>> getCustomer(Map<String,String> queries,String email){
         mCustomerResult = new MutableLiveData<>();
-        Call<List<CustomerBody>> call = mWoocommerceApi.getCustomer(mQueries,email);
+        Call<List<CustomerBody>> call = mWoocommerceApi.getCustomer(queries,email);
         call.enqueue(new Callback<List<CustomerBody>>() {
             @Override
             public void onResponse(Call<List<CustomerBody>> call, Response<List<CustomerBody>> response) {

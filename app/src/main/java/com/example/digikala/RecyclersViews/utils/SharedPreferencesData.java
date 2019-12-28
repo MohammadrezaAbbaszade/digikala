@@ -11,6 +11,7 @@ public class SharedPreferencesData {
     private static final String PREF_EMAIL = "email";
     private static final String ID = "id";
     public static final String PREF_LAST_PRODUCT_ID = "lastProductId";
+    private static final String CUSTOMER_NAME = "customername";
 
     private static SharedPreferences getPproductsSharedPreferences(Context context) {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -45,6 +46,21 @@ public class SharedPreferencesData {
         SharedPreferences prefs = getPproductsSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PREF_EMAIL, query);
+        editor.apply();
+    }
+    public static String getCustomerName(Context context) {
+        SharedPreferences prefs = getPproductsSharedPreferences(context);
+
+        if (prefs == null)
+            return null;
+
+        return prefs.getString(CUSTOMER_NAME, null);
+    }
+
+    public static void setCustomerName(Context context, String name) {
+        SharedPreferences prefs = getPproductsSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(CUSTOMER_NAME, name);
         editor.apply();
     }
     public static void setRadioGroupId(Context context, int id) {

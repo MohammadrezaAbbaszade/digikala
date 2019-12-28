@@ -7,6 +7,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -24,9 +26,15 @@ public class RetrofitInstance  {
     }
 
     private RetrofitInstance(String baseUrl) {
+        OkHttpClient.Builder okHttpClient=new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging=new HttpLoggingInterceptor();
+        logging.level(HttpLoggingInterceptor.Level.BODY);
+        okHttpClient.addInterceptor(logging);
+
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient.build())
                 .build();
     }
 

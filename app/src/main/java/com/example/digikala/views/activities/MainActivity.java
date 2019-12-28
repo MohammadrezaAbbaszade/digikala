@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.digikala.R;
+import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
 import com.example.digikala.model.productsModels.WoocommerceBody;
 import com.example.digikala.views.fragments.MainFragment;
 import com.example.digikala.views.fragments.NoNetworkFragment;
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
     private ImageButton mSearchImageButton;
     private ImageButton mToolbarBag;
     private ImageView mLoginHeaderImageView;
+    private TextView mHeaderCustomerNameTextView;
+    private ImageView mHeaderUserIcon;
     int state;
     List<WoocommerceBody> woocommerceBodies;
     FragmentManager fm = getSupportFragmentManager();
@@ -59,6 +62,23 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
             mcart_badge.setText(Repository.getInstance().getBagsIds().size() + "");
             initBagTextview();
         }
+        if(SharedPreferencesData.checkCustomerLogedIn(this))
+        {
+            if(mHeaderCustomerNameTextView!=null&&mHeaderUserIcon!=null&&mLoginHeaderImageView!=null)
+            {
+                mLoginHeaderImageView.setVisibility(View.GONE);
+                mHeaderUserIcon.setVisibility(View.VISIBLE);
+                mHeaderCustomerNameTextView.setVisibility(View.VISIBLE);
+                mHeaderCustomerNameTextView.setText(SharedPreferencesData.getCustomerName(this));
+            }
+        }else
+        {
+            if(mHeaderCustomerNameTextView!=null&&mHeaderUserIcon!=null&&mLoginHeaderImageView!=null) {
+                mLoginHeaderImageView.setVisibility(View.VISIBLE);
+                mHeaderUserIcon.setVisibility(View.GONE);
+                mHeaderCustomerNameTextView.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -73,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
         mToolbarBag = findViewById(R.id.toolbar_shop);
         mSearchImageButton = findViewById(R.id.search_view_button);
         mLoginHeaderImageView = findViewById(R.id.main_toolbal_login_image_view);
+
 //        setSupportActionBar(mToolbar);
 
         initBagTextview();
@@ -105,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
         });
         View header = mNavigationView.getHeaderView(0);
         mLoginHeaderImageView = header.findViewById(R.id.main_toolbal_login_image_view);
+        mHeaderCustomerNameTextView=header.findViewById(R.id.main_header_number_text_view);
+        mHeaderUserIcon=header.findViewById(R.id.main_header_user_image_view);
         mLoginHeaderImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
