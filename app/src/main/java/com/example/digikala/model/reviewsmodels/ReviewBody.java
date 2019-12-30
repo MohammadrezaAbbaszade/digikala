@@ -42,6 +42,17 @@ public class ReviewBody{
 	@SerializedName("status")
 	private String status;
 
+
+
+	public ReviewBody(String review, int id) {
+		this.review = review;
+		this.id = id;
+	}
+
+	public ReviewBody() {
+
+	}
+
 	public void setReviewerAvatarUrls(ReviewerAvatarUrls reviewerAvatarUrls){
 		this.reviewerAvatarUrls = reviewerAvatarUrls;
 	}

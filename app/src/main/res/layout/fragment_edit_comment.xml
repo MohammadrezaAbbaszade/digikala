@@ -14,12 +14,11 @@
 
         <ProgressBar
             android:id="@+id/edit_comment_progress_bar"
-            android:indeterminateTint="@color/white"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/review_layout"
-            android:layout_marginLeft="170dp"
+            android:layout_marginLeft="115dp"
              />
 
         <TextView

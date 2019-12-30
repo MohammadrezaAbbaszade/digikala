@@ -3,6 +3,7 @@ package com.example.digikala.views.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -11,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +34,8 @@ import com.google.android.material.textfield.TextInputEditText;
  */
 public class EditCommentDialogFragment extends DialogFragment {
 
+    private static final String COMMENT = "comment";
+    private static final String COMMENT_ID = "commentId";
     private final String COMMENT_OBJECT = "commentObject";
     private TextView mNameReviewer;
     private TextView mEmailReviewer;
@@ -40,11 +45,25 @@ public class EditCommentDialogFragment extends DialogFragment {
     private CommentsViewModel mCommentsViewModel;
     private ProgressBar mLoadingProgressBar;
     private int productId;
+    private int commentId;
+    private String comment;
     private static final String PRODUCT_ID = "productId";
+
     public static EditCommentDialogFragment newInstance(int productId) {
 
         Bundle args = new Bundle();
         args.putInt(PRODUCT_ID, productId);
+        EditCommentDialogFragment fragment = new EditCommentDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static EditCommentDialogFragment newInstance(String comment, int productId,int commentId) {
+
+        Bundle args = new Bundle();
+        args.putInt(PRODUCT_ID, productId);
+        args.putInt(COMMENT_ID, commentId);
+        args.putString(COMMENT, comment);
         EditCommentDialogFragment fragment = new EditCommentDialogFragment();
         fragment.setArguments(args);
         return fragment;
@@ -59,6 +78,9 @@ public class EditCommentDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         mCommentsViewModel = ViewModelProviders.of(this).get(CommentsViewModel.class);
         productId = getArguments().getInt(PRODUCT_ID);
+        Log.d("dcomm",String.valueOf(productId));
+        comment = getArguments().getString(COMMENT);
+        commentId=getArguments().getInt(COMMENT_ID);
     }
 
     @Override
@@ -101,6 +123,14 @@ public class EditCommentDialogFragment extends DialogFragment {
     private void setDataToView(View view) {
         mNameReviewer.setText(SharedPreferencesData.getCustomerName(getContext()));
         mEmailReviewer.setText(SharedPreferencesData.getCustomerEmail(getActivity()));
+        if (comment != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                mReviewEdt.setText(Html.fromHtml(comment, Html.FROM_HTML_MODE_COMPACT));
+            } else {
+                mReviewEdt.setText(Html.fromHtml(comment));
+            }
+        }
+
     }
 
     private void sendRresult() {
@@ -111,6 +141,10 @@ public class EditCommentDialogFragment extends DialogFragment {
 
     private void createNewCommentObject() {
         ReviewBody reviewBody = new ReviewBody();
+        if(comment!=null)
+        {
+            reviewBody.setId(commentId);
+        }
         reviewBody.setReview(mReviewEdt.getText().toString());
         reviewBody.setReviewer(mNameReviewer.getText().toString());
         reviewBody.setRating(mRateReviewSeekBar.getProgress());
@@ -118,17 +152,35 @@ public class EditCommentDialogFragment extends DialogFragment {
         reviewBody.setProductId(productId);
         reviewBody.setStatus("approved");
         reviewBody.setVerified(true);
-        mCommentsViewModel.sendCustomerComment(reviewBody).observe(this, new Observer<ReviewBody>() {
-            @Override
-            public void onChanged(ReviewBody reviewBody) {
-                if (reviewBody.getId() != 0) {
-                    mLoadingProgressBar.setVisibility(View.GONE);
-                    mRegisterComment.setVisibility(View.VISIBLE);
-                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.publish_comment), Toast.LENGTH_LONG).show();
-                    dismiss();
+        if (comment==null) {
+            mCommentsViewModel.sendCustomerComment(reviewBody).observe(this, new Observer<ReviewBody>() {
+                @Override
+                public void onChanged(ReviewBody reviewBody) {
+                    if (reviewBody.getId() != 0) {
+                        mLoadingProgressBar.setVisibility(View.GONE);
+                        mRegisterComment.setVisibility(View.VISIBLE);
+                        Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.publish_comment), Toast.LENGTH_LONG).show();
+                        dismiss();
+                        sendRresult();
+                    }
                 }
-            }
-        });
-        sendRresult();
+            });
+        } else {
+            mCommentsViewModel.updateComment(reviewBody).observe(this, new Observer<ReviewBody>() {
+                @Override
+                public void onChanged(ReviewBody reviewBody) {
+                    if (reviewBody.getId() == 0) {
+                        Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.cant_update_comment), Toast.LENGTH_LONG).show();
+                        dismiss();
+                    } else {
+                        Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.update_comment), Toast.LENGTH_LONG).show();
+                        dismiss();
+                        sendRresult();
+                    }
+                }
+            });
+
+        }
+
     }
 }

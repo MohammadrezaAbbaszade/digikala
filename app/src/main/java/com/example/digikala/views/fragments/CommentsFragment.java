@@ -2,9 +2,11 @@ package com.example.digikala.views.fragments;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -27,6 +29,9 @@ import com.example.digikala.model.reviewsmodels.ReviewBody;
 import com.example.digikala.viewmodels.CommentsViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.List;
 
 /**
@@ -46,6 +51,7 @@ public class CommentsFragment extends Fragment {
     private final int REQUEST_FOR_EDIT_DIALOG_FRAGMENT = 0;
     private final String EDIT_DIALOG_FRAGMENT_TAG = "com.example.digikala.views.fragments.editdialogfragment";
     private List<ReviewBody> mReviewBodies;
+
     public static CommentsFragment newInstance(int productId) {
 
         Bundle args = new Bundle();
@@ -59,6 +65,24 @@ public class CommentsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Subscribe
+    public void editComment(ReviewBody reviewBody) {
+        EditCommentDialogFragment editCommentDialogFragment = EditCommentDialogFragment.newInstance(reviewBody.getReview(),productId
+        ,reviewBody.getId());
+        editCommentDialogFragment.setTargetFragment(CommentsFragment.this, REQUEST_FOR_EDIT_DIALOG_FRAGMENT);
+        editCommentDialogFragment.show(getFragmentManager(), EDIT_DIALOG_FRAGMENT_TAG);
+    }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,11 +96,9 @@ public class CommentsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_comments, container, false);
         init(view);
-        if(SharedPreferencesData.checkCustomerLogedIn(getActivity()))
-        {
+        if (SharedPreferencesData.checkCustomerLogedIn(getActivity())) {
             mFloatingActionButton.show();
-        }else
-        {
+        } else {
             mFloatingActionButton.hide();
         }
         mProgressBar.setVisibility(View.VISIBLE);
@@ -92,7 +114,7 @@ public class CommentsFragment extends Fragment {
             public void onClick(View v) {
                 EditCommentDialogFragment editCommentDialogFragment = EditCommentDialogFragment.newInstance(productId);
                 editCommentDialogFragment.setTargetFragment(CommentsFragment.this, REQUEST_FOR_EDIT_DIALOG_FRAGMENT);
-                editCommentDialogFragment.show(getFragmentManager(),EDIT_DIALOG_FRAGMENT_TAG);
+                editCommentDialogFragment.show(getFragmentManager(), EDIT_DIALOG_FRAGMENT_TAG);
             }
         });
         return view;
@@ -103,7 +125,7 @@ public class CommentsFragment extends Fragment {
             @Override
             public void onChanged(List<ReviewBody> reviewBodies) {
                 if (reviewBodies.isEmpty()) {
-                    mReviewBodies=reviewBodies;
+                    mReviewBodies = reviewBodies;
                     emptyComment.setVisibility(View.VISIBLE);
                     parentRelative.setVisibility(View.GONE);
                 } else {
@@ -122,7 +144,7 @@ public class CommentsFragment extends Fragment {
         mProgressBar = view.findViewById(R.id.progress_bar);
         mCommentsRecyclerView = view.findViewById(R.id.comments_recyclerView);
         mBackImageView = view.findViewById(R.id.back_toolbar);
-        mFloatingActionButton=view.findViewById(R.id.add_comment_fab);
+        mFloatingActionButton = view.findViewById(R.id.add_comment_fab);
 
     }
 
@@ -131,6 +153,7 @@ public class CommentsFragment extends Fragment {
         mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mCommentsRecyclerView.setAdapter(mCommentsAdapter);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -141,7 +164,7 @@ public class CommentsFragment extends Fragment {
             parentRelative.setVisibility(View.GONE);
             mProgressBar.setVisibility(View.VISIBLE);
             emptyComment.setVisibility(View.GONE);
-           getComments();
+            getComments();
         }
 
     }

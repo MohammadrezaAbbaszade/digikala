@@ -15,6 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.utils.SharedPreferencesData;
 import com.example.digikala.model.reviewsmodels.ReviewBody;
+import com.example.digikala.views.fragments.CommentsFragment;
+import com.example.digikala.views.fragments.EditCommentDialogFragment;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -63,6 +67,12 @@ public class CommentsRcyclerView extends RecyclerView.Adapter {
             mRatingComment=itemView.findViewById(R.id.rating_comment);
             mEditComment=itemView.findViewById(R.id.edit_comment);
             mDeleteCommnet=itemView.findViewById(R.id.delete_comment);
+            mEditComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EventBus.getDefault().postSticky(new ReviewBody(mReviewBody.getReview(),mReviewBody.getId()));
+                }
+            });
         }
 
         void bind(ReviewBody reviewBody) {

@@ -62,5 +62,7 @@ public interface WoocommerceService {
     @GET("customers")
     Call<List<CustomerBody>> getCustomer(@QueryMap Map<String, String> queries,@Query("email") String email);
     @PUT("customers/{id}")
-    Call<CustomerBody> updateCustomer(@Path("id")int customerId , @Body CustomerBody customerBody);
+    Call<CustomerBody> updateCustomer(@QueryMap Map<String, String> queries,@Path("id")int customerId , @Body CustomerBody customerBody);
+    @PUT("products/reviews/{id}")
+    Call<ReviewBody> updateComment(@Path("id") int id,@QueryMap Map<String, String> queries , @Body ReviewBody reviewBody);
 }

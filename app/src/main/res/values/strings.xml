@@ -61,6 +61,8 @@
     <string name="your_review">نظر شما</string>
     <string name="register_comment">ثبت نظر</string>
     <string name="publish_comment">کامنت شما منتشر شد</string>
+    <string name="cant_update_comment">متاسفانه کامنت شما به روز رسانی نشد</string>
+    <string name="update_comment">کامنت شما به روز رسانی شد</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
