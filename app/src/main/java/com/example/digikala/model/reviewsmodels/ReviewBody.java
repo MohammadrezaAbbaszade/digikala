@@ -48,7 +48,9 @@ public class ReviewBody{
 		this.review = review;
 		this.id = id;
 	}
-
+	public ReviewBody(int id) {
+		this.id = id;
+	}
 	public ReviewBody() {
 
 	}

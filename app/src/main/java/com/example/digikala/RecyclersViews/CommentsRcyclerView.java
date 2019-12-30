@@ -73,6 +73,12 @@ public class CommentsRcyclerView extends RecyclerView.Adapter {
                     EventBus.getDefault().postSticky(new ReviewBody(mReviewBody.getReview(),mReviewBody.getId()));
                 }
             });
+            mDeleteCommnet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EventBus.getDefault().postSticky(new ReviewBody(mReviewBody.getId()));
+                }
+            });
         }
 
         void bind(ReviewBody reviewBody) {

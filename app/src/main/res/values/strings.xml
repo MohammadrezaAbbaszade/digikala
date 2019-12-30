@@ -63,6 +63,9 @@
     <string name="publish_comment">کامنت شما منتشر شد</string>
     <string name="cant_update_comment">متاسفانه کامنت شما به روز رسانی نشد</string>
     <string name="update_comment">کامنت شما به روز رسانی شد</string>
+    <string name="want_delete_comment">آیا مایل به حذف این نظر هستید؟</string>
+    <string name="delete_your_comment">کامنت مورد نظر پاک شد</string>
+    <string name="cant_delete_comment">متاسفانه کامنت شما پاک نشد!</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

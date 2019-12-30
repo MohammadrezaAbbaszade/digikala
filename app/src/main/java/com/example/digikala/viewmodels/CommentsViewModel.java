@@ -40,4 +40,7 @@ public class CommentsViewModel extends AndroidViewModel {
     public LiveData<ReviewBody> updateComment(ReviewBody reviewBody) {
         return mRepository.updateComment(mQueries,reviewBody);
     }
+    public LiveData<ReviewBody> deleteCustomerComment(int commentId) {
+        return mRepository.deleteComment(mQueries,commentId);
+    }
 }

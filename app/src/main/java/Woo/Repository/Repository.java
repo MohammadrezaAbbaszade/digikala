@@ -52,6 +52,7 @@ public class Repository {
     private MutableLiveData<List<WoocommerceBody>> mRelatedProducts;
     private MutableLiveData<List<ReviewBody>> commentProductsMutableLiveData;
     private MutableLiveData<ReviewBody> updateCommentMutable;
+    private MutableLiveData<ReviewBody> deleteCommentMutable;
     private MutableLiveData<List<WoocommerceBody>> mFilteredSortedProducts;
     private MutableLiveData<List<CustomerBody>> mCustomerResult;
     private MutableLiveData<CustomerBody> mRegisterCustomerResult;
@@ -553,5 +554,23 @@ public class Repository {
         });
 
         return updateCommentMutable;
+    }
+    public MutableLiveData<ReviewBody> deleteComment(Map<String,String> queries,int id){
+        deleteCommentMutable = new MutableLiveData<>();
+        Call<ReviewBody> call = mWoocommerceApi.deleteCustomerComment(id,queries);
+        call.enqueue(new Callback<ReviewBody>() {
+            @Override
+            public void onResponse(Call<ReviewBody> call, Response<ReviewBody> response) {
+                if (response.isSuccessful()){
+                    deleteCommentMutable.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReviewBody> call, Throwable t) {
+
+            }
+        });
+        return deleteCommentMutable;
     }
 }

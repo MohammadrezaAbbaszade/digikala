@@ -3,11 +3,13 @@ package com.example.digikala.views.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -21,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.CommentsRcyclerView;
@@ -66,12 +69,45 @@ public class CommentsFragment extends Fragment {
     }
 
     @Subscribe
-    public void editComment(ReviewBody reviewBody) {
-        EditCommentDialogFragment editCommentDialogFragment = EditCommentDialogFragment.newInstance(reviewBody.getReview(),productId
-        ,reviewBody.getId());
-        editCommentDialogFragment.setTargetFragment(CommentsFragment.this, REQUEST_FOR_EDIT_DIALOG_FRAGMENT);
-        editCommentDialogFragment.show(getFragmentManager(), EDIT_DIALOG_FRAGMENT_TAG);
-    }
+    public void editComment(final ReviewBody reviewBody) {
+        if(reviewBody.getReview()!=null) {
+            EditCommentDialogFragment editCommentDialogFragment = EditCommentDialogFragment.newInstance(reviewBody.getReview(), productId
+                    , reviewBody.getId());
+            editCommentDialogFragment.setTargetFragment(CommentsFragment.this, REQUEST_FOR_EDIT_DIALOG_FRAGMENT);
+            editCommentDialogFragment.show(getFragmentManager(), EDIT_DIALOG_FRAGMENT_TAG);
+        }else
+        {
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            alert.setTitle(getActivity().getString(R.string.want_delete_comment));
+            alert.setPositiveButton("بله", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(final DialogInterface dialog, int which) {
+                    parentRelative.setVisibility(View.GONE);
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    mCommentsViewModel.deleteCustomerComment(reviewBody.getId()).observe(CommentsFragment.this, new Observer<ReviewBody>() {
+                        @Override
+                        public void onChanged(ReviewBody reviewBody) {
+                            if (reviewBody.getId()!=0){
+                                Toast.makeText(getActivity() , getActivity().getString(R.string.delete_your_comment),Toast.LENGTH_LONG).show();
+                            }else {
+                                dialog.cancel();
+                                Toast.makeText(getActivity() , getActivity().getString(R.string.cant_delete_comment),Toast.LENGTH_LONG).show();
+                            }
+                            mProgressBar.setVisibility(View.GONE);
+                            getComments();
+                        }
+                    });
+                }
+            });
+           alert.setNegativeButton("خیر", new DialogInterface.OnClickListener() {
+               @Override
+               public void onClick(DialogInterface dialog, int which) {
+                   dialog.cancel();
+               }
+           });
+            alert.show();
+        }
+        }
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
