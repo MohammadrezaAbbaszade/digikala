@@ -119,7 +119,6 @@ public class LoginFragment extends Fragment {
                             SharedPreferencesData.setCustomerLogedIn(getContext(), true);
                             Toast.makeText(getActivity(), getString(R.string.login_successfull),
                                     Toast.LENGTH_SHORT).show();
-                            startActivity(MainActivity.newIntent(getActivity(), 1));
                             getActivity().finish();
                         } else {
                             SharedPreferencesData.setCustomerLogedIn(getContext(), false);

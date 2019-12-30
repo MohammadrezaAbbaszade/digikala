@@ -138,7 +138,6 @@ public class SignUpFragment extends Fragment {
                     SharedPreferencesData.setCustomerLogedIn(getContext(), true);
                     Toast.makeText(getActivity() , getString(R.string.register_successfull)  ,
                             Toast.LENGTH_SHORT).show();
-                    startActivity(MainActivity.newIntent(getActivity(),1));
                     getActivity().finish();
                 }else if (customerBody.getError() !=null){
                     SharedPreferencesData.setCustomerLogedIn(getContext(), false);

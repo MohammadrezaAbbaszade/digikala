@@ -15,6 +15,7 @@ import com.example.digikala.model.productsModels.ShoppingBagDao;
 import com.example.digikala.model.productsModels.WoocommerceBody;
 import com.example.digikala.model.categoriesmodel.CategoriesBody;
 
+import com.example.digikala.model.reviewsmodels.ReviewBody;
 import com.example.digikala.network.RetrofitInstance;
 import com.example.digikala.network.WoocommerceService;
 
@@ -49,6 +50,7 @@ public class Repository {
     private MutableLiveData<List<WoocommerceBody>> mSpecialProducts;
     private MutableLiveData<List<WoocommerceBody>> mAllProducts;
     private MutableLiveData<List<WoocommerceBody>> mRelatedProducts;
+    private MutableLiveData<List<ReviewBody>> commentProductsMutableLiveData;
     private MutableLiveData<List<WoocommerceBody>> mFilteredSortedProducts;
     private MutableLiveData<List<CustomerBody>> mCustomerResult;
     private MutableLiveData<CustomerBody> mRegisterCustomerResult;
@@ -494,5 +496,23 @@ public class Repository {
             }
         });
         return mRegisterCustomerResult;
+    }
+    public MutableLiveData<List<ReviewBody>> getCommentsProduct(Map<String,String> queries,int productId){
+        commentProductsMutableLiveData = new MutableLiveData<>();
+        Call<List<ReviewBody>> call = mWoocommerceApi.getProductComment(queries,productId);
+        call.enqueue(new Callback<List<ReviewBody>>() {
+            @Override
+            public void onResponse(Call<List<ReviewBody>> call, Response<List<ReviewBody>> response) {
+                if (response.isSuccessful()){
+                    commentProductsMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ReviewBody>> call, Throwable t) {
+
+            }
+        });
+        return commentProductsMutableLiveData;
     }
 }

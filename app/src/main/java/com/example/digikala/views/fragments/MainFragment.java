@@ -154,28 +154,28 @@ public class MainFragment extends Fragment {
                     mPopularRecyclerProgressBar.setVisibility(View.GONE);
                     updatePopularProductsAdaptor(woocommerceBodies);
                 } else {
-                    getActivity().finish();
+                    mPopularRecyclerProgressBar.setVisibility(View.GONE);
                 }
             }
         });
         mMainViewModel.getNewestProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-                if (woocommerceBodies != null) {
+                if (!woocommerceBodies.isEmpty()) {
                     SharedPreferencesData.setLastProductId(getActivity(), woocommerceBodies.get(0).getId());
 
                     mSliderView.setVisibility(View.VISIBLE);
                     mNewestRecyclerProgressBar.setVisibility(View.GONE);
                     updateNewestProductsAdaptor(woocommerceBodies);
                 } else {
-                    getActivity().finish();
+                    mNewestRecyclerProgressBar.setVisibility(View.GONE);
                 }
             }
         });
         mMainViewModel.getRatedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
             @Override
             public void onChanged(List<WoocommerceBody> woocommerceBodies) {
-                if (woocommerceBodies != null) {
+                if (!woocommerceBodies.isEmpty()) {
                     updateRatedProductsAdaptor(woocommerceBodies);
                     mProgressBar.setVisibility(View.GONE);
                     mPopularProductsTextView.setVisibility(View.VISIBLE);
@@ -184,7 +184,7 @@ public class MainFragment extends Fragment {
                     mSliderView.setVisibility(View.VISIBLE);
                     mRatedRecyclerProgressBar.setVisibility(View.GONE);
                 } else {
-                    getActivity().finish();
+                    mRatedRecyclerProgressBar.setVisibility(View.GONE);
                 }
             }
         });

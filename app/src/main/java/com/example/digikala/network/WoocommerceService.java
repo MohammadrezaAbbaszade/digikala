@@ -52,7 +52,7 @@ public interface WoocommerceService {
     @GET("products")
     Call<List<WoocommerceBody>> getsortedAndFilteredProductsList(@QueryMap Map<String, String> queries, @Query("page") int page);
     @GET("products/reviews")
-    Call<List<ReviewBody>> getProductComment (@Query("product") int productId);
+    Call<List<ReviewBody>> getProductComment (@QueryMap Map<String, String> queries,@Query("product") int productId);
     @POST("products/reviews")
     Call<ReviewBody> sendCustomerComment(@Body ReviewBody reviewBody);
     @DELETE("products/reviews/{id}")

@@ -257,9 +257,11 @@ public class ListProductsFragment extends Fragment {
                 if (woocommerceBodies != null) {
                     Log.d("pop", "first");
                     mProgressBar.setVisibility(View.GONE);
+                    mTextView.setVisibility(View.GONE);
                     mSecondProgressBar.setVisibility(View.GONE);
                     initAdaptor(woocommerceBodies);
                 } else {
+
                     getActivity().finish();
                 }
             }
@@ -270,6 +272,7 @@ public class ListProductsFragment extends Fragment {
                 if (woocommerceBodies != null) {
                     mProgressBar.setVisibility(View.GONE);
                     mSecondProgressBar.setVisibility(View.GONE);
+                    mTextView.setVisibility(View.GONE);
                     if (woocommerceBodies.isEmpty())
                         isListEmpty = true;
                     initAdaptor(woocommerceBodies);
@@ -284,6 +287,7 @@ public class ListProductsFragment extends Fragment {
                 if (woocommerceBodies != null) {
                     mProgressBar.setVisibility(View.GONE);
                     mSecondProgressBar.setVisibility(View.GONE);
+                    mTextView.setVisibility(View.GONE);
                     initAdaptor(woocommerceBodies);
                 } else {
                     getActivity().finish();
@@ -298,6 +302,7 @@ public class ListProductsFragment extends Fragment {
                     initAdaptor(woocommerceBodies);
                     mProgressBar.setVisibility(View.GONE);
                     mListProductsRecycler.setVisibility(View.VISIBLE);
+                    mSecondProgressBar.setVisibility(View.GONE);
                     mTextView.setVisibility(View.GONE);
                 } else {
                     Log.e("n", "NotenteredSearched");
@@ -317,6 +322,7 @@ public class ListProductsFragment extends Fragment {
                         Log.d("categoryreqAga", "newRecieved");
                         initAdaptor(woocommerceBodies);
                         mTextView.setVisibility(View.GONE);
+                        mSecondProgressBar.setVisibility(View.GONE);
                         mProgressBar.setVisibility(View.GONE);
                         mListProductsRecycler.setVisibility(View.VISIBLE);
                     } else {
@@ -343,6 +349,7 @@ public class ListProductsFragment extends Fragment {
                     Log.d("categoryreqAga", "newRecieved");
                     initAdaptor(woocommerceBodies);
                     mTextView.setVisibility(View.GONE);
+                    mSecondProgressBar.setVisibility(View.GONE);
                     mProgressBar.setVisibility(View.GONE);
                     mListProductsRecycler.setVisibility(View.VISIBLE);
                 } else {
@@ -366,6 +373,7 @@ public class ListProductsFragment extends Fragment {
                 if (!woocommerceBodies.isEmpty()) {
                     Log.d("filteredP", "first" + woocommerceBodies.size());
                     mProgressBar.setVisibility(View.GONE);
+                    mSecondProgressBar.setVisibility(View.GONE);
                     initAdaptorFromFilter(woocommerceBodies);
                 } else {
                     Log.d("filteredP", "first");
@@ -462,7 +470,7 @@ public class ListProductsFragment extends Fragment {
                     super.onScrolled(recyclerView, dx, dy);
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                     if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == woocommerceBodies.size() - 1) {
-                        if (!isListEmpty) {
+                        if (!isListEmpty&&state!=5) {
                             mSecondProgressBar.setVisibility(View.VISIBLE);
                             switch (state) {
                                 case 1:
@@ -479,15 +487,12 @@ public class ListProductsFragment extends Fragment {
                                     mListProductViewModel.loadSearchedProducts(mQueries, ++searchPage);
                                     initSearchObserver();
                                     break;
-                                case 5:
-                                    Log.d("categoryreqAga", String.valueOf(categoryId));
-                                    mListProductViewModel.loadSubCategoriesProducts(String.valueOf(categoryId), ++categoryPage);
-                                    initNewPageSubCategories();
-                                    break;
+
                             }
 
                         } else {
                             mSecondProgressBar.setVisibility(View.GONE);
+                            mTextView.setVisibility(View.GONE);
                         }
 
                     }

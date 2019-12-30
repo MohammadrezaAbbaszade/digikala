@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.digikala" >
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    package="com.example.digikala">
 
     <application
         android:name="Woo.Repository.DBApplication"
@@ -13,23 +9,46 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-        <activity android:name=".views.activities.FilterActivity" >
-        </activity>
-        <activity android:name=".views.activities.LoginActivity" />
-        <activity android:name=".views.activities.SearchActivity" />
-        <activity android:name=".views.activities.ShopBagFragmentActivity" />
-        <activity android:name=".views.activities.CategoriesViewPagerActivity" />
-        <activity android:name=".views.activities.ListProductsActivity" />
-        <activity android:name=".views.activities.ProductDetailActivity" />
-        <activity android:name=".views.activities.SplashActivity" >
+        android:theme="@style/AppTheme">
+        <activity android:name=".views.activities.CommentsActivity"></activity>
+        <activity
+            android:name=".views.activities.FilterActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".views.activities.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.activities.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.activities.ShopBagFragmentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.activities.CategoriesViewPagerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.activities.ListProductsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.activities.ProductDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.activities.SplashActivity"
+            android:icon="@drawable/digikala_main_icon"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.activities.MainActivity" />
+        <activity
+            android:name=".views.activities.MainActivity"
+            android:screenOrientation="portrait" />
     </application>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

@@ -58,13 +58,38 @@
             app:layout_constraintTop_toBottomOf="@+id/detail_fragment_card_view" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/detail_fragment_card_view"
+            android:id="@+id/fragment_detail_comments"
             android:layout_width="380dp"
-            android:layout_height="280dp"
-            android:layout_marginTop="44dp"
+            android:layout_height="50dp"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detal_fragment_discription_text_view">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="نظرات کاربران" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/ic_comment" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/detail_fragment_card_view"
+            android:layout_width="380dp"
+            android:layout_height="280dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_detail_comments">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

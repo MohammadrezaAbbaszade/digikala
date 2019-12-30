@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimary">#ffef394e</color>
     <color name="colorPrimaryDark">#ffef394e</color>
     <color name="colorAccent">#D81B60</color>
     <color name="white">#FFFFFF</color>
@@ -8,4 +8,6 @@
     <color name="green">#51AC52</color>
     <color name="black">#000</color>
     <color name="gray">#757575</color>
+    <color name="relateProductTitle">#78909C</color>
+    <color name="productBackGroundColor">#EEEEEE</color>
 </resources>

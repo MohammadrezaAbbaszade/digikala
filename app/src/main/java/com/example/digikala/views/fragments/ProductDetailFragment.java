@@ -27,6 +27,7 @@ import com.example.digikala.R;
 import com.example.digikala.RecyclersViews.SliderAdaptor;
 import com.example.digikala.model.productsModels.WoocommerceBody;
 import com.example.digikala.viewmodels.ProductDetailViewModel;
+import com.example.digikala.views.activities.CommentsActivity;
 import com.example.digikala.views.activities.ProductDetailActivity;
 import com.example.digikala.views.activities.ShopBagFragmentActivity;
 import com.example.digikala.views.changeFragment;
@@ -56,6 +57,7 @@ public class ProductDetailFragment extends Fragment {
     private SliderView mSliderView;
     private SliderAdaptor mSliderAdaptor;
     private changeFragment mChangeFragment;
+    private CardView mCommentsCardView;
 private ProductDetailViewModel mProductDetailViewModel;
     public static ProductDetailFragment newInstance(int id) {
 
@@ -105,6 +107,7 @@ private ProductDetailViewModel mProductDetailViewModel;
         mProgressBar.setVisibility(View.VISIBLE);
         mSliderView.setVisibility(View.GONE);
         mCardView.setVisibility(View.GONE);
+        mCommentsCardView.setVisibility(View.GONE);
         mSimilarProductsTextView.setVisibility(View.GONE);
         mRelatedProductRecycler.setVisibility(View.GONE);
         if(isNetworkConnected()) {
@@ -125,6 +128,7 @@ private ProductDetailViewModel mProductDetailViewModel;
                         mProgressBar.setVisibility(View.GONE);
                         mSliderView.setVisibility(View.VISIBLE);
                         mCardView.setVisibility(View.VISIBLE);
+                        mCommentsCardView.setVisibility(View.VISIBLE);
                         PrepareViewPager(woocommerceBody);
                         PrepareRelatedProducts(woocommerceBody.getRelatedIds());
                         addProductToBag(woocommerceBody);
@@ -133,6 +137,14 @@ private ProductDetailViewModel mProductDetailViewModel;
                     }
                 }
             });
+            mCommentsCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent= CommentsActivity.newIntent(getActivity(),id);
+                    startActivity(intent);
+                }
+            });
+
         }
         return view;
     }
@@ -178,6 +190,7 @@ private ProductDetailViewModel mProductDetailViewModel;
         mRegularPriceTextView = view.findViewById(R.id.detail_fragment_regular_price_textView);
         mBuyButton = view.findViewById(R.id.detail_fragment_buy_button);
         mSimilarProductsTextView=view.findViewById(R.id.detail_fragment_related_text_view);
+        mCommentsCardView=view.findViewById(R.id.fragment_detail_comments);
     }
 
     private void setUpAdaptor(List<WoocommerceBody> woocommerceBodies) {
