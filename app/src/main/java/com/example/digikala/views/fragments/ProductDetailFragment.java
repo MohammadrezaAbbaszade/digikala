@@ -4,6 +4,7 @@ package com.example.digikala.views.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +60,8 @@ public class ProductDetailFragment extends Fragment {
     private SliderAdaptor mSliderAdaptor;
     private changeFragment mChangeFragment;
     private CardView mCommentsCardView;
-private ProductDetailViewModel mProductDetailViewModel;
+    private ProductDetailViewModel mProductDetailViewModel;
+
     public static ProductDetailFragment newInstance(int id) {
 
         Bundle args = new Bundle();
@@ -78,12 +81,13 @@ private ProductDetailViewModel mProductDetailViewModel;
             Log.d("tag", "finished");
         } else {
             id = getArguments().getInt(ID);
-            mProductDetailViewModel= ViewModelProviders.of(this).get(ProductDetailViewModel.class);
+            mProductDetailViewModel = ViewModelProviders.of(this).get(ProductDetailViewModel.class);
             mProductDetailViewModel.loadSingleProduct(id);
 
         }
 
     }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -110,7 +114,7 @@ private ProductDetailViewModel mProductDetailViewModel;
         mCommentsCardView.setVisibility(View.GONE);
         mSimilarProductsTextView.setVisibility(View.GONE);
         mRelatedProductRecycler.setVisibility(View.GONE);
-        if(isNetworkConnected()) {
+        if (isNetworkConnected()) {
             mProductDetailViewModel.getRelatedProducts().observe(this, new Observer<List<WoocommerceBody>>() {
                 @Override
                 public void onChanged(List<WoocommerceBody> woocommerceBodies) {
@@ -140,7 +144,7 @@ private ProductDetailViewModel mProductDetailViewModel;
             mCommentsCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent= CommentsActivity.newIntent(getActivity(),id);
+                    Intent intent = CommentsActivity.newIntent(getActivity(), id);
                     startActivity(intent);
                 }
             });
@@ -148,16 +152,19 @@ private ProductDetailViewModel mProductDetailViewModel;
         }
         return view;
     }
+
     private void PrepareViewPager(WoocommerceBody woocommerceBody) {
 
 
         mSliderAdaptor = new SliderAdaptor(woocommerceBody, getActivity());
         mSliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
-       mSliderView.setSliderAdapter(mSliderAdaptor);
-
-
+        mSliderView.setSliderAdapter(mSliderAdaptor);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mDiscriptionTextView.setText(Html.fromHtml(woocommerceBody.getDescription(), Html.FROM_HTML_MODE_COMPACT));
+        } else {
+            mDiscriptionTextView.setText(Html.fromHtml(woocommerceBody.getDescription()));
+        }
         mTextView.setText(woocommerceBody.getName());
-        mDiscriptionTextView.setText(woocommerceBody.getDescription());
         mRegularPriceTextView.setText(woocommerceBody.getPrice() + " " + "تومان");
         mBudgetPriceTextView.setText(woocommerceBody.getRegularPrice() + " " + "تومان");
     }
@@ -172,15 +179,16 @@ private ProductDetailViewModel mProductDetailViewModel;
             }
         });
     }
+
     private void PrepareRelatedProducts(List<Integer> integers) {
-        if(mProductAdaptor!=null)
+        if (mProductAdaptor != null)
             mRelatedProductRecycler.setVisibility(View.GONE);
-       mProductDetailViewModel.loadRelatedProducts(integers);
+        mProductDetailViewModel.loadRelatedProducts(integers);
 
     }
 
     private void init(View view) {
-        mSliderView=view.findViewById(R.id.detail_fragment_imageSlider);
+        mSliderView = view.findViewById(R.id.detail_fragment_imageSlider);
         mProgressBar = view.findViewById(R.id.detal_fragment_progress_bar);
         mCardView = view.findViewById(R.id.detail_fragment_card_view);
         mTextView = view.findViewById(R.id.detal_fragment_text_view);
@@ -189,8 +197,8 @@ private ProductDetailViewModel mProductDetailViewModel;
         mBudgetPriceTextView = view.findViewById(R.id.detail_fragment_budget_price_textView);
         mRegularPriceTextView = view.findViewById(R.id.detail_fragment_regular_price_textView);
         mBuyButton = view.findViewById(R.id.detail_fragment_buy_button);
-        mSimilarProductsTextView=view.findViewById(R.id.detail_fragment_related_text_view);
-        mCommentsCardView=view.findViewById(R.id.fragment_detail_comments);
+        mSimilarProductsTextView = view.findViewById(R.id.detail_fragment_related_text_view);
+        mCommentsCardView = view.findViewById(R.id.fragment_detail_comments);
     }
 
     private void setUpAdaptor(List<WoocommerceBody> woocommerceBodies) {

@@ -34,5 +34,7 @@ public class CommentsViewModel extends AndroidViewModel {
     {
        return mRepository.getCommentsProduct(mQueries,productsId);
     }
-
+    public LiveData<ReviewBody> sendCustomerComment(ReviewBody reviewBody) {
+        return mRepository.sendCustomerComment(mQueries,reviewBody);
+    }
 }

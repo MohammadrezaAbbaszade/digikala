@@ -57,6 +57,10 @@
     <string name="fix_email">ایمیل خود را به درستی وارد کنید!</string>
     <string name="login_successfull">با موفقیت وارد شدید</string>
     <string name="no_comment">هیچ نظری برای این محصول ثبت نشده است!</string>
+    <string name="register_digikala"><u>ثبت نام در دیجی‌کالا</u></string>
+    <string name="your_review">نظر شما</string>
+    <string name="register_comment">ثبت نظر</string>
+    <string name="publish_comment">کامنت شما منتشر شد</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

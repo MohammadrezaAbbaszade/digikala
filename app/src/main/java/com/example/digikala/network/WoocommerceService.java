@@ -54,7 +54,7 @@ public interface WoocommerceService {
     @GET("products/reviews")
     Call<List<ReviewBody>> getProductComment (@QueryMap Map<String, String> queries,@Query("product") int productId);
     @POST("products/reviews")
-    Call<ReviewBody> sendCustomerComment(@Body ReviewBody reviewBody);
+    Call<ReviewBody> sendCustomerComment(@QueryMap Map<String, String> queries,@Body ReviewBody reviewBody);
     @DELETE("products/reviews/{id}")
     Call<ReviewBody> deleteCustomerComment(@Path("id") int id);
     @POST("customers")

@@ -55,6 +55,7 @@ public class Repository {
     private MutableLiveData<List<CustomerBody>> mCustomerResult;
     private MutableLiveData<CustomerBody> mRegisterCustomerResult;
     private MutableLiveData<List<WoocommerceBody>> mSubCategoriesProducts;
+    private MutableLiveData<ReviewBody> sendCustomerCommentMutable = new MutableLiveData<>();
     private MutableLiveData<OrderBody> mOrderBody;
     private MutableLiveData<WoocommerceBody> mProductById;
     private List<CategoriesBody> mCategoriesItems;
@@ -514,5 +515,23 @@ public class Repository {
             }
         });
         return commentProductsMutableLiveData;
+    }
+    public MutableLiveData<ReviewBody> sendCustomerComment(Map<String,String> queries,ReviewBody reviewBody){
+        Call<ReviewBody> call = mWoocommerceApi.sendCustomerComment(queries,reviewBody);
+        call.enqueue(new Callback<ReviewBody>() {
+            @Override
+            public void onResponse(Call<ReviewBody> call, Response<ReviewBody> response) {
+                if (response.isSuccessful()){
+                    sendCustomerCommentMutable.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReviewBody> call, Throwable t) {
+
+            }
+        });
+
+        return sendCustomerCommentMutable;
     }
 }
