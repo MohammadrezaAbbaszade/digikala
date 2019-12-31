@@ -110,14 +110,14 @@ public class SignUpFragment extends Fragment {
     }
 
     private void init(View view) {
-        mEmailEditText = view.findViewById(R.id.fragment_login_email_edit_text);
+        mEmailEditText = view.findViewById(R.id.fragment_sign_up_email_edit_text);
         mFirstNameEditText = view.findViewById(R.id.fragment_sign_up_first_name_edit_text);
         mLastNameEditText = view.findViewById(R.id.fragment_sign_up_last_name_edit_text);
         mPhoneNumberEditText = view.findViewById(R.id.fragment_sign_up_phone_number_edit_text);
-        mPasswordEditText = view.findViewById(R.id.fragment_login_password_edit_text);
+        mPasswordEditText = view.findViewById(R.id.fragment_sign_up_password_edit_text);
         mRegisterButton = view.findViewById(R.id.fragment_sign_up_register_button);
         mProgressBar = view.findViewById(R.id.fragment_sign_up_progress_bar);
-        mRegisterTextView = view.findViewById(R.id.fragment_login_register_text_view);
+        mRegisterTextView = view.findViewById(R.id.fragment_sign_up_register_text_view);
         mSingleArrowImageView = view.findViewById(R.id.fragment_sign_up_image_view);
     }
 
@@ -134,7 +134,8 @@ public class SignUpFragment extends Fragment {
             public void onChanged(CustomerBody customerBody) {
                 if (customerBody.getUsername()!=null){
                     SharedPreferencesData.setCustomerEmail(getContext(), customerBody.getEmail());
-                    SharedPreferencesData.setCustomerName(getContext(), customerBody.getFirstName());
+                    SharedPreferencesData.setCustomerName(getContext(), customerBody.getFirstName()+" "+customerBody.getLastName());
+                    SharedPreferencesData.setCustomertId(getContext(), customerBody.getId());
                     SharedPreferencesData.setCustomerLogedIn(getContext(), true);
                     Toast.makeText(getActivity() , getString(R.string.register_successfull)  ,
                             Toast.LENGTH_SHORT).show();

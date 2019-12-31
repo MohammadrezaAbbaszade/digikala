@@ -3,6 +3,7 @@ package com.example.digikala.views.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +28,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.ch
     private ImageButton mToolbarBag;
     private TextView mCartBadge;
     private ImageButton mSearchImageButton;
-    private FragmentManager fm;
+    public static FragmentManager fm;
     private int state;
 
     public static Intent newIntent(Context context,int state) {
@@ -70,14 +71,14 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.ch
         mArrowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+               finish();
             }
         });
         fm=getSupportFragmentManager();
         Fragment fragment=fm.findFragmentById(R.id.login_activity_container);
         if(fragment==null)
         {
-            fm.beginTransaction().replace(R.id.login_activity_container, LoginFragment.newInstance())
+            fm.beginTransaction().replace(R.id.login_activity_container,LoginFragment.newInstance())
                     .commit();
         }
 

@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.digikala.R;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
     private FrameLayout mToolbar;
     private TextView mcart_badge;
     private TextView mBagTextView;
+    private ImageView mToolbarUserImageView;
     private NavigationView mNavigationView;
     private ImageButton mImageButton;
     private ImageButton mSearchImageButton;
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
     private ImageView mLoginHeaderImageView;
     private TextView mHeaderCustomerNameTextView;
     private ImageView mHeaderUserIcon;
+    private LinearLayout mHeaderLogin;
     int state;
     List<WoocommerceBody> woocommerceBodies;
     FragmentManager fm = getSupportFragmentManager();
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
         intent.putExtra(STATE, state);
         return intent;
     }
+
 
     @Override
     protected void onStart() {
@@ -66,17 +70,18 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
         {
             if(mHeaderCustomerNameTextView!=null&&mHeaderUserIcon!=null&&mLoginHeaderImageView!=null)
             {
+
+                mToolbarUserImageView.setVisibility(View.VISIBLE);
                 mLoginHeaderImageView.setVisibility(View.GONE);
-                mHeaderUserIcon.setVisibility(View.VISIBLE);
-                mHeaderCustomerNameTextView.setVisibility(View.VISIBLE);
+                mHeaderLogin.setVisibility(View.VISIBLE);
                 mHeaderCustomerNameTextView.setText(SharedPreferencesData.getCustomerName(this));
             }
         }else
         {
             if(mHeaderCustomerNameTextView!=null&&mHeaderUserIcon!=null&&mLoginHeaderImageView!=null) {
+                mToolbarUserImageView.setVisibility(View.GONE);
                 mLoginHeaderImageView.setVisibility(View.VISIBLE);
-                mHeaderUserIcon.setVisibility(View.GONE);
-                mHeaderCustomerNameTextView.setVisibility(View.GONE);
+                mHeaderLogin.setVisibility(View.GONE);
             }
         }
     }
@@ -93,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
         mToolbarBag = findViewById(R.id.toolbar_shop);
         mSearchImageButton = findViewById(R.id.search_view_button);
         mLoginHeaderImageView = findViewById(R.id.main_toolbal_login_image_view);
+        mToolbarUserImageView=findViewById(R.id.toolbar_user_image_view);
+        mHeaderLogin=findViewById(R.id.header_linear);
 
 //        setSupportActionBar(mToolbar);
 
@@ -128,7 +135,8 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
         mLoginHeaderImageView = header.findViewById(R.id.main_toolbal_login_image_view);
         mHeaderCustomerNameTextView=header.findViewById(R.id.main_header_number_text_view);
         mHeaderUserIcon=header.findViewById(R.id.main_header_user_image_view);
-        mLoginHeaderImageView.setOnClickListener(new View.OnClickListener() {
+        mHeaderLogin=header.findViewById(R.id.header_linear);
+        mHeaderLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = LoginActivity.newIntent(MainActivity.this,1);
@@ -146,8 +154,20 @@ public class MainActivity extends AppCompatActivity implements changeFragment {
             mToolbar.setVisibility(View.GONE);
             Log.d("tag", "mainActivity" + "0");
         }
-
-
+        mHeaderCustomerNameTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=CustomerInfoActivity.newIntent(MainActivity.this);
+                startActivity(intent);
+            }
+        });
+        mToolbarUserImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=CustomerInfoActivity.newIntent(MainActivity.this);
+                startActivity(intent);
+            }
+        });
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

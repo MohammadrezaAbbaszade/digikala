@@ -115,7 +115,8 @@ public class LoginFragment extends Fragment {
                                 return;
                             }
                             SharedPreferencesData.setCustomerEmail(getContext(), customerBodies.get(0).getEmail());
-                            SharedPreferencesData.setCustomerName(getContext(), customerBodies.get(0).getFirstName());
+                            SharedPreferencesData.setCustomertId(getContext(), customerBodies.get(0).getId());
+                            SharedPreferencesData.setCustomerName(getContext(), customerBodies.get(0).getFirstName()+" "+customerBodies.get(0).getLastName());
                             SharedPreferencesData.setCustomerLogedIn(getContext(), true);
                             Toast.makeText(getActivity(), getString(R.string.login_successfull),
                                     Toast.LENGTH_SHORT).show();

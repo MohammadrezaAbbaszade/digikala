@@ -7,7 +7,15 @@
     android:background="@color/colorPrimaryDark">
 
 
-
+<ImageView
+    android:id="@+id/toolbar_user_image_view"
+android:visibility="gone"
+    android:layout_width="wrap_content"
+    android:layout_height="50dp"
+    android:padding="8dp"
+    android:clickable="true"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:src="@drawable/ic_user"/>
     <ImageButton
         android:id="@+id/toolbar_shop"
         android:layout_width="wrap_content"

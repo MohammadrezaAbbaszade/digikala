@@ -12,6 +12,7 @@ public class SharedPreferencesData {
     private static final String ID = "id";
     public static final String PREF_LAST_PRODUCT_ID = "lastProductId";
     private static final String CUSTOMER_NAME = "customername";
+    private static final String CUSTOMER_ID = "customerId";
 
     private static SharedPreferences getPproductsSharedPreferences(Context context) {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -85,6 +86,18 @@ public class SharedPreferencesData {
         getPproductsSharedPreferences(context)
                 .edit()
                 .putInt(PREF_LAST_PRODUCT_ID, productId)
+                .apply();
+    }
+    public static int getCustomerId(Context context) {
+        SharedPreferences prefs = getPproductsSharedPreferences(context);
+
+        return prefs.getInt(CUSTOMER_ID, 0);
+    }
+
+    public static void setCustomertId(Context context, int customerId) {
+        getPproductsSharedPreferences(context)
+                .edit()
+                .putInt(CUSTOMER_ID, customerId)
                 .apply();
     }
     public static boolean checkCustomerLogedIn(Context context) {
